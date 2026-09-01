@@ -22,42 +22,68 @@ support where relevant.
 
 ## What's inside
 
-- **`SKILL.md`** — an [Agent Skill](https://docs.claude.com/en/docs/claude-code/skills)
-  definition that drives the prompt generator: it collects the needed variables,
-  asks for the output language, and fills in the matching template.
-- **`references/`** — the 13 prompt templates, each using `[BRACKET]`
-  placeholders for values you supply.
+This repo is a **Claude Code plugin** that bundles one Agent Skill:
+
+```
+.claude-plugin/
+  marketplace.json          # lets others add this repo as a plugin marketplace
+  plugin.json               # plugin manifest
+skills/
+  israeli-compliance/
+    SKILL.md                # the prompt-generator skill
+    references/             # the 13 prompt templates ([BRACKET] placeholders)
+```
+
+- **`skills/israeli-compliance/SKILL.md`** — an
+  [Agent Skill](https://docs.claude.com/en/docs/claude-code/skills) that drives
+  the generator: it collects the needed variables, asks for the output language,
+  and fills in the matching template.
+- **`skills/israeli-compliance/references/`** — the 13 prompt templates.
+
+## Install as a Claude Code plugin
+
+In Claude Code, add this repo as a plugin marketplace, then install the plugin:
+
+```
+/plugin marketplace add ward3107/israeli-compliance-prompts
+/plugin install israeli-compliance@israeli-compliance
+```
+
+Once installed, just ask naturally — e.g. *"give me the cookie banner compliance
+prompt"* or *"I need the freelancer contract"* — and the skill activates, asks
+for your variables and language, and outputs the filled prompt.
+
+### Alternative: install the skill directly (no plugin)
+
+```bash
+git clone https://github.com/ward3107/israeli-compliance-prompts.git
+mkdir -p ~/.claude/skills
+cp -r israeli-compliance-prompts/skills/israeli-compliance ~/.claude/skills/israeli-compliance
+```
+
+### Alternative: use the prompts by hand (no Claude Code)
+
+Open any file under `skills/israeli-compliance/references/`, copy the text,
+replace the `[BRACKET]` placeholders, and paste it into Cursor, Claude, ChatGPT,
+or any AI coding assistant.
 
 ## The 13 prompts
 
 | # | Prompt | File |
 |---|--------|------|
-| 1 | 🍪 Cookie Banner (Consent Mode v2) | `references/prompt-01-cookie-banner.md` |
-| 2 | 📄 Privacy Policy (Amendment 13) | `references/prompt-02-privacy-policy.md` |
-| 3 | ♿ Accessibility Widget | `references/prompt-03-accessibility-widget.md` |
-| 4 | 🌐 Full-Site WCAG 2.0 AA Baseline | `references/prompt-04-wcag-baseline.md` |
-| 5 | 📋 Accessibility Statement (IS 5568) | `references/prompt-05-accessibility-statement.md` |
-| 6 | 📜 Freelancer Contract | `references/prompt-06-freelancer-contract.md` |
-| 7 | 📜 Terms of Use | `references/prompt-07-terms-of-use.md` |
-| 8 | 💳 Refund & Cancellation Policy | `references/prompt-08-refund-policy.md` |
-| 9 | ⚠️ Disclaimer | `references/prompt-09-disclaimer.md` |
-| 10 | 🛒 E-Commerce Compliance | `references/prompt-10-ecommerce.md` |
-| 11 | 📧 Email Marketing | `references/prompt-11-email-marketing.md` |
-| 12 | 🇪🇺 GDPR Notice Layer | `references/prompt-12-gdpr.md` |
-| 13 | 📋 Client Onboarding Questionnaire | `references/prompt-13-onboarding.md` |
-
-## How to use
-
-1. Pick the prompt you need from `references/`.
-2. Replace every `[BRACKET]` placeholder with your real values.
-3. Choose the output language (Hebrew / Arabic / English / Russian).
-4. Paste the filled prompt into your AI coding assistant.
-5. Review the generated output against the verification checklist included in
-   each prompt — and have anything legally binding reviewed by a lawyer.
-
-If you use Claude Code or another skill-aware assistant, `SKILL.md` can automate
-steps 1–4: it prompts you for the variables and language, then emits the filled
-template.
+| 1 | 🍪 Cookie Banner (Consent Mode v2) | `skills/israeli-compliance/references/prompt-01-cookie-banner.md` |
+| 2 | 📄 Privacy Policy (Amendment 13) | `skills/israeli-compliance/references/prompt-02-privacy-policy.md` |
+| 3 | ♿ Accessibility Widget | `skills/israeli-compliance/references/prompt-03-accessibility-widget.md` |
+| 4 | 🌐 Full-Site WCAG 2.0 AA Baseline | `skills/israeli-compliance/references/prompt-04-wcag-baseline.md` |
+| 5 | 📋 Accessibility Statement (IS 5568) | `skills/israeli-compliance/references/prompt-05-accessibility-statement.md` |
+| 6 | 📜 Freelancer Contract | `skills/israeli-compliance/references/prompt-06-freelancer-contract.md` |
+| 7 | 📜 Terms of Use | `skills/israeli-compliance/references/prompt-07-terms-of-use.md` |
+| 8 | 💳 Refund & Cancellation Policy | `skills/israeli-compliance/references/prompt-08-refund-policy.md` |
+| 9 | ⚠️ Disclaimer | `skills/israeli-compliance/references/prompt-09-disclaimer.md` |
+| 10 | 🛒 E-Commerce Compliance | `skills/israeli-compliance/references/prompt-10-ecommerce.md` |
+| 11 | 📧 Email Marketing | `skills/israeli-compliance/references/prompt-11-email-marketing.md` |
+| 12 | 🇪🇺 GDPR Notice Layer | `skills/israeli-compliance/references/prompt-12-gdpr.md` |
+| 13 | 📋 Client Onboarding Questionnaire | `skills/israeli-compliance/references/prompt-13-onboarding.md` |
 
 ## Standards referenced
 
