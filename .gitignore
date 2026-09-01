@@ -1,0 +1,11 @@
+# OS noise
+.DS_Store
+
+# Node
+node_modules/
+
+# Archives
+*.zip
+
+# Env / secrets
+.env
