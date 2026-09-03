@@ -6,7 +6,7 @@ WCAG 2.0 AA. The widget itself must be fully accessible.
 
 == PROJECT INFO ==
 Framework: HTML/CSS/JS (plain, no dependencies, works on any project)
-Widget position: bottom-right
+Widget position: bottom, inset-inline-end (bottom-right in LTR, bottom-left in RTL)
 Brand color: AUTO-DETECT from the page (scan buttons, links, headers, nav for the first colorful computed color; fallback to #2563EB)
 
 == TRIGGER BUTTON ICON ==
@@ -29,7 +29,9 @@ Use the first colorful result.
 Inject into CSS variables: --a11y-brand: [detected color] --a11y-brand-dark: [detected color darkened by 25%]
 
 == TRIGGER BUTTON ==
-- Fixed position bottom-right, 52x52px circular button
+- Fixed position at the bottom inset-inline-end corner, 52x52px circular button.
+  Use inset-inline-end, NOT right, so the widget mirrors correctly on RTL (Hebrew/Arabic) sites.
+  The panel must anchor to the same side as the trigger.
 - Background: color-mix(in srgb, var(--a11y-brand) 50%, transparent) — becomes solid on hover/focus
 - Smooth box-shadow pulse animation on idle to draw attention
 - role="button", aria-expanded="false/true", aria-controls="a11y-panel"

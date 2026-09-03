@@ -15,6 +15,12 @@ Promotional offers: [PROMO_OFFERS]
 Product updates: [PRODUCT_UPDATES]
 Has EU subscribers: [EU_SUBSCRIBERS]
 
+== LANGUAGE ==
+Write every user-facing string in [LANGUAGE] — form labels, the consent
+checkbox text, the confirmation email, and the unsubscribe page.
+If [LANGUAGE] is Hebrew or Arabic, set dir="rtl" and mirror the layout.
+Also available: Hebrew, Arabic, English, Russian.
+
 == OPT-IN FORM ==
 Fields: Email (required), First name (optional)
 Consent checkbox (mandatory, unchecked by default):

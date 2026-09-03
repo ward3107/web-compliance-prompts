@@ -9,6 +9,12 @@ Framework: [FRAMEWORK]
 Primary language: [PRIMARY_LANGUAGE]
 Main colors: background [BG_COLOR] / text [TEXT_COLOR] / links [LINK_COLOR] / buttons [BUTTON_COLOR]
 
+== LANGUAGE ==
+Write every user-facing string you add or rewrite in [LANGUAGE] — skip-link
+text, form labels, validation messages, ARIA labels and page titles.
+If [LANGUAGE] is Hebrew or Arabic, set dir="rtl" and mirror the layout.
+Also available: Hebrew, Arabic, English, Russian.
+
 == FIXES TO IMPLEMENT (all 38 criteria, grouped by priority) ==
 
 PERCEIVABLE

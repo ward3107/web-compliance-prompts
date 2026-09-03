@@ -20,6 +20,27 @@ support where relevant.
 
 ---
 
+## What it produces
+
+Example output built to the specs in `prompt-01` (cookie banner) and
+`prompt-03` (accessibility widget), on a sample Hebrew RTL business site.
+
+| Cookie banner — Amendment 13 + Consent Mode v2 | Granular consent preferences |
+|---|---|
+| ![Hebrew RTL cookie banner with Accept All, Reject All and Customize buttons, plus a HE/AR/EN/RU language switcher](docs/screenshots/cookie-banner.png) | ![Expanded preferences showing three toggles: Necessary locked on, Analytics enabled, Marketing off, each with an explanation of what it collects](docs/screenshots/cookie-preferences.png) |
+| Explicit consent, 4 languages, links to the privacy policy. | Necessary locked on; Analytics and Marketing off by default, each explaining what it collects and who receives it. |
+
+| Accessibility widget — IS 5568 / WCAG 2.0 AA | High contrast + 120% text |
+|---|---|
+| ![Accessibility panel open showing font size control at 100 percent and eight toggles including high contrast, grayscale and underline links](docs/screenshots/accessibility-widget.png) | ![The same site in high contrast mode with black background, yellow text and cyan links, text scaled to 120 percent](docs/screenshots/high-contrast.png) |
+| Font sizing (50–200%), 8 feature toggles, reset, and a link to the accessibility statement. | High contrast mode with the panel still readable, text scaled up, settings persisted. |
+
+> These are screenshots of example output, included to show what the prompts
+> generate — they are not a hosted demo. Your own output will match your brand
+> color, language, and framework.
+
+---
+
 ## What's inside
 
 This repo is a **Claude Code plugin** that bundles one Agent Skill:

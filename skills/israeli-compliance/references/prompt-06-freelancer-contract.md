@@ -1,7 +1,7 @@
 # 📜 Freelancer Contract + Handoff Checklist
 
-Build a PROFESSIONAL FREELANCE WEB DEVELOPMENT CONTRACT in Hebrew
-(with English translation) for Israeli clients.
+Build a PROFESSIONAL FREELANCE WEB DEVELOPMENT CONTRACT in [LANGUAGE]
+(with English translation alongside) for Israeli clients.
 This contract must comply with Israeli contract law, including
 Amendment 3 to the Contracts (General Part) Law (January 2025).
 
@@ -118,9 +118,15 @@ meaning. Disputes shall be resolved exclusively in the courts of
 [YOUR_CITY], Israel.
 Alternative: disputes under ₪75,000 may be filed in Small Claims Court.
 
+== LANGUAGE ==
+Primary language: [LANGUAGE] (default Hebrew for Israeli clients).
+If [LANGUAGE] is Hebrew or Arabic, lay the document out right-to-left.
+Also available: Hebrew, Arabic, English, Russian.
+
 == OUTPUT FORMAT ==
-Primary language: Hebrew (right-to-left)
+Primary language: [LANGUAGE]
 English translation: side-by-side or below each clause
+(skip the translation if [LANGUAGE] is already English)
 Format: Word document (.docx) OR PDF-ready HTML
 Signature blocks: client name + signature + date + stamp (if company) / contractor name + signature + date
 Add clause: "This agreement constitutes the entire agreement between
