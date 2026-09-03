@@ -3,8 +3,8 @@
   "description": "Generates filled-in, ready-to-paste AI coding prompts for website legal compliance — cookie banners, privacy policies, accessibility widgets and more — composed against per-jurisdiction rule packs. Ships Israel (Amendment 13, IS 5568) and EU/EEA (GDPR, ePrivacy, EAA / WCAG 2.1 AA).",
   "version": "2.0.0",
   "author": { "name": "ward3107" },
-  "homepage": "https://github.com/ward3107/israeli-compliance-prompts",
-  "repository": "https://github.com/ward3107/israeli-compliance-prompts",
+  "homepage": "https://github.com/ward3107/web-compliance-prompts",
+  "repository": "https://github.com/ward3107/web-compliance-prompts",
   "license": "MIT",
   "keywords": ["compliance","privacy","gdpr","eprivacy","accessibility","wcag","israel","eu","rtl","hebrew"]
 }

@@ -119,7 +119,7 @@ Planned: more US states, Canada (PIPEDA / Law 25), Brazil (LGPD).
 ## Install
 
 ```
-/plugin marketplace add ward3107/israeli-compliance-prompts
+/plugin marketplace add ward3107/web-compliance-prompts
 /plugin install web-compliance@web-compliance
 ```
 
@@ -132,9 +132,9 @@ prompt.
 
 **Install the skill directly:**
 ```bash
-git clone https://github.com/ward3107/israeli-compliance-prompts.git
+git clone https://github.com/ward3107/web-compliance-prompts.git
 mkdir -p ~/.claude/skills
-cp -r israeli-compliance-prompts/skills/web-compliance ~/.claude/skills/web-compliance
+cp -r web-compliance-prompts/skills/web-compliance ~/.claude/skills/web-compliance
 ```
 
 **Or by hand:** open any file in `skills/web-compliance/templates/`, replace the
