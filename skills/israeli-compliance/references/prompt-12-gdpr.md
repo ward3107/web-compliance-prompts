@@ -14,6 +14,13 @@ Brand primary color: [BRAND_COLOR]
 Existing privacy policy URL: [PRIVACY_POLICY_URL]
 Cookie banner already built (Prompt 1): [COOKIE_BANNER_BUILT]
 
+== LANGUAGE ==
+Write every user-facing string in [LANGUAGE] — the banner enhancement, the
+privacy-policy addendum, and the data subject request form.
+If [LANGUAGE] is Hebrew or Arabic, set dir="rtl" and mirror the layout.
+Keep GDPR article references (e.g. "Article 6(1)(a)") in their standard form.
+Also available: Hebrew, Arabic, English, Russian.
+
 == PART 1 — EU USER DETECTION ==
 Detect EU visitors via browser locale or IP geolocation.
 If EU detected: show GDPR-enhanced UI (Parts 2 and 3).
