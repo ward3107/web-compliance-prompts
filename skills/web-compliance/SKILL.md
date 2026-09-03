@@ -50,8 +50,9 @@ relying on them as authoritative.
 1. **Identify the artifact** the user wants (match by name or description).
 2. **Ask which markets the site serves** — this is the jurisdiction question and
    it comes FIRST, because it changes the legal requirements, not just wording.
-   Offer: Israel / EU-EEA / both / somewhere else. If they say a market with no
-   pack yet (US, UK, Canada…), say plainly that there is no pack for it, that
+   Offer: Israel / EU-EEA / UK / United States (ask which states) / a
+   combination. If they name a market with no pack yet (Canada, Australia,
+   Brazil, or a US state other than California), say plainly there is no pack, that
    you can still generate the artifact using the closest pack, and that a local
    lawyer must review it.
 3. **Ask for the output language** — Hebrew / Arabic / English / Russian.
@@ -94,14 +95,31 @@ relying on them as authoritative.
 |---|---|---|
 | `jurisdictions/il.yaml` | Privacy Protection Law + Amendment 13, IS 5568 (WCAG 2.0 AA), accessibility, spam, contracts | opt-in |
 | `jurisdictions/eu.yaml` | GDPR, ePrivacy Art. 5(3), EAA / EN 301 549 (WCAG 2.1 AA), Web Accessibility Directive | opt-in |
+| `jurisdictions/uk.yaml` | UK GDPR + DPA 2018, PECR (cookies + marketing, incl. soft opt-in), Equality Act, public-sector accessibility regs | opt-in |
+| `jurisdictions/us.yaml` | Federal layer only: CAN-SPAM, COPPA, ADA, Section 508 | opt-out |
+| `jurisdictions/us-ca.yaml` | CCPA/CPRA, Global Privacy Control, CPPA — `extends: us` | opt-out |
 
-Two things to get right when both apply:
+Things to get right when several apply:
 
-- **The EU cookie banner comes from the ePrivacy Directive, not the GDPR.**
-  GDPR supplies the definition of valid consent; ePrivacy Art. 5(3) is what
-  requires prior consent before any device storage.
+- **The cookie banner comes from ePrivacy / PECR, not the GDPR.** GDPR (and UK
+  GDPR) supplies the definition of valid consent; ePrivacy Art. 5(3) in the EU
+  and PECR Reg. 6 in the UK are what require prior consent before any device
+  storage — localStorage and fingerprinting included, not just cookies.
+- **Consent models are opposite across markets.** EU / UK / Israel are opt-in
+  (consent before storage). US states are opt-out (a "Do Not Sell or Share"
+  control). Geo-detect and serve each visitor their own model. Never apply the
+  US opt-out model globally — that breaches ePrivacy and PECR.
+- **Honour Global Privacy Control wherever US state law applies.** It is a code
+  requirement (`navigator.globalPrivacyControl`), not policy text, and it
+  applies even on a site that otherwise runs an opt-in banner.
+- **Email consent differs sharply.** CAN-SPAM permits sending until opt-out;
+  EU / UK / Israel require prior opt-in. One list spanning them must be opt-in.
 - **Build accessibility to WCAG 2.1 AA.** IS 5568 is based on 2.0 AA, but the
-  EAA requires EN 301 549 → 2.1 AA. 2.1 is a superset, so it satisfies both.
+  EAA and the UK public-sector regs require EN 301 549 → 2.1 AA. 2.1 is a
+  superset, so it satisfies both.
+- **`us.yaml` alone is never "US compliant".** There is no general federal
+  privacy law; consumer rights come from state packs. If the user names a state
+  with no pack, say so plainly rather than implying coverage.
 
 ---
 

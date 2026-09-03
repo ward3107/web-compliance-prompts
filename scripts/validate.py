@@ -121,6 +121,16 @@ def check_jurisdictions() -> None:
         if "needs_legal_review: true" in text:
             warn(f"{rel}: still flagged needs_legal_review — not yet signed off by a lawyer")
 
+        # Cross-references must point at packs that actually exist, or a
+        # composed prompt will silently miss a jurisdiction.
+        codes = {q.stem for q in JURISDICTIONS.glob("*.yaml")}
+        ext = top.get("extends")
+        if ext and ext not in codes:
+            err(f"{rel}: extends '{ext}' but no {ext}.yaml exists")
+        for ref in re.findall(r"^\s*-\s+with:\s*(\S+)", text, re.M):
+            if ref not in codes:
+                err(f"{rel}: conflicts with '{ref}' but no {ref}.yaml exists")
+
 
 # ------------------------------------------------------------------ disclaimer
 def check_disclaimer() -> None:

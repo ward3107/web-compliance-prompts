@@ -17,9 +17,30 @@ Read the requirements from the matching jurisdictions/*.yaml pack. In short:
 - California (CCPA/CPRA): opt-OUT model — show a "Do Not Sell or Share My
   Personal Information" control rather than a prior-consent gate.
 
+- UK: the banner is required by PECR Regulation 6 (not the UK GDPR).
+  Opt-in, same shape as the EU.
+
 If the site serves several of these, detect the visitor's region and apply the
-STRICTER model to them: opt-in for EU/Israel visitors, opt-out control for
+STRICTER model to them: opt-in for EU/UK/Israel visitors, opt-out control for
 California. Never apply opt-out globally — that breaches ePrivacy.
+
+== GLOBAL PRIVACY CONTROL (required wherever US state law applies) ==
+California — and a growing number of other US states — require you to honour a
+browser-level opt-out signal. This is real code, not policy text:
+
+  const gpc = navigator.globalPrivacyControl === true;
+
+If gpc is true, on FIRST LOAD and before any tag fires:
+  - treat sale/sharing as opted out: ad_storage, ad_user_data and
+    ad_personalization = 'denied'
+  - do NOT wait for a banner click, and do NOT show a prior-consent gate as
+    though the choice were still open
+  - reflect it in the UI ("You have opted out via your browser's privacy
+    signal") and persist it like any other stored choice
+  - keep analytics_storage governed by the rules of the visitor's own
+    jurisdiction
+
+GPC must be honoured even on a site that otherwise runs an opt-in banner.
 
 == PROJECT INFO ==
 Framework: [FRAMEWORK]
