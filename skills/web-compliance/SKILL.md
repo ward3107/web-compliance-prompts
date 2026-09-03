@@ -1,0 +1,263 @@
+---
+name: web-compliance
+description: >
+  Generates filled-in, ready-to-paste AI coding prompts for website legal
+  compliance in a chosen jurisdiction. Use this skill ANY TIME the user asks
+  for a compliance prompt, legal page, cookie banner, accessibility widget,
+  privacy policy, freelancer contract, terms of use, refund policy, disclaimer,
+  e-commerce checkout, email marketing, GDPR or data-subject-rights layer, or
+  client onboarding form — even casually ("give me the cookie banner", "I need
+  a privacy policy prompt", "freelancer contract please"). Always ask which
+  markets the site serves, then which language, then the variables, then output
+  the filled prompt. Ships jurisdiction packs for Israel (Privacy Protection
+  Law Amendment 13 · IS 5568) and the EU/EEA (GDPR · ePrivacy · EAA /
+  EN 301 549 · WCAG 2.1 AA), plus GTM Consent Mode v2 wiring.
+---
+
+# Web Compliance — Prompt Generator
+
+Turns a compliance artifact (cookie banner, privacy policy, accessibility
+widget…) plus one or more jurisdictions into a fully filled-in prompt, ready to
+paste into Cursor, Claude Code or any AI coding assistant.
+
+The design separates two things:
+
+- **`templates/`** — WHAT to build. Jurisdiction-neutral.
+- **`jurisdictions/`** — WHICH rules apply, with citations and review dates.
+
+You compose them. One `cookie-banner` template serves Israel, the EU and
+California without being forked.
+
+---
+
+## ⚠️ Not legal advice
+
+These prompts and the documents they generate are **templates for informational
+purposes only** and do **not** constitute legal advice. Laws change and every
+situation differs. Before publishing any policy, contract, disclaimer, or
+accessibility statement produced with this skill, have it reviewed by a
+qualified lawyer licensed in the relevant jurisdiction. Use at your own risk;
+no warranty is provided.
+
+Both shipped jurisdiction packs are currently marked `needs_legal_review: true`
+— they have not yet been signed off by a lawyer. Say so if the user seems to be
+relying on them as authoritative.
+
+---
+
+## Workflow (follow every time)
+
+1. **Identify the artifact** the user wants (match by name or description).
+2. **Ask which markets the site serves** — this is the jurisdiction question and
+   it comes FIRST, because it changes the legal requirements, not just wording.
+   Offer: Israel / EU-EEA / both / somewhere else. If they say a market with no
+   pack yet (US, UK, Canada…), say plainly that there is no pack for it, that
+   you can still generate the artifact using the closest pack, and that a local
+   lawyer must review it.
+3. **Ask for the output language** — Hebrew / Arabic / English / Russian.
+4. **Ask for the variables** for that artifact (see below). All at once, grouped
+   naturally. Mark optional fields as (optional).
+5. **Read the template** from `templates/` and the pack(s) from
+   `jurisdictions/`.
+6. **Compose and output** — replace every `[BRACKET]`, set `[JURISDICTIONS]` to
+   the chosen markets, and fill `== LANGUAGE ==`. Fold in the requirements from
+   each selected pack.
+   - If two packs **conflict**, do NOT silently pick one. Apply the stricter
+     rule and surface the conflict — each pack lists known conflicts under
+     `conflicts:`.
+   - Cite the governing law by name in the generated output, so whoever reviews
+     it can check the source.
+
+---
+
+## Artifact Directory
+
+| Artifact | Template |
+|---|---|
+| 🍪 Cookie Banner (Consent Mode v2) | `templates/cookie-banner.md` |
+| 📄 Privacy Policy | `templates/privacy-policy.md` |
+| ♿ Accessibility Widget | `templates/accessibility-widget.md` |
+| 🌐 Full-Site Accessibility Baseline | `templates/accessibility-baseline.md` |
+| 📋 Accessibility Statement | `templates/accessibility-statement.md` |
+| 📜 Freelancer Contract | `templates/freelancer-contract.md` |
+| 📜 Terms of Use | `templates/terms-of-use.md` |
+| 💳 Refund & Cancellation Policy | `templates/refund-policy.md` |
+| ⚠️ Disclaimer | `templates/disclaimer.md` |
+| 🛒 E-Commerce Checkout | `templates/ecommerce-checkout.md` |
+| 📧 Email Marketing | `templates/email-marketing.md` |
+| 🇪🇺 Data Subject Rights layer | `templates/data-subject-rights.md` |
+| 📋 Client Onboarding Questionnaire | `templates/client-onboarding.md` |
+
+## Jurisdiction Packs
+
+| Pack | Covers | Consent model |
+|---|---|---|
+| `jurisdictions/il.yaml` | Privacy Protection Law + Amendment 13, IS 5568 (WCAG 2.0 AA), accessibility, spam, contracts | opt-in |
+| `jurisdictions/eu.yaml` | GDPR, ePrivacy Art. 5(3), EAA / EN 301 549 (WCAG 2.1 AA), Web Accessibility Directive | opt-in |
+
+Two things to get right when both apply:
+
+- **The EU cookie banner comes from the ePrivacy Directive, not the GDPR.**
+  GDPR supplies the definition of valid consent; ePrivacy Art. 5(3) is what
+  requires prior consent before any device storage.
+- **Build accessibility to WCAG 2.1 AA.** IS 5568 is based on 2.0 AA, but the
+  EAA requires EN 301 549 → 2.1 AA. 2.1 is a superset, so it satisfies both.
+
+---
+
+## Variables Per Prompt
+
+### Cookie Banner
+- Framework (HTML/CSS/JS or React)
+- Website name
+- Privacy policy URL
+- Contact email
+- Brand primary color (#HEX)
+- Uses Google Analytics 4? (YES/NO)
+- Uses Google Ads? (YES/NO)
+- Uses Facebook/Meta Pixel? (YES/NO)
+- Uses Mailchimp or email marketing? (YES/NO)
+- GTM Container ID (or "not using GTM")
+
+### Privacy Policy
+- Framework
+- Business/website name
+- Business type (e.g. freelance web dev / e-commerce / portfolio)
+- Owner full name
+- Business address (street, city, Israel)
+- Privacy contact email
+- Website URL
+- Hosting provider + country (e.g. GoDaddy / USA)
+- Tools used — YES/NO for each: Google Analytics 4, Google Ads, Facebook Pixel, GTM, Mailchimp, WhatsApp Business, Contact form
+- Brand primary color
+
+### Accessibility Widget
+No variables needed — the widget auto-detects brand color from the page.
+Just ask for language and output the prompt as-is.
+
+### Full Site WCAG Baseline
+- Framework
+- Primary language of the site (Hebrew / Arabic / English / Russian)
+- Main colors: background #HEX / text #HEX / links #HEX / buttons #HEX
+
+### Accessibility Statement
+- Framework
+- Website name
+- Business owner / coordinator name
+- Coordinator email
+- Coordinator phone (optional)
+- Website URL
+- Last accessibility review date
+- Brand primary color
+
+### Freelancer Contract
+- Contractor full name (the freelancer's name)
+- Contractor address
+- Tax ID / ת.ז
+- Contractor business type (עוסק פטור or עוסק מורשה)
+- Client business name
+- Client address
+- Client tax ID
+- Client contact person (name + title)
+- Project description (what website/app)
+- Estimated delivery (weeks)
+- Number of revision rounds included
+- Total fee (₪)
+- Payment method (Bank transfer / Bit / PayPal)
+- Start date (or "within 5 days of deposit")
+- Your city (for jurisdiction clause)
+- Hourly rate for additional work (₪/hour)
+
+### Terms of Use
+- Framework
+- Business/website name
+- Business type
+- Owner full name
+- Business address
+- Contact email
+- Website URL
+- Brand primary color
+- Sells products or services? (YES/NO)
+- Allows user accounts/registration? (YES/NO)
+- Allows user-generated content? (YES/NO)
+
+### Refund & Cancellation Policy
+- Framework
+- Business/website name
+- Business type (freelance services / digital products / physical goods / SaaS)
+- Owner full name
+- Contact email
+- Website URL
+- Brand primary color
+- Physical goods? (YES/NO)
+- Digital downloads? (YES/NO)
+- Software/SaaS subscriptions? (YES/NO)
+- Freelance/service-based work? (YES/NO)
+
+### Disclaimer
+- Framework
+- Business/website name
+- Owner full name
+- Contact email
+- Brand primary color
+- General information/blog content? (YES/NO)
+- Health or medical content? (YES/NO)
+- Legal information? (YES/NO)
+- Financial or investment content? (YES/NO)
+- Coaching / personal development? (YES/NO)
+- Affiliate links or sponsored content? (YES/NO)
+- AI-generated content on site? (YES/NO)
+
+### E-Commerce Compliance
+- Framework
+- Shop name
+- Products sold (physical / digital / services / subscriptions)
+- Payment processor (Stripe / PayPlus / CardCom / Tranzila / other)
+- Brand primary color
+- Contact email
+
+### Email Marketing
+- Framework
+- Email platform (Mailchimp / ActiveCampaign / Sendinblue / other)
+- Website name
+- Contact email
+- Brand primary color
+- Newsletter? (YES/NO)
+- Promotional offers? (YES/NO)
+- Product updates? (YES/NO)
+- Has EU subscribers? (YES/NO)
+
+### GDPR Notice Layer
+- Framework
+- Website name
+- Shows EU prices or EU-language content? (YES/NO)
+- Ships to EU? (YES/NO)
+- Privacy contact email
+- Brand primary color
+- Existing privacy policy URL
+- Cookie banner already built (Prompt 1 done)? (YES/NO)
+
+### Client Onboarding Questionnaire
+- Your name
+- Your email
+- Your website URL
+- Brand color for the form (#HEX)
+
+---
+
+## Output Format
+
+After collecting all answers, output the filled prompt like this:
+
+```
+---
+## 🍪 Cookie Banner Prompt — Ready to paste into Cursor AI
+
+[full filled prompt text here]
+
+---
+✅ Verification Checklist:
+[checklist from the reference file]
+```
+
+Always include the verification checklist at the end so the user can check the output.

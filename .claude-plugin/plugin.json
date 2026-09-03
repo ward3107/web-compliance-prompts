@@ -1,21 +1,10 @@
 {
-  "name": "israeli-compliance",
-  "description": "Generates filled-in, ready-to-paste AI coding prompts for Israeli website legal compliance — Amendment 13, IS 5568 / WCAG 2.0 AA, and GTM Consent Mode v2. Output in Hebrew, Arabic, English, or Russian.",
-  "version": "1.0.0",
-  "author": {
-    "name": "ward3107"
-  },
+  "name": "web-compliance",
+  "description": "Generates filled-in, ready-to-paste AI coding prompts for website legal compliance — cookie banners, privacy policies, accessibility widgets and more — composed against per-jurisdiction rule packs. Ships Israel (Amendment 13, IS 5568) and EU/EEA (GDPR, ePrivacy, EAA / WCAG 2.1 AA).",
+  "version": "2.0.0",
+  "author": { "name": "ward3107" },
   "homepage": "https://github.com/ward3107/israeli-compliance-prompts",
   "repository": "https://github.com/ward3107/israeli-compliance-prompts",
   "license": "MIT",
-  "keywords": [
-    "israel",
-    "privacy",
-    "gdpr",
-    "accessibility",
-    "wcag",
-    "compliance",
-    "rtl",
-    "hebrew"
-  ]
+  "keywords": ["compliance","privacy","gdpr","eprivacy","accessibility","wcag","israel","eu","rtl","hebrew"]
 }

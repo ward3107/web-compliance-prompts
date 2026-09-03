@@ -1,13 +1,13 @@
-# Israeli Compliance Prompts
+# Web Compliance Prompts
 
-AI coding prompts for **Israeli website legal compliance** — covering
-**Amendment 13** to the Privacy Protection Law, the **IS 5568 / WCAG 2.0 AA**
-accessibility standard, and **Google Consent Mode v2**. Each prompt is a
-ready-to-fill template you paste into an AI coding assistant (Cursor, Claude,
-etc.) to generate the corresponding artifact for a client site.
+AI coding prompts for **website legal compliance**, composed against
+per-jurisdiction rule packs. Pick what you're building and which markets the
+site serves; the skill assembles a filled-in prompt you paste into Cursor,
+Claude Code, or any AI coding assistant.
 
-Output can be generated in **Hebrew, Arabic, English, or Russian**, with RTL
-support where relevant.
+Ships packs for **Israel** (Privacy Protection Law + Amendment 13, IS 5568) and
+the **EU/EEA** (GDPR, ePrivacy, European Accessibility Act / EN 301 549).
+Output in **Hebrew, Arabic, English or Russian**, with RTL support.
 
 > ## ⚠️ Not legal advice
 >
@@ -15,104 +15,127 @@ support where relevant.
 > informational purposes only** and do **not** constitute legal advice. Laws
 > change and every situation differs. Before publishing any policy, contract,
 > disclaimer, or accessibility statement produced with these prompts, have it
-> reviewed by a **qualified lawyer** licensed in the relevant jurisdiction
-> (Israel and/or the EU). Use at your own risk; no warranty is provided.
+> reviewed by a **qualified lawyer** licensed in the relevant jurisdiction.
+> Use at your own risk; no warranty is provided.
+>
+> **Both jurisdiction packs are currently marked `needs_legal_review: true`** —
+> the citations are sourced but have not been signed off by a practitioner.
 
 ---
 
 ## What it produces
 
-Example output built to the specs in `prompt-01` (cookie banner) and
-`prompt-03` (accessibility widget), on a sample Hebrew RTL business site.
+Example output built to the `cookie-banner` and `accessibility-widget`
+templates, on a sample Hebrew RTL business site.
 
-| Cookie banner — Amendment 13 + Consent Mode v2 | Granular consent preferences |
+| Cookie banner | Granular consent preferences |
 |---|---|
 | ![Hebrew RTL cookie banner with Accept All, Reject All and Customize buttons, plus a HE/AR/EN/RU language switcher](docs/screenshots/cookie-banner.png) | ![Expanded preferences showing three toggles: Necessary locked on, Analytics enabled, Marketing off, each with an explanation of what it collects](docs/screenshots/cookie-preferences.png) |
-| Explicit consent, 4 languages, links to the privacy policy. | Necessary locked on; Analytics and Marketing off by default, each explaining what it collects and who receives it. |
 
-| Accessibility widget — IS 5568 / WCAG 2.0 AA | High contrast + 120% text |
+| Accessibility widget | High contrast + 120% text |
 |---|---|
 | ![Accessibility panel open showing font size control at 100 percent and eight toggles including high contrast, grayscale and underline links](docs/screenshots/accessibility-widget.png) | ![The same site in high contrast mode with black background, yellow text and cyan links, text scaled to 120 percent](docs/screenshots/high-contrast.png) |
-| Font sizing (50–200%), 8 feature toggles, reset, and a link to the accessibility statement. | High contrast mode with the panel still readable, text scaled up, settings persisted. |
 
-> These are screenshots of example output, included to show what the prompts
-> generate — they are not a hosted demo. Your own output will match your brand
-> color, language, and framework.
+> Screenshots of example output, not a hosted demo. Your own output matches your
+> brand color, language, framework and jurisdictions.
 
 ---
 
-## What's inside
-
-This repo is a **Claude Code plugin** that bundles one Agent Skill:
+## How it's structured
 
 ```
-.claude-plugin/
-  marketplace.json          # lets others add this repo as a plugin marketplace
-  plugin.json               # plugin manifest
-skills/
-  israeli-compliance/
-    SKILL.md                # the prompt-generator skill
-    references/             # the 13 prompt templates ([BRACKET] placeholders)
+skills/web-compliance/
+  SKILL.md              # composes template × jurisdiction(s)
+  templates/            # WHAT to build — jurisdiction-neutral (13 artifacts)
+  jurisdictions/        # WHICH rules apply — cited, dated, machine-readable
+    il.yaml             # Israel
+    eu.yaml             # EU / EEA
+scripts/validate.py     # structural checks, run in CI
+docs/screenshots/
 ```
 
-- **`skills/israeli-compliance/SKILL.md`** — an
-  [Agent Skill](https://docs.claude.com/en/docs/claude-code/skills) that drives
-  the generator: it collects the needed variables, asks for the output language,
-  and fills in the matching template.
-- **`skills/israeli-compliance/references/`** — the 13 prompt templates.
+Templates and jurisdictions are deliberately separate. One `cookie-banner`
+template serves Israel, the EU and California without being forked — the pack
+supplies the rules, the template supplies the build.
 
-## Install as a Claude Code plugin
+## The 13 artifacts
 
-In Claude Code, add this repo as a plugin marketplace, then install the plugin:
+| Artifact | Template |
+|---|---|
+| 🍪 Cookie Banner (Consent Mode v2) | `templates/cookie-banner.md` |
+| 📄 Privacy Policy | `templates/privacy-policy.md` |
+| ♿ Accessibility Widget | `templates/accessibility-widget.md` |
+| 🌐 Full-Site Accessibility Baseline | `templates/accessibility-baseline.md` |
+| 📋 Accessibility Statement | `templates/accessibility-statement.md` |
+| 📜 Freelancer Contract | `templates/freelancer-contract.md` |
+| 📜 Terms of Use | `templates/terms-of-use.md` |
+| 💳 Refund & Cancellation Policy | `templates/refund-policy.md` |
+| ⚠️ Disclaimer | `templates/disclaimer.md` |
+| 🛒 E-Commerce Checkout | `templates/ecommerce-checkout.md` |
+| 📧 Email Marketing | `templates/email-marketing.md` |
+| 🇪🇺 Data Subject Rights layer | `templates/data-subject-rights.md` |
+| 📋 Client Onboarding Questionnaire | `templates/client-onboarding.md` |
+
+## Jurisdiction coverage
+
+| Pack | Frameworks | Consent | Accessibility | Legal review |
+|---|---|---|---|---|
+| **Israel** `il.yaml` | PPL + Amendment 13 (14 Aug 2025), IS 5568, Equal Rights Law, anti-spam, Contracts Amendment 3 | opt-in | WCAG 2.0 AA | ❌ pending |
+| **EU / EEA** `eu.yaml` | GDPR 2016/679, ePrivacy 2002/58/EC Art. 5(3), EAA 2019/882, EN 301 549, WAD 2016/2102 | opt-in | WCAG 2.1 AA | ❌ pending |
+
+Planned: `us-ca` (CCPA/CPRA), `uk` (UK GDPR + PECR).
+
+**Two things this structure gets right that a flat prompt set gets wrong:**
+
+- The EU cookie banner is required by the **ePrivacy Directive Art. 5(3)**, not
+  the GDPR. GDPR defines what valid consent *is*; ePrivacy is what requires
+  consent before any device storage — including `localStorage` and
+  fingerprinting, not just cookies.
+- Accessibility should target **WCAG 2.1 AA**. IS 5568 is built on 2.0 AA, but
+  the EAA requires EN 301 549 → 2.1 AA. 2.1 is a superset, so building to it
+  satisfies both.
+
+## Install
 
 ```
 /plugin marketplace add ward3107/israeli-compliance-prompts
-/plugin install israeli-compliance@israeli-compliance
+/plugin install web-compliance@web-compliance
 ```
 
-Once installed, just ask naturally — e.g. *"give me the cookie banner compliance
-prompt"* or *"I need the freelancer contract"* — and the skill activates, asks
-for your variables and language, and outputs the filled prompt.
+Then just ask — *"give me the cookie banner prompt"* — and the skill asks which
+markets you serve, which language, and your variables, then emits the filled
+prompt.
 
-### Alternative: install the skill directly (no plugin)
+<details>
+<summary>Alternatives without the plugin system</summary>
 
+**Install the skill directly:**
 ```bash
 git clone https://github.com/ward3107/israeli-compliance-prompts.git
 mkdir -p ~/.claude/skills
-cp -r israeli-compliance-prompts/skills/israeli-compliance ~/.claude/skills/israeli-compliance
+cp -r israeli-compliance-prompts/skills/web-compliance ~/.claude/skills/web-compliance
 ```
 
-### Alternative: use the prompts by hand (no Claude Code)
+**Or by hand:** open any file in `skills/web-compliance/templates/`, replace the
+`[BRACKET]` placeholders, and paste it into your AI assistant.
+</details>
 
-Open any file under `skills/israeli-compliance/references/`, copy the text,
-replace the `[BRACKET]` placeholders, and paste it into Cursor, Claude, ChatGPT,
-or any AI coding assistant.
+## Contributing a jurisdiction
 
-## The 13 prompts
+See `skills/web-compliance/jurisdictions/README.md`. The rules in short:
+no requirement without a citation, mark what you have not verified, date
+everything, and record conflicts between jurisdictions rather than silently
+resolving them.
 
-| # | Prompt | File |
-|---|--------|------|
-| 1 | 🍪 Cookie Banner (Consent Mode v2) | `skills/israeli-compliance/references/prompt-01-cookie-banner.md` |
-| 2 | 📄 Privacy Policy (Amendment 13) | `skills/israeli-compliance/references/prompt-02-privacy-policy.md` |
-| 3 | ♿ Accessibility Widget | `skills/israeli-compliance/references/prompt-03-accessibility-widget.md` |
-| 4 | 🌐 Full-Site WCAG 2.0 AA Baseline | `skills/israeli-compliance/references/prompt-04-wcag-baseline.md` |
-| 5 | 📋 Accessibility Statement (IS 5568) | `skills/israeli-compliance/references/prompt-05-accessibility-statement.md` |
-| 6 | 📜 Freelancer Contract | `skills/israeli-compliance/references/prompt-06-freelancer-contract.md` |
-| 7 | 📜 Terms of Use | `skills/israeli-compliance/references/prompt-07-terms-of-use.md` |
-| 8 | 💳 Refund & Cancellation Policy | `skills/israeli-compliance/references/prompt-08-refund-policy.md` |
-| 9 | ⚠️ Disclaimer | `skills/israeli-compliance/references/prompt-09-disclaimer.md` |
-| 10 | 🛒 E-Commerce Compliance | `skills/israeli-compliance/references/prompt-10-ecommerce.md` |
-| 11 | 📧 Email Marketing | `skills/israeli-compliance/references/prompt-11-email-marketing.md` |
-| 12 | 🇪🇺 GDPR Notice Layer | `skills/israeli-compliance/references/prompt-12-gdpr.md` |
-| 13 | 📋 Client Onboarding Questionnaire | `skills/israeli-compliance/references/prompt-13-onboarding.md` |
+Run the checks before opening a PR:
 
-## Standards referenced
+```bash
+python3 scripts/validate.py
+```
 
-- **Amendment 13** — Israel's Privacy Protection Law (Amendment 13), effective 2025.
-- **IS 5568** — Israeli accessibility standard, aligned with **WCAG 2.0 Level AA**.
-- **GTM Consent Mode v2** — Google's consent signaling for Analytics/Ads.
-- **GDPR** — for sites with EU visitors or customers.
+It fails on uncited frameworks, missing `[LANGUAGE]` placeholders, missing
+checklists, and absent disclaimers; it warns on review dates older than a year.
 
 ## License
 
-Released under the [MIT License](LICENSE).
+[MIT](LICENSE).
