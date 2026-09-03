@@ -16,6 +16,22 @@ Uses Facebook/Meta Pixel? [FB_PIXEL]
 Uses Mailchimp or email marketing? [MAILCHIMP]
 GTM Container ID: [GTM_ID]
 
+== BROWSER SUPPORT ==
+Target the current versions of Chrome, Edge, Safari, Firefox, Samsung Internet
+and Opera, on desktop and mobile. Note there are only three engines: Blink
+(Chrome, Edge, Opera, Samsung Internet), WebKit (Safari, and every browser on
+iOS) and Gecko (Firefox) — so test one browser per engine.
+
+Rules:
+- Progressive enhancement: never let a newer CSS feature be the ONLY declaration
+  for something load-bearing (a background, a position, a size). Declare a widely
+  supported fallback first, then the enhanced version on the next line.
+- Do not rely on color-mix(), :has(), @container, popover or <dialog> unless you
+  also provide a fallback that works without them.
+- Safe to use without fallback: CSS custom properties, flexbox, grid,
+  :focus-visible, inset-inline-*, localStorage/sessionStorage, filter.
+- Test keyboard and screen-reader behaviour on both a Blink and a WebKit browser.
+
 == CONSENT MODE V2 INTEGRATION ==
 Before GTM loads, inject this default consent state in <head>:
 window.dataLayer = window.dataLayer || [];
@@ -103,3 +119,4 @@ Show the 3-line GTM head snippet placement separately.
 - Switch to Hebrew/Arabic. Layout flips RTL. Language choice saved to localStorage.
 - Click Reject All. Only Necessary = true in localStorage. All 4 GTM signals = 'denied'.
 - Tab through with keyboard only. All 3 toggles and all 3 buttons focusable with visible focus ring.
+- Open the banner in one Blink browser (Chrome/Samsung Internet), one WebKit (Safari/any iOS browser) and Firefox. Buttons, toggles and RTL layout look correct in all three.
