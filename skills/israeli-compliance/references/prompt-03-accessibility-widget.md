@@ -9,6 +9,22 @@ Framework: HTML/CSS/JS (plain, no dependencies, works on any project)
 Widget position: bottom, inset-inline-end (bottom-right in LTR, bottom-left in RTL)
 Brand color: AUTO-DETECT from the page (scan buttons, links, headers, nav for the first colorful computed color; fallback to #2563EB)
 
+== BROWSER SUPPORT ==
+Target the current versions of Chrome, Edge, Safari, Firefox, Samsung Internet
+and Opera, on desktop and mobile. Note there are only three engines: Blink
+(Chrome, Edge, Opera, Samsung Internet), WebKit (Safari, and every browser on
+iOS) and Gecko (Firefox) — so test one browser per engine.
+
+Rules:
+- Progressive enhancement: never let a newer CSS feature be the ONLY declaration
+  for something load-bearing (a background, a position, a size). Declare a widely
+  supported fallback first, then the enhanced version on the next line.
+- Do not rely on color-mix(), :has(), @container, popover or <dialog> unless you
+  also provide a fallback that works without them.
+- Safe to use without fallback: CSS custom properties, flexbox, grid,
+  :focus-visible, inset-inline-*, localStorage/sessionStorage, filter.
+- Test keyboard and screen-reader behaviour on both a Blink and a WebKit browser.
+
 == TRIGGER BUTTON ICON ==
 Use the official international accessibility SVG icon (the dynamic wheelchair user symbol) as the trigger button icon. Do NOT use text or emoji. Embed the SVG inline inside the button. The SVG should be white on the brand-colored background. The icon should be clean, recognizable, and sized at 28x28px inside the 52x52px button.
 
@@ -32,7 +48,13 @@ Inject into CSS variables: --a11y-brand: [detected color] --a11y-brand-dark: [de
 - Fixed position at the bottom inset-inline-end corner, 52x52px circular button.
   Use inset-inline-end, NOT right, so the widget mirrors correctly on RTL (Hebrew/Arabic) sites.
   The panel must anchor to the same side as the trigger.
-- Background: color-mix(in srgb, var(--a11y-brand) 50%, transparent) — becomes solid on hover/focus
+- Background: declare a solid fallback FIRST, then the translucent version:
+    background: var(--a11y-brand);                                     /* fallback */
+    background: color-mix(in srgb, var(--a11y-brand) 50%, transparent); /* enhanced */
+  Browsers without color-mix() keep the solid brand color. NEVER ship the
+  color-mix() line alone — if it is dropped the button loses its background
+  and the accessibility widget becomes invisible.
+  Becomes fully solid on hover/focus.
 - Smooth box-shadow pulse animation on idle to draw attention
 - role="button", aria-expanded="false/true", aria-controls="a11y-panel"
 - aria-label="Open accessibility tools" / "Close accessibility tools"
@@ -147,3 +169,5 @@ Default language for panel text: [LANGUAGE]
 - Use a screen reader (or NVDA if Windows). Toggle a feature — hears announcement
 - Enable all features. Reload page. All features restored immediately.
 - Font Size A+ six times. Reaches 28px. A+ becomes disabled (no more increase).
+- Check the trigger button in a browser without color-mix() support (or disable that line in DevTools). The button still has a solid brand-colored background and is clearly visible.
+- Open the widget in one Blink, one WebKit and one Gecko browser. Panel position mirrors correctly on an RTL page.

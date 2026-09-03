@@ -44,6 +44,24 @@ Process unsubscribes within 10 business days (Israeli law).
 Add GDPR consent language: 'Legal basis: Consent (Article 6(1)(a) GDPR)'
 Include right to withdraw consent and right to data portability.
 
+== EMAIL CLIENT COMPATIBILITY ==
+Email clients are NOT browsers — Outlook on Windows renders with the Word
+engine. For confirmation-email.html and any other email template:
+- Layout with <table> elements, not flexbox or grid. Neither works in Outlook.
+- All CSS inline on the element (style="..."). External and <style> blocks are
+  stripped by several clients (Gmail strips <style> in forwarded mail).
+- Use widths in px on tables; max-width 600px for the outer container.
+- Web fonts are unreliable — specify a real fallback stack (Arial, Helvetica,
+  sans-serif). For Hebrew/Arabic add dir="rtl" on the table AND the body.
+- No JavaScript — it is stripped everywhere. The unsubscribe and confirm
+  actions must be plain <a href> links.
+- Every image needs alt text; many clients block images by default, so the
+  email must still make sense with images off.
+- Test in Gmail (web + mobile), Outlook, and Apple Mail at minimum.
+
+The opt-in form and unsubscribe PAGE are normal web pages — normal CSS is
+fine there. This section applies only to the email templates.
+
 == OUTPUT ==
 opt-in-form.html / React component
 confirmation-email.html (inline CSS)
@@ -60,3 +78,4 @@ unsubscribe-page.html / React component
 - Unsubscribe does NOT ask reason BEFORE completing the action
 - GDPR section present only if EU subscribers = YES
 - ⚠️ Transactional emails do not need marketing consent — keep those lists separate
+- Send the confirmation email to Gmail, Outlook (Windows) and Apple Mail. Layout holds in all three, including with images blocked.

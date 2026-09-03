@@ -71,7 +71,12 @@ Fix with visually-hidden text: <span class="sr-only"> about pricing</span>
 
 11. VISIBLE FOCUS INDICATOR (2.4.7)
 NEVER use: :focus { outline: none }
-Add to CSS: :focus-visible { outline: 3px solid [BUTTON_COLOR]; outline-offset: 3px; }
+Add to CSS, :focus first as the fallback, then :focus-visible:
+  :focus { outline: 3px solid [BUTTON_COLOR]; outline-offset: 3px; }
+  :focus:not(:focus-visible) { outline: none; }   /* hide it for mouse users */
+  :focus-visible { outline: 3px solid [BUTTON_COLOR]; outline-offset: 3px; }
+This order means a browser without :focus-visible still shows a visible focus
+ring (2.4.7 passes) instead of no ring at all.
 
 UNDERSTANDABLE
 12. PAGE LANGUAGE (3.1.1)
