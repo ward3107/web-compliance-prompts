@@ -9,6 +9,26 @@ Framework: HTML/CSS/JS (plain, no dependencies, works on any project)
 Widget position: bottom, inset-inline-end (bottom-right in LTR, bottom-left in RTL)
 Brand color: AUTO-DETECT from the page (scan buttons, links, headers, nav for the first colorful computed color; fallback to #2563EB)
 
+== ACCESSIBILITY STANDARD TARGET ==
+Build to the HIGHER of the standards that apply to [JURISDICTIONS]:
+- Israel (IS 5568)              -> WCAG 2.0 Level AA
+- EU (EAA / EN 301 549)         -> WCAG 2.1 Level AA
+- UK, US Section 508, Canada    -> WCAG 2.1 Level AA (verify per contract)
+
+WCAG 2.1 AA is a strict superset of 2.0 AA, so building to 2.1 satisfies
+IS 5568 as well. Default to 2.1 AA unless the client serves Israel only.
+
+The 2.1 additions that matter most beyond 2.0 AA:
+- 1.3.4 Orientation — do not lock to portrait or landscape
+- 1.3.5 Identify Input Purpose — autocomplete attributes on personal-data fields
+- 1.4.10 Reflow — usable at 320px wide with no horizontal scrolling
+- 1.4.11 Non-text Contrast — 3:1 for UI components, icons and focus indicators
+- 1.4.12 Text Spacing — no clipping when users override spacing
+- 1.4.13 Content on Hover or Focus — dismissible, hoverable, persistent
+- 2.5.1 Pointer Gestures / 2.5.2 Pointer Cancellation
+- 2.5.3 Label in Name — visible label text must be in the accessible name
+- 2.5.4 Motion Actuation
+
 == BROWSER SUPPORT ==
 Target the current versions of Chrome, Edge, Safari, Firefox, Samsung Internet
 and Opera, on desktop and mobile. Note there are only three engines: Blink

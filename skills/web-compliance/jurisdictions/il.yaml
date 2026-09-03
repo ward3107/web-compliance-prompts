@@ -1,0 +1,81 @@
+jurisdiction: il
+name: Israel
+last_reviewed: 2026-09-03
+reviewed_by: unverified          # set to the reviewing lawyer/firm once checked
+needs_legal_review: true
+
+# Every entry below must carry a citation. If you cannot cite it, do not ship it.
+frameworks:
+
+  - id: ppl
+    name: Privacy Protection Law, 5741-1981
+    short: PPL
+    amended_by: Amendment 13
+    effective: 2025-08-14          # Amendment 13 entry into force
+    governs: [privacy_policy, data_subject_rights, security, enforcement]
+    citation: https://www.gov.il/en/departments/the_privacy_protection_authority
+    verified: false
+    notes: >
+      Amendment 13 substantially expanded the Privacy Protection Authority's
+      enforcement powers and introduced administrative fines. Confirm the
+      current DPO (ממונה על הגנת הפרטיות) and database-registration thresholds
+      with a practitioner before relying on them.
+    requires:
+      - explicit_consent
+      - purpose_limitation
+      - data_subject_access
+      - data_subject_correction
+      - data_subject_deletion
+      - breach_notification
+
+  - id: is5568
+    name: Israeli Standard IS 5568 — Web Content Accessibility
+    short: IS 5568
+    based_on: WCAG 2.0 Level AA
+    governs: [accessibility]
+    citation: https://www.gov.il/en/departments/topics/accessibility
+    verified: false
+    notes: >
+      IS 5568 is built on WCAG 2.0 AA. Sites also serving the EU should target
+      WCAG 2.1 AA (see eu.yaml) — 2.1 is a superset, so meeting 2.1 also meets
+      IS 5568. Enforced under the Equal Rights for Persons with Disabilities
+      Law, 5758-1998 and its accessibility regulations.
+    requires:
+      - wcag_20_aa
+      - accessibility_statement
+      - accessibility_coordinator_contact
+
+  - id: equal_rights
+    name: Equal Rights for Persons with Disabilities Law, 5758-1998
+    governs: [accessibility, accessibility_statement]
+    citation: https://www.gov.il/en/departments/topics/accessibility
+    verified: false
+
+  - id: spam
+    name: Anti-spam provisions (Communications Law, Amendment 40)
+    governs: [email_marketing, sms_marketing]
+    citation: https://www.gov.il/en/departments/ministry_of_communications
+    verified: false
+    needs_verification: >
+      IMPORTANT — an earlier version of these templates cited "Computer Law
+      5755-1995" for spam. Israeli commercial-messaging rules are generally
+      attributed to Amendment 40 of the Communications (Telecommunications and
+      Broadcasting) Law, 1982. Confirm the correct statute and section with an
+      Israeli lawyer before publishing either citation.
+    requires:
+      - prior_opt_in
+      - sender_identification
+      - one_click_unsubscribe
+
+  - id: contracts_amendment_3
+    name: Contracts (General Part) Law — Amendment 3
+    effective: 2025-01-01
+    governs: [contracts]
+    citation: https://www.gov.il/en/departments/ministry_of_justice
+    verified: false
+
+consent_model: opt_in            # affirmative action required before non-essential storage
+rtl: true
+languages: [he, ar, en, ru]
+currency: ILS
+small_claims_ceiling_ils: 75000  # verify current figure before relying on it

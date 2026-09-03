@@ -2,7 +2,24 @@
 
 You are a senior frontend developer. Build a PRODUCTION-READY COOKIE
 CONSENT BANNER that integrates with Google Tag Manager Consent Mode v2
-and complies with Israel's Privacy Protection Law Amendment 13 (August 2025).
+and complies with the consent rules of [JURISDICTIONS].
+
+== LEGAL BASIS BY JURISDICTION ==
+Read the requirements from the matching jurisdictions/*.yaml pack. In short:
+- Israel: Privacy Protection Law + Amendment 13 (in force 14 Aug 2025).
+  Opt-in — explicit, granular, documented consent.
+- EU/EEA: the banner is required by the ePrivacy Directive 2002/58/EC
+  Article 5(3) — NOT by the GDPR. Article 5(3) demands prior informed consent
+  before storing or accessing ANY information on the device, cookies or not
+  (localStorage, fingerprinting and SDK identifiers all count). The GDPR then
+  defines what valid consent is (Art. 4(11) and Art. 7). Strictly necessary
+  storage is exempt. Reject must be as easy as Accept.
+- California (CCPA/CPRA): opt-OUT model — show a "Do Not Sell or Share My
+  Personal Information" control rather than a prior-consent gate.
+
+If the site serves several of these, detect the visitor's region and apply the
+STRICTER model to them: opt-in for EU/Israel visitors, opt-out control for
+California. Never apply opt-out globally — that breaches ePrivacy.
 
 == PROJECT INFO ==
 Framework: [FRAMEWORK]

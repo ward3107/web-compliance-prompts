@@ -1,31 +1,18 @@
 {
-  "name": "israeli-compliance",
-  "owner": {
-    "name": "ward3107",
-    "url": "https://github.com/ward3107"
-  },
+  "name": "web-compliance",
+  "owner": { "name": "ward3107", "url": "https://github.com/ward3107" },
   "metadata": {
-    "description": "AI coding prompts for Israeli website legal compliance.",
-    "version": "1.0.0"
+    "description": "Jurisdiction-aware AI coding prompts for website legal compliance.",
+    "version": "2.0.0"
   },
   "plugins": [
     {
-      "name": "israeli-compliance",
+      "name": "web-compliance",
       "source": "./",
-      "description": "13 ready-to-paste prompts for Israeli website legal compliance — Amendment 13, IS 5568 / WCAG 2.0 AA, GTM Consent Mode v2. Hebrew/Arabic/English/Russian.",
-      "version": "1.0.0",
+      "description": "13 compliance artifact templates composed against per-jurisdiction rule packs (Israel, EU/EEA) with citations and review dates. Hebrew/Arabic/English/Russian.",
+      "version": "2.0.0",
       "category": "legal",
-      "keywords": [
-        "israel",
-        "privacy",
-        "gdpr",
-        "accessibility",
-        "wcag",
-        "compliance",
-        "rtl",
-        "hebrew",
-        "cursor"
-      ]
+      "keywords": ["compliance","privacy","gdpr","eprivacy","accessibility","wcag","israel","eu","rtl","hebrew","cursor"]
     }
   ]
 }
