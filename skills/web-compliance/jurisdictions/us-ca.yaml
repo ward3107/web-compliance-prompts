@@ -1,0 +1,88 @@
+jurisdiction: us-ca
+name: California, USA
+extends: us                      # load us.yaml (federal layer) alongside this
+last_reviewed: 2026-09-03
+reviewed_by: unverified
+needs_legal_review: true
+
+frameworks:
+
+  - id: ccpa_cpra
+    name: California Consumer Privacy Act, as amended by the California Privacy Rights Act
+    short: CCPA/CPRA
+    effective: 2023-01-01        # CPRA amendments operative
+    governs: [privacy_policy, data_subject_rights, sale_and_sharing, sensitive_data]
+    citation: https://oag.ca.gov/privacy/ccpa
+    verified: true
+    notes: >
+      OPT-OUT model, unlike the EU/UK/Israel: a business may process and even
+      "sell or share" personal information until the consumer opts out. The
+      practical consequence for a cookie banner is that California visitors get
+      an opt-out control, NOT a prior-consent gate. Applies to businesses
+      meeting statutory thresholds (revenue, volume of consumers, or share of
+      revenue from selling data) — verify the client actually falls in scope.
+      "Sharing" is defined broadly enough to cover most cross-context
+      behavioural advertising, so advertising pixels usually trigger it.
+    consumer_rights:
+      know: Right to know what is collected, used, disclosed
+      delete: Right to delete
+      correct: Right to correct inaccurate personal information
+      opt_out: Right to opt out of sale/sharing
+      limit: Right to limit use of sensitive personal information
+      no_retaliation: Right to non-discrimination for exercising rights
+    requires:
+      - do_not_sell_or_share_link
+      - limit_sensitive_pi_link          # where sensitive PI is used beyond permitted purposes
+      - honour_global_privacy_control
+      - privacy_policy_updated_annually
+      - respond_within_45_days           # extendable by a further 45
+      - notice_at_collection
+
+  - id: gpc
+    name: Global Privacy Control (opt-out preference signal)
+    governs: [cookie_consent, sale_and_sharing]
+    citation: https://oag.ca.gov/privacy/ccpa
+    verified: true
+    notes: >
+      California requires businesses to treat a browser-level opt-out preference
+      signal as a valid request to opt out of sale/sharing. This is a CONCRETE
+      ENGINEERING REQUIREMENT, not boilerplate — the banner must read
+      navigator.globalPrivacyControl and, when it is true, suppress
+      sale/sharing (in Consent Mode terms: ad_storage, ad_user_data and
+      ad_personalization denied) WITHOUT waiting for the user to click anything,
+      and reflect that state in the UI. Several other states now require
+      honouring a universal opt-out signal too.
+    requires:
+      - read_navigator_globalPrivacyControl
+      - auto_apply_optout_when_signal_present
+      - reflect_state_in_ui
+
+  - id: cppa
+    name: California Privacy Protection Agency
+    governs: [enforcement]
+    citation: https://cppa.ca.gov/
+    verified: true
+    notes: Rulemaking and enforcement body created by the CPRA; also enforced by the CA AG.
+
+regulator: California Privacy Protection Agency (CPPA) and California Attorney General
+consent_model: opt_out
+rtl: false
+languages: [en, es]
+currency: USD
+
+conflicts:
+  - with: eu
+    issue: >
+      Opposite consent models. The EU requires prior opt-in before non-essential
+      storage (ePrivacy Art. 5(3)); California requires an opt-out control and
+      honouring GPC. A site serving both must geo-detect and present the right
+      UI: a consent gate for EU visitors, a "Do Not Sell or Share" control for
+      Californians. Applying opt-out globally breaches ePrivacy. Applying opt-in
+      globally is legally safe in California but still does not remove the GPC
+      obligation — you must honour the signal either way.
+  - with: uk
+    issue: Same opposition as with the EU — PECR is opt-in, California is opt-out.
+  - with: il
+    issue: >
+      Israel's Amendment 13 expects explicit opt-in consent; California is
+      opt-out. Geo-detect and apply the model matching the visitor.

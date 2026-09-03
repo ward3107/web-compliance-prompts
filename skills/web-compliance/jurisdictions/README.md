@@ -41,12 +41,22 @@ Each entry in `frameworks` needs at minimum a `name`, what it `governs`, and a
 
 ## Status
 
-| Pack | Coverage | Legal review |
-|---|---|---|
-| `il.yaml` | PPL + Amendment 13, IS 5568, accessibility, spam, contracts | ❌ Not yet reviewed |
-| `eu.yaml` | GDPR, ePrivacy, EAA / EN 301 549, Web Accessibility Directive | ❌ Not yet reviewed |
+| Pack | Coverage | Consent | Legal review |
+|---|---|---|---|
+| `il.yaml` | PPL + Amendment 13, IS 5568, accessibility, spam, contracts | opt-in | ❌ Not yet reviewed |
+| `eu.yaml` | GDPR, ePrivacy, EAA / EN 301 549, Web Accessibility Directive | opt-in | ❌ Not yet reviewed |
+| `uk.yaml` | UK GDPR, DPA 2018, PECR, Equality Act, PSBAP Regs | opt-in | ❌ Not yet reviewed |
+| `us.yaml` | Federal only: CAN-SPAM, COPPA, ADA, Section 508 | opt-out | ❌ Not yet reviewed |
+| `us-ca.yaml` | CCPA/CPRA, Global Privacy Control (`extends: us`) | opt-out | ❌ Not yet reviewed |
 
-Planned next: `us-ca` (CCPA/CPRA), `uk` (UK GDPR + PECR).
+Planned next: more US states, Canada (PIPEDA / Law 25), Brazil (LGPD).
+
+## `extends`
+
+A pack may set `extends: <code>` to layer on top of another — `us-ca.yaml`
+extends `us.yaml`, so California loads the federal layer too. `validate.py`
+fails if `extends:` or any `conflicts: - with:` names a pack that does not
+exist, so a typo cannot silently drop a jurisdiction.
 
 > These packs are structured references, not legal advice. Every pack must be
 > reviewed by a lawyer qualified in that jurisdiction before it is relied on.

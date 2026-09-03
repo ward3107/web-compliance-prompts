@@ -1,0 +1,126 @@
+jurisdiction: uk
+name: United Kingdom
+last_reviewed: 2026-09-03
+reviewed_by: unverified
+needs_legal_review: true
+
+frameworks:
+
+  - id: uk_gdpr
+    name: UK GDPR (retained Regulation (EU) 2016/679 as incorporated into UK law)
+    short: UK GDPR
+    governs: [privacy_policy, data_subject_rights, lawful_basis, transfers, breach]
+    citation: https://www.legislation.gov.uk/eur/2016/679/contents
+    verified: true
+    notes: >
+      Read alongside the Data Protection Act 2018, which supplements it. The
+      article structure mirrors the EU GDPR, so Article references (6, 7, 13-22,
+      33-34) carry over. Diverges from the EU on international transfers: the UK
+      uses the IDTA or the Addendum to the EU SCCs, not the EU SCCs alone.
+    requires:
+      - lawful_basis_per_purpose
+      - freely_given_consent
+      - withdraw_as_easy_as_give
+      - data_subject_access
+      - data_subject_portability
+      - data_subject_erasure
+      - transfer_safeguards        # IDTA / UK Addendum
+      - response_within_one_month
+
+  - id: dpa2018
+    name: Data Protection Act 2018
+    governs: [privacy_policy, data_subject_rights, enforcement]
+    citation: https://www.legislation.gov.uk/ukpga/2018/12/contents
+    verified: true
+
+  - id: pecr
+    name: Privacy and Electronic Communications (EC Directive) Regulations 2003
+    short: PECR
+    governs: [cookie_consent, device_storage, email_marketing, sms_marketing]
+    citation: https://www.legislation.gov.uk/uksi/2003/2426/contents/made
+    verified: true
+    notes: >
+      PECR is the UK's implementation of the ePrivacy Directive and is the law
+      that actually requires the cookie banner — NOT the UK GDPR. Regulation 6
+      covers storage/access on terminal equipment (so localStorage and
+      fingerprinting count, not only cookies); Regulation 22 covers unsolicited
+      electronic marketing. UK GDPR then supplies the definition of valid
+      consent. Enforced by the ICO.
+    key_provisions:
+      cookies_and_storage: Regulation 6
+      electronic_marketing: Regulation 22
+    requires:
+      - prior_consent
+      - granular_per_purpose
+      - no_pre_ticked_boxes
+      - reject_as_easy_as_accept
+      - withdrawable_any_time
+
+  - id: pecr_soft_optin
+    name: PECR Regulation 22(3) — "soft opt-in" for existing customers
+    governs: [email_marketing]
+    citation: https://www.legislation.gov.uk/uksi/2003/2426/regulation/22/made
+    verified: true
+    notes: >
+      A narrow exception: you may email existing customers about SIMILAR
+      products or services where their details were obtained during a sale or
+      negotiations for a sale, provided every message offers a simple opt-out
+      and one was offered at collection. It does NOT extend to prospects, bought
+      lists, or unrelated product lines. Do not treat it as a general licence to
+      skip consent.
+
+  - id: data_use_access_act
+    name: Data (Use and Access) Act 2025
+    governs: [privacy_policy, data_subject_rights, cookie_consent]
+    citation: https://www.legislation.gov.uk/ukpga/2025/18/contents
+    verified: false
+    needs_verification: >
+      This Act reforms parts of the UK data protection and PECR regime,
+      including some low-risk cookie exemptions and changes to how certain
+      requests are handled. Provisions commence on staggered dates. Confirm
+      which provisions are actually in force, and their effect on cookie
+      consent, with a UK practitioner before relying on any relaxation.
+
+  - id: equality_act
+    name: Equality Act 2010
+    governs: [accessibility]
+    scope: all_service_providers
+    citation: https://www.legislation.gov.uk/ukpga/2010/15/contents
+    verified: true
+    notes: >
+      Requires service providers to make "reasonable adjustments" for disabled
+      people. It does not name a technical standard, but WCAG 2.1/2.2 Level AA
+      is the accepted way to evidence compliance in practice.
+
+  - id: psbap
+    name: Public Sector Bodies (Websites and Mobile Applications) Accessibility Regulations 2018
+    governs: [accessibility, accessibility_statement]
+    scope: public_sector_bodies
+    citation: https://www.legislation.gov.uk/uksi/2018/952/contents/made
+    verified: true
+    notes: >
+      Public sector only. Requires conformance with EN 301 549 (WCAG 2.1 AA)
+      and a published, regularly reviewed accessibility statement.
+    requires:
+      - en_301_549
+      - wcag_21_aa
+      - accessibility_statement
+
+regulator: Information Commissioner's Office (ICO)
+consent_model: opt_in
+rtl: false
+languages: [en, cy]              # Welsh may be required for public sector in Wales
+currency: GBP
+
+conflicts:
+  - with: eu
+    issue: >
+      Substantively close, but not identical. Transfers out of the UK use the
+      IDTA or the UK Addendum rather than the EU SCCs, and a controller serving
+      both the UK and the EU may need to designate representatives in each.
+      Treat UK and EU as two jurisdictions, not one.
+  - with: us
+    issue: >
+      PECR requires opt-in consent before marketing email (bar the narrow soft
+      opt-in); US CAN-SPAM permits sending until the recipient opts out. A
+      single mailing list covering both must be run opt-in.

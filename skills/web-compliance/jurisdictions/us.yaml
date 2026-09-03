@@ -1,0 +1,123 @@
+jurisdiction: us
+name: United States (federal layer)
+last_reviewed: 2026-09-03
+reviewed_by: unverified
+needs_legal_review: true
+
+# IMPORTANT — there is no general federal privacy law in the US. Consumer
+# privacy is governed state by state. This pack covers only the federal layer
+# that applies nationwide (email, accessibility, children). For consumer
+# privacy rights you MUST also load a state pack — see us-ca.yaml, and the
+# other_state_laws note below.
+scope_warning: >
+  Loading this pack alone does NOT make a site "US compliant". It has no
+  consumer privacy rights in it, because federally there are none. Always
+  combine it with the pack(s) for the states whose residents the site serves.
+
+frameworks:
+
+  - id: can_spam
+    name: CAN-SPAM Act of 2003 (15 U.S.C. ch. 103)
+    governs: [email_marketing]
+    citation: https://www.ftc.gov/legal-library/browse/rules/can-spam-rule
+    verified: true
+    notes: >
+      CAN-SPAM is an OPT-OUT regime — prior consent is not required to send
+      commercial email, which is the opposite of the EU, UK and Israel. It does
+      require accurate headers and subject lines, identification of the message
+      as an advertisement, a valid physical postal address, and a working
+      opt-out honoured within 10 business days. Enforced by the FTC; penalties
+      are per-email. Note it preempts most state anti-spam laws but not state
+      laws on falsity or deception.
+    requires:
+      - accurate_header_and_subject
+      - identify_as_advertisement
+      - valid_physical_postal_address
+      - working_optout_link
+      - honour_optout_within_10_business_days
+
+  - id: coppa
+    name: Children's Online Privacy Protection Act (15 U.S.C. §§ 6501-6506)
+    short: COPPA
+    governs: [children, consent]
+    citation: https://www.ftc.gov/legal-library/browse/rules/childrens-online-privacy-protection-rule-coppa
+    verified: true
+    notes: >
+      Applies to sites/services directed to children under 13, or with actual
+      knowledge of collecting from under-13s. Requires verifiable parental
+      consent before collection, a separate children's privacy notice, and
+      limits on retention. If the site could attract under-13s, escalate to a
+      lawyer — the analytics and advertising tags in the cookie banner are
+      exactly what triggers liability here.
+    requires:
+      - verifiable_parental_consent
+      - childrens_privacy_notice
+      - no_behavioural_ads_to_children
+
+  - id: ada_title_iii
+    name: Americans with Disabilities Act, Title III (42 U.S.C. §§ 12181-12189)
+    short: ADA
+    governs: [accessibility]
+    scope: places_of_public_accommodation
+    citation: https://www.ada.gov/
+    verified: false
+    needs_verification: >
+      The ADA does not codify a technical standard for private websites.
+      Litigation and DOJ guidance in practice treat WCAG 2.1 Level AA as the
+      benchmark, and circuits differ on when a website is covered at all.
+      Build to WCAG 2.1 AA and have counsel assess coverage — do not present
+      any specific WCAG level as a statutory ADA requirement.
+    requires:
+      - wcag_21_aa            # practical benchmark, not a codified mandate
+
+  - id: ada_title_ii_rule
+    name: DOJ rule on web/mobile accessibility for state and local government
+    governs: [accessibility]
+    scope: state_and_local_government
+    citation: https://www.ada.gov/resources/2024-03-08-web-rule/
+    verified: false
+    needs_verification: >
+      The 2024 DOJ rule sets WCAG 2.1 AA for state and local government
+      entities, with compliance dates staggered by entity size. Confirm the
+      applicable deadline for the specific entity.
+    requires:
+      - wcag_21_aa
+
+  - id: section_508
+    name: Section 508 of the Rehabilitation Act (29 U.S.C. § 794d)
+    governs: [accessibility]
+    scope: federal_agencies_and_contractors
+    citation: https://www.section508.gov/
+    verified: false
+    needs_verification: >
+      The 2017 Section 508 refresh incorporates WCAG 2.0 Level AA by reference.
+      Confirm the current baseline before bidding on federal work — procurement
+      language may specify a higher level.
+
+other_state_laws: >
+  Roughly twenty states have enacted comprehensive consumer privacy laws
+  (California, Virginia, Colorado, Connecticut, Utah, Texas, Oregon, Montana,
+  Delaware, Iowa, Nebraska, New Hampshire, New Jersey, Tennessee, Minnesota,
+  Maryland and others), with more taking effect each year. Most follow an
+  opt-out model with rights of access, correction, deletion and portability,
+  and several require honouring a universal opt-out signal such as Global
+  Privacy Control. Only California ships as a pack here so far. Do NOT tell a
+  user they are covered for a state that has no pack — say the pack does not
+  exist and that local counsel is needed.
+
+consent_model: opt_out           # federal layer; individual states may differ
+rtl: false
+languages: [en, es]
+currency: USD
+
+conflicts:
+  - with: eu
+    issue: >
+      CAN-SPAM allows commercial email without prior consent; the EU (ePrivacy)
+      and UK (PECR) require opt-in. A single mailing list spanning these markets
+      must be run opt-in. Applying the US rule globally is a straightforward
+      breach in Europe.
+  - with: il
+    issue: >
+      Same email conflict as with the EU: Israel requires prior opt-in for
+      commercial messaging. Run the stricter opt-in model.
