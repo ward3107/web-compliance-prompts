@@ -9,9 +9,15 @@ description: >
   client onboarding form — even casually ("give me the cookie banner", "I need
   a privacy policy prompt", "freelancer contract please"). Always ask which
   markets the site serves, then which language, then the variables, then output
-  the filled prompt. Ships jurisdiction packs for Israel (Privacy Protection
-  Law Amendment 13 · IS 5568) and the EU/EEA (GDPR · ePrivacy · EAA /
-  EN 301 549 · WCAG 2.1 AA), plus GTM Consent Mode v2 wiring.
+  the filled prompt. Also use when the user names a law or market directly —
+  Amendment 13, IS 5568, GDPR, ePrivacy, EAA, UK GDPR, PECR, CCPA, CPRA,
+  CAN-SPAM, COPPA, ADA, Section 508, Global Privacy Control, WCAG — or asks
+  whether a site is compliant in Israel, the EU, the UK or the US. Ships
+  jurisdiction packs for Israel (Privacy Protection Law Amendment 13 ·
+  IS 5568), the EU/EEA (GDPR · ePrivacy · EAA / EN 301 549 · WCAG 2.1 AA),
+  the UK (UK GDPR · DPA 2018 · PECR · Equality Act) and the US (CAN-SPAM ·
+  COPPA · ADA · Section 508 federally; CCPA/CPRA · Global Privacy Control for
+  California), plus GTM Consent Mode v2 wiring.
 ---
 
 # Web Compliance — Prompt Generator
