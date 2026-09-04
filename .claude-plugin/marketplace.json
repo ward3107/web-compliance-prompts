@@ -9,7 +9,7 @@
     {
       "name": "web-compliance",
       "source": "./",
-      "description": "13 compliance artifact templates composed against per-jurisdiction rule packs (Israel, EU/EEA) with citations and review dates. Hebrew/Arabic/English/Russian.",
+      "description": "13 compliance artifact templates composed against 5 per-jurisdiction rule packs (Israel, EU/EEA, UK, US federal, California) with citations and review dates. Hebrew/Arabic/English/Russian.",
       "version": "2.0.0",
       "category": "legal",
       "keywords": ["compliance","privacy","gdpr","eprivacy","accessibility","wcag","israel","eu","rtl","hebrew","cursor"]
