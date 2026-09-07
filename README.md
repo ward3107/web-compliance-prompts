@@ -31,6 +31,10 @@ support.
 Example output built to the `cookie-banner` and `accessibility-widget`
 templates, on a sample Hebrew RTL business site.
 
+![A ~7-second reel cycling through the cookie banner, granular consent preferences, the accessibility widget and high-contrast mode](docs/screenshots/demo.gif)
+
+> A ~7s tour of the four states below. Same screenshots, in motion — not a hosted demo.
+
 | Cookie banner | Granular consent preferences |
 |---|---|
 | ![Hebrew RTL cookie banner with Accept All, Reject All and Customize buttons, plus a HE/AR/EN/RU language switcher](docs/screenshots/cookie-banner.png) | ![Expanded preferences showing three toggles: Necessary locked on, Analytics enabled, Marketing off, each with an explanation of what it collects](docs/screenshots/cookie-preferences.png) |
