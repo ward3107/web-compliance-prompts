@@ -26,10 +26,39 @@ support.
 
 ---
 
+## How it works (in plain words)
+
+It's a box of ready-made legal prompts for websites — cookie banners, privacy
+policies, accessibility widgets, terms of use, and more. You don't write the
+legal wording; you say what you're building and which markets the site serves,
+and it hands you a filled-in prompt to paste into an AI coding assistant
+(Cursor, Claude Code, …) that then builds it.
+
+1. **Install it once** (see [Install](#install)).
+2. **Ask in plain words** — *"give me the cookie banner prompt."*
+3. **Answer a few questions** — which markets (Israel? EU? UK? US?), which
+   language (Hebrew / Arabic / English / Russian), and your details (business
+   name, brand color, framework).
+4. **Paste the prompt** it emits into your AI coding assistant, which builds the
+   artifact into the site.
+
+One template (say `cookie-banner`) serves Israel, the EU, the UK or California —
+the jurisdiction pack supplies the rules, the template supplies the build. See
+[How it's structured](#how-its-structured) for why that split matters.
+
+> Every user works the same way: install, ask, answer, paste. Output is tailored
+> to *their* site and *their* markets — nothing is hosted or shared.
+
+---
+
 ## What it produces
 
 Example output built to the `cookie-banner` and `accessibility-widget`
 templates, on a sample Hebrew RTL business site.
+
+![A ~7-second reel cycling through the cookie banner, granular consent preferences, the accessibility widget and high-contrast mode](docs/screenshots/demo.gif)
+
+> A ~7s tour of the four states below. Same screenshots, in motion — not a hosted demo.
 
 | Cookie banner | Granular consent preferences |
 |---|---|
