@@ -38,8 +38,11 @@ frameworks:
     notes: >
       IS 5568 is built on WCAG 2.0 AA. Sites also serving the EU should target
       WCAG 2.1 AA (see eu.yaml) — 2.1 is a superset, so meeting 2.1 also meets
-      IS 5568. Enforced under the Equal Rights for Persons with Disabilities
-      Law, 5758-1998 and its accessibility regulations.
+      IS 5568. WCAG 2.2 AA (W3C Recommendation, Oct 2023) is now the newest
+      version and is itself a superset of 2.1; no regime in these packs mandates
+      it yet, but building to 2.2 AA future-proofs and satisfies every target
+      here. Enforced under the Equal Rights for Persons with Disabilities Law,
+      5758-1998 and its accessibility regulations.
     requires:
       - wcag_20_aa
       - accessibility_statement
@@ -52,16 +55,16 @@ frameworks:
     verified: false
 
   - id: spam
-    name: Anti-spam provisions (Communications Law, Amendment 40)
+    name: Communications (Telecommunications and Broadcasting) Law, 1982, §30A (added by Amendment 40)
     governs: [email_marketing, sms_marketing]
     citation: https://www.gov.il/en/departments/ministry_of_communications
     verified: false
     needs_verification: >
       IMPORTANT — an earlier version of these templates cited "Computer Law
-      5755-1995" for spam. Israeli commercial-messaging rules are generally
-      attributed to Amendment 40 of the Communications (Telecommunications and
-      Broadcasting) Law, 1982. Confirm the correct statute and section with an
-      Israeli lawyer before publishing either citation.
+      5755-1995" for spam. Israeli commercial-messaging rules come from Section
+      30A of the Communications (Telecommunications and Broadcasting) Law, 1982,
+      which was added by Amendment 40. Confirm the section and its current
+      wording with an Israeli lawyer before publishing.
     requires:
       - prior_opt_in
       - sender_identification
@@ -69,13 +72,21 @@ frameworks:
 
   - id: contracts_amendment_3
     name: Contracts (General Part) Law — Amendment 3
-    effective: 2025-01-01
+    effective: 2025-01-05          # enacted by the Knesset 5 Jan 2025
     governs: [contracts]
     citation: https://www.gov.il/en/departments/ministry_of_justice
     verified: false
+    notes: >
+      Amendment 3 sets statutory rules for CONTRACT INTERPRETATION, distinguishing
+      business contracts (interpreted by their wording by default) from
+      non-business contracts (interpreted by the parties' intent), and lets
+      parties stipulate their own interpretation rules. It applies to new or
+      renewed contracts only. It is not a set of drafting requirements — treat
+      it as interpretation background for the freelancer-contract template, and
+      confirm application with an Israeli lawyer.
 
 consent_model: opt_in            # affirmative action required before non-essential storage
 rtl: true
 languages: [he, ar, en, ru]
 currency: ILS
-small_claims_ceiling_ils: 75000  # verify current figure before relying on it
+small_claims_ceiling_ils: 39900  # ₪39,900 as of Jan 2026; updated annually — verify current figure before relying on it
