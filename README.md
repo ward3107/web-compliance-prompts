@@ -141,8 +141,10 @@ Planned: more US states, Brazil (LGPD).
   opt-in banner.
 - **Email consent is inverted.** CAN-SPAM permits sending until opt-out; the EU,
   UK and Israel require prior opt-in. One list across them must be opt-in.
-- **Accessibility should target WCAG 2.1 AA.** IS 5568 is built on 2.0 AA, but
-  the EAA and UK public-sector regs require EN 301 549 → 2.1 AA, a superset.
+- **Accessibility should target WCAG 2.2 AA.** Statutory floors vary (IS 5568 is
+  2.0 AA; the EAA and UK public-sector regs require EN 301 549 → 2.1 AA), but 2.2
+  AA (the current standard) is a superset of both, so building to it satisfies
+  every pack.
 - **`us.yaml` alone is not "US compliant."** There is no general federal privacy
   law — consumer rights come from state packs, and only California ships today.
 

@@ -128,9 +128,11 @@ Things to get right when several apply:
   applies even on a site that otherwise runs an opt-in banner.
 - **Email consent differs sharply.** CAN-SPAM permits sending until opt-out;
   EU / UK / Israel require prior opt-in. One list spanning them must be opt-in.
-- **Build accessibility to WCAG 2.1 AA.** IS 5568 is based on 2.0 AA, but the
-  EAA and the UK public-sector regs require EN 301 549 → 2.1 AA. 2.1 is a
-  superset, so it satisfies both.
+- **Build accessibility to WCAG 2.2 AA.** The statutory floors differ (IS 5568
+  is 2.0 AA; the EAA and UK public-sector regs require EN 301 549 → 2.1 AA), but
+  2.2 AA is a superset of 2.1 which is a superset of 2.0, so building to 2.2 AA
+  satisfies every pack. 2.2 (W3C Rec, Oct 2023) is the current version; default
+  to it unless a client serves Israel only and wants the minimum.
 - **`us.yaml` alone is never "US compliant".** There is no general federal
   privacy law; consumer rights come from state packs. If the user names a state
   with no pack, say so plainly rather than implying coverage.
