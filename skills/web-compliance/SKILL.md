@@ -11,13 +11,14 @@ description: >
   markets the site serves, then which language, then the variables, then output
   the filled prompt. Also use when the user names a law or market directly —
   Amendment 13, IS 5568, GDPR, ePrivacy, EAA, UK GDPR, PECR, CCPA, CPRA,
-  CAN-SPAM, COPPA, ADA, Section 508, Global Privacy Control, WCAG — or asks
-  whether a site is compliant in Israel, the EU, the UK or the US. Ships
-  jurisdiction packs for Israel (Privacy Protection Law Amendment 13 ·
-  IS 5568), the EU/EEA (GDPR · ePrivacy · EAA / EN 301 549 · WCAG 2.1 AA),
-  the UK (UK GDPR · DPA 2018 · PECR · Equality Act) and the US (CAN-SPAM ·
-  COPPA · ADA · Section 508 federally; CCPA/CPRA · Global Privacy Control for
-  California), plus GTM Consent Mode v2 wiring.
+  CAN-SPAM, COPPA, ADA, Section 508, Global Privacy Control, PIPEDA, Law 25,
+  CASL, AODA, WCAG — or asks whether a site is compliant in Israel, the EU, the
+  UK, the US or Canada. Ships jurisdiction packs for Israel (Privacy Protection
+  Law Amendment 13 · IS 5568), the EU/EEA (GDPR · ePrivacy · EAA / EN 301 549 ·
+  WCAG 2.1 AA), the UK (UK GDPR · DPA 2018 · PECR · Equality Act), the US
+  (CAN-SPAM · COPPA · ADA · Section 508 federally; CCPA/CPRA · Global Privacy
+  Control for California) and Canada (PIPEDA · Québec Law 25 · CASL · Accessible
+  Canada Act · AODA), plus GTM Consent Mode v2 wiring.
 ---
 
 # Web Compliance — Prompt Generator
@@ -56,11 +57,11 @@ relying on them as authoritative.
 1. **Identify the artifact** the user wants (match by name or description).
 2. **Ask which markets the site serves** — this is the jurisdiction question and
    it comes FIRST, because it changes the legal requirements, not just wording.
-   Offer: Israel / EU-EEA / UK / United States (ask which states) / a
-   combination. If they name a market with no pack yet (Canada, Australia,
-   Brazil, or a US state other than California), say plainly there is no pack, that
-   you can still generate the artifact using the closest pack, and that a local
-   lawyer must review it.
+   Offer: Israel / EU-EEA / UK / United States (ask which states) / Canada
+   (ask which province) / a combination. If they name a market with no pack yet
+   (Australia, Brazil, or a US state other than California), say plainly there is
+   no pack, that you can still generate the artifact using the closest pack, and
+   that a local lawyer must review it.
 3. **Ask for the output language** — Hebrew / Arabic / English / Russian.
 4. **Ask for the variables** for that artifact (see below). All at once, grouped
    naturally. Mark optional fields as (optional).
@@ -104,6 +105,7 @@ relying on them as authoritative.
 | `jurisdictions/uk.yaml` | UK GDPR + DPA 2018, PECR (cookies + marketing, incl. soft opt-in), Equality Act, public-sector accessibility regs | opt-in |
 | `jurisdictions/us.yaml` | Federal layer only: CAN-SPAM, COPPA, ADA, Section 508 | opt-out |
 | `jurisdictions/us-ca.yaml` | CCPA/CPRA, Global Privacy Control, CPPA — `extends: us` | opt-out |
+| `jurisdictions/ca.yaml` | PIPEDA, Québec Law 25, BC/AB PIPA, CASL, Accessible Canada Act, AODA | opt-in |
 
 Things to get right when several apply:
 

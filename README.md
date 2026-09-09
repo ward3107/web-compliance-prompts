@@ -6,10 +6,10 @@ site serves; the skill assembles a filled-in prompt you paste into Cursor,
 Claude Code, or any AI coding assistant.
 
 Ships packs for **Israel** (Amendment 13, IS 5568), the **EU/EEA** (GDPR,
-ePrivacy, European Accessibility Act), the **UK** (UK GDPR, PECR) and the
+ePrivacy, European Accessibility Act), the **UK** (UK GDPR, PECR), the
 **US** (CAN-SPAM, COPPA, ADA federally; CCPA/CPRA and Global Privacy Control
-for California). Output in **Hebrew, Arabic, English or Russian**, with RTL
-support.
+for California) and **Canada** (PIPEDA, Québec Law 25, CASL, AODA). Output in
+**Hebrew, Arabic, English or Russian**, with RTL support.
 
 > ## ⚠️ Not legal advice
 >
@@ -36,7 +36,7 @@ and it hands you a filled-in prompt to paste into an AI coding assistant
 
 1. **Install it once** (see [Install](#install)).
 2. **Ask in plain words** — *"give me the cookie banner prompt."*
-3. **Answer a few questions** — which markets (Israel? EU? UK? US?), which
+3. **Answer a few questions** — which markets (Israel? EU? UK? US? Canada?), which
    language (Hebrew / Arabic / English / Russian), and your details (business
    name, brand color, framework).
 4. **Paste the prompt** it emits into your AI coding assistant, which builds the
@@ -120,11 +120,12 @@ supplies the rules, the template supplies the build.
 | **UK** `uk.yaml` | UK GDPR, DPA 2018, PECR 2003 (Reg. 6 + 22, soft opt-in), Equality Act 2010, PSBAP Regs 2018 | opt-in | WCAG 2.1 AA | ❌ pending |
 | **US federal** `us.yaml` | CAN-SPAM, COPPA, ADA Title III, Section 508 | opt-out | WCAG 2.1 AA* | ❌ pending |
 | **California** `us-ca.yaml` | CCPA/CPRA, Global Privacy Control, CPPA (`extends: us`) | opt-out | — | ❌ pending |
+| **Canada** `ca.yaml` | PIPEDA, Québec Law 25, BC/AB PIPA, CASL, Accessible Canada Act, AODA | opt-in | WCAG 2.0/2.1 AA | ❌ pending |
 
 \* The ADA does not codify a WCAG level for private sites; 2.1 AA is the
 practical litigation benchmark, not a statutory mandate.
 
-Planned: more US states, Canada (PIPEDA / Law 25), Brazil (LGPD).
+Planned: more US states, Brazil (LGPD).
 
 **What this structure gets right that a flat prompt set gets wrong:**
 
