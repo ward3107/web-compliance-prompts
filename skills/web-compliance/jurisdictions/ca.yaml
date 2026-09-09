@@ -1,0 +1,163 @@
+jurisdiction: ca
+name: Canada
+last_reviewed: 2026-09-09
+reviewed_by: unverified          # set to the reviewing lawyer/firm once checked
+needs_legal_review: true
+
+# Canada layers federal law (PIPEDA, CASL, the Accessible Canada Act) with
+# provincial regimes. Québec's Law 25 and the provincial private-sector privacy
+# laws of British Columbia and Alberta apply INSTEAD of PIPEDA for activity that
+# stays within those provinces (they are deemed "substantially similar"), while
+# PIPEDA still governs interprovincial and international data flows. If the
+# client operates in Québec, BC or Alberta, load the provincial rule as the
+# governing one and confirm scope with counsel.
+frameworks:
+
+  - id: pipeda
+    name: Personal Information Protection and Electronic Documents Act (PIPEDA)
+    short: PIPEDA
+    governs: [privacy_policy, data_subject_rights, consent, breach, transfers]
+    citation: https://laws-lois.justice.gc.ca/eng/acts/p-8.6/
+    verified: false
+    notes: >
+      The federal private-sector privacy law, enforced by the Office of the
+      Privacy Commissioner of Canada (OPC). Built on ten fair-information
+      principles (Schedule 1). Consent must be MEANINGFUL: express consent for
+      sensitive information and for uses a reasonable person would not expect;
+      implied consent may suffice only for clearly non-sensitive, expected uses.
+      Individuals have rights of access and correction; organizations must
+      report breaches of security safeguards posing a "real risk of significant
+      harm" to the OPC and affected individuals and keep breach records.
+      Superseded by the provincial law in Québec, BC and Alberta for
+      intra-provincial activity (see below). Reform (the stalled Bill C-27 /
+      CPPA) may change this — confirm the current statute before relying on it.
+    requires:
+      - meaningful_consent
+      - purpose_identified_at_collection
+      - data_subject_access
+      - data_subject_correction
+      - breach_report_real_risk_of_significant_harm
+
+  - id: law25
+    name: Québec Act respecting the protection of personal information in the private sector (Law 25 / former Bill 64)
+    short: Law 25
+    effective: 2024-09-22          # final phase in force; earlier phases 2022-09-22 and 2023-09-22
+    governs: [privacy_policy, data_subject_rights, cookie_consent, consent, breach, transfers]
+    citation: https://www.legisquebec.gouv.qc.ca/en/document/cs/p-39.1
+    verified: false
+    notes: >
+      Québec's modernized private-sector privacy law, phased in over
+      2022-2024 and now fully in force, enforced by the Commission d'accès à
+      l'information (CAI). Stricter than PIPEDA and the governing regime for
+      Québec activity. Key build-relevant duties:
+        - EXPRESS, unbundled consent before non-essential cookies/tracking —
+          consent cannot be assumed from continued browsing, and must be
+          separate from the terms of use.
+        - Appoint a Privacy Officer and publish their contact details.
+        - Privacy-by-default: technology that collects personal information must
+          default to the highest privacy setting (relevant to cookie banners).
+        - Data-portability right (in force since 22 Sep 2024) and rights of
+          access, correction and de-indexing.
+        - Breach notification to the CAI and affected individuals where there is
+          a risk of serious injury.
+      Administrative penalties up to CAD 10 million or 2% of worldwide turnover.
+    requires:
+      - express_unbundled_consent
+      - privacy_officer_published
+      - privacy_by_default
+      - data_portability
+      - breach_notification_cai
+
+  - id: provincial_pipa
+    name: BC Personal Information Protection Act & Alberta Personal Information Protection Act (PIPA)
+    short: BC/AB PIPA
+    governs: [privacy_policy, data_subject_rights, consent]
+    citation: https://www.oipc.bc.ca/for-organizations/personal-information-protection-act/
+    verified: false
+    needs_verification: >
+      British Columbia and Alberta each have a private-sector PIPA deemed
+      "substantially similar" to PIPEDA; either governs (instead of PIPEDA) for
+      activity confined to that province. Confirm which statute governs the
+      client's operations, and its current consent and breach rules, with local
+      counsel. The citation points to the BC OIPC; Alberta's PIPA is a separate
+      statute administered by the Office of the Information and Privacy
+      Commissioner of Alberta.
+
+  - id: casl
+    name: Canada's Anti-Spam Legislation (S.C. 2010, c. 23)
+    short: CASL
+    governs: [email_marketing, sms_marketing]
+    citation: https://laws-lois.justice.gc.ca/eng/acts/e-1.6/
+    verified: false
+    notes: >
+      One of the strictest anti-spam regimes in the world, enforced by the CRTC.
+      OPT-IN: a commercial electronic message (email, SMS, some social messages)
+      generally requires prior EXPRESS consent, plus clear sender identification
+      and a working unsubscribe honoured within 10 business days. Limited implied
+      consent exists (e.g. an existing business relationship) but is
+      time-limited and narrower than the US soft opt-in. This is the opposite of
+      US CAN-SPAM. Penalties run up to CAD 10 million per violation for a
+      business.
+    requires:
+      - prior_express_consent
+      - sender_identification
+      - unsubscribe_within_10_business_days
+
+  - id: accessible_canada_act
+    name: Accessible Canada Act (S.C. 2019, c. 10)
+    short: ACA
+    governs: [accessibility]
+    scope: federal_government_and_federally_regulated
+    citation: https://laws-lois.justice.gc.ca/eng/acts/a-0.6/
+    verified: false
+    needs_verification: >
+      Applies to the federal public sector, Crown corporations and federally
+      regulated organizations (banking, telecom, interprovincial transport).
+      It does not itself codify a WCAG level for private sites; WCAG 2.0/2.1 AA
+      is the accepted technical benchmark. Confirm applicable standards and
+      deadlines for the specific entity with counsel.
+    requires:
+      - wcag_21_aa            # practical benchmark
+
+  - id: aoda
+    name: Accessibility for Ontarians with Disabilities Act, 2005 (AODA) — Integrated Accessibility Standards, O. Reg. 191/11
+    short: AODA
+    governs: [accessibility]
+    scope: ontario_public_and_large_private_organizations
+    citation: https://www.ontario.ca/laws/regulation/110191
+    verified: false
+    notes: >
+      Ontario's accessibility regime. Public sector and larger private/non-profit
+      organizations must make public websites and web content conform to WCAG 2.0
+      Level AA (Success Criterion 1.4.5 audio-description and 1.2.4 live captions
+      excepted). Penalties can reach CAD 100,000 per day for a corporation.
+      Other provinces have their own regimes — e.g. Manitoba requires WCAG 2.1 AA
+      for web content published on or after 22 Apr 2022 — so confirm the province.
+    requires:
+      - wcag_20_aa
+      - accessibility_statement
+
+consent_model: opt_in            # Québec Law 25 requires express consent for non-essential storage; CASL opt-in for messaging
+rtl: false
+languages: [en, fr]              # English and French; French is mandatory in Québec (Charter of the French Language)
+currency: CAD
+
+conflicts:
+  - with: us
+    issue: >
+      Email is inverted. CASL requires prior EXPRESS consent before commercial
+      email; US CAN-SPAM permits sending until the recipient opts out. A single
+      list spanning Canada and the US must be run opt-in to satisfy CASL.
+  - with: eu
+    issue: >
+      Both are opt-in for cookies, but not identical. Québec Law 25 requires a
+      privacy-by-default setting and a published Privacy Officer; the EU adds no
+      such officer duty for most sites but applies ePrivacy Art. 5(3) uniformly.
+      International transfers out of Canada follow PIPEDA/Law 25 accountability
+      rather than EU SCCs. Treat Canada and the EU as separate jurisdictions.
+  - with: us-ca
+    issue: >
+      Opposite consent models between the two "CA" codes. Québec (this pack, ca)
+      is opt-in — express consent before non-essential cookies. California
+      (us-ca) is opt-out — a "Do Not Sell or Share" control plus Global Privacy
+      Control. Do not confuse the two; geo-detect and apply the matching model.

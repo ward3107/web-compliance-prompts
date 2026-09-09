@@ -48,8 +48,9 @@ Each entry in `frameworks` needs at minimum a `name`, what it `governs`, and a
 | `uk.yaml` | UK GDPR, DPA 2018, PECR, Equality Act, PSBAP Regs | opt-in | ❌ Not yet reviewed |
 | `us.yaml` | Federal only: CAN-SPAM, COPPA, ADA, Section 508 | opt-out | ❌ Not yet reviewed |
 | `us-ca.yaml` | CCPA/CPRA, Global Privacy Control (`extends: us`) | opt-out | ❌ Not yet reviewed |
+| `ca.yaml` | PIPEDA, Québec Law 25, BC/AB PIPA, CASL, Accessible Canada Act, AODA | opt-in | ❌ Not yet reviewed |
 
-Planned next: more US states, Canada (PIPEDA / Law 25), Brazil (LGPD).
+Planned next: more US states, Brazil (LGPD).
 
 ## `extends`
 
