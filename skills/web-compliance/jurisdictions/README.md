@@ -32,7 +32,10 @@ Each entry in `frameworks` needs at minimum a `name`, what it `governs`, and a
    doubt is specific, a `needs_verification:` note explaining exactly what to
    check. An honest "unverified" is far better than a confident wrong citation.
 3. **Date everything.** `last_reviewed` older than 12 months should be treated
-   as stale — `scripts/validate.py` warns about this.
+   as stale — `scripts/validate.py` warns about this, and a scheduled
+   `freshness` workflow runs monthly with `--strict-stale 180`: a pack not
+   re-checked within ~6 months fails that run and opens a tracking issue, so a
+   re-check becomes a visible task rather than a warning nobody reads.
 4. **Record conflicts.** When one jurisdiction's rule contradicts another's,
    add a `conflicts:` entry. Multi-market sites depend on these being surfaced
    rather than silently resolved.
