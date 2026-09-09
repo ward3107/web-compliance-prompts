@@ -145,6 +145,49 @@ Planned: more US states, Canada (PIPEDA / Law 25), Brazil (LGPD).
 - **`us.yaml` alone is not "US compliant."** There is no general federal privacy
   law — consumer rights come from state packs, and only California ships today.
 
+## Getting it legally reviewed
+
+Every pack ships `needs_legal_review: true` — the citations are sourced but not
+signed off by a practitioner, and laws change. Treat the output as a **first
+draft** and have a qualified lawyer in the relevant jurisdiction review it
+before anything goes live. Here's what that step actually involves.
+
+**Why it matters:** these are legal documents. A wrong privacy policy, a cookie
+banner that breaches ePrivacy, or a spam flow that ignores prior opt-in is
+regulatory exposure — fines, accessibility lawsuits, unenforceable contracts —
+not a cosmetic bug. A template that *looks* authoritative and one that *is*
+authoritative are different things; the review closes that gap.
+
+**What to hand the lawyer:**
+
+- The generated document(s), plus which **jurisdiction pack(s)** and **markets**
+  they were built for.
+- The relevant `skills/web-compliance/jurisdictions/*.yaml` file(s) — each lists
+  its frameworks, citations, and `effective` dates, so a lawyer can check them
+  against what is currently in force.
+- Your client's actual facts: revenue/volume (does CCPA even apply?), whether
+  the site targets children (COPPA), what data is collected, and whether any
+  public-sector accessibility rules apply.
+
+**Ask them to confirm, at minimum:**
+
+1. The **citations and dates** are current and correct for each market.
+2. Consent model is right per market (**opt-in** EU / UK / Israel vs **opt-out**
+   US states) and email marketing follows the stricter rule where lists overlap.
+3. Scope/thresholds — that each law your document claims actually *applies* to
+   this client.
+4. The **accessibility target** (WCAG level) is defensible for the site.
+5. Anything flagged `needs_verification` in a pack (e.g. Israel's spam statute,
+   the ADA WCAG level, the UK Data Use and Access Act's in-force provisions).
+
+**Which packs to prioritize:** review the markets your client actually serves
+first, and within those, the documents with legal teeth — **privacy policy,
+cookie banner, terms of use, and any contract** — before the lower-risk ones.
+
+Once a pack is signed off, set `reviewed_by` to the reviewing lawyer/firm and
+flip `needs_legal_review` to `false` in that YAML file, so the review status is
+tracked in the repo.
+
 ## Install
 
 ```
