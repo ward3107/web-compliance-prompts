@@ -265,3 +265,7 @@ python3 scripts/validate.py --strict-stale 180
 ## License
 
 [MIT](LICENSE).
+
+---
+
+<p align="right"><a href="#web-compliance-prompts">⬆ Back to top</a></p>
