@@ -233,6 +233,17 @@ It fails on uncited frameworks, missing `[LANGUAGE]` placeholders, missing
 checklists, absent disclaimers, and `extends`/`conflicts` references pointing at
 packs that don't exist; it warns on review dates older than a year.
 
+**Freshness guardrail.** Legal citations rot as laws change. A scheduled
+`freshness` GitHub Actions workflow runs monthly with
+`python3 scripts/validate.py --strict-stale 180` — any jurisdiction pack not
+re-checked within ~6 months fails the run and opens (or updates) a tracking
+issue, so a re-check is a visible task rather than a warning nobody reads. Run
+the strict check yourself any time with:
+
+```bash
+python3 scripts/validate.py --strict-stale 180
+```
+
 ## License
 
 [MIT](LICENSE).

@@ -5,9 +5,15 @@ Catches the failure modes that matter for legally sensitive templates:
 uncited requirements, stale review dates, and templates that ask for a
 language but have nowhere to put it.
 
-Usage:  python3 scripts/validate.py
+Usage:  python3 scripts/validate.py [--strict-stale DAYS]
 Exit code 1 if any ERROR is found. Warnings do not fail the run.
+
+  --strict-stale DAYS   Promote the "last_reviewed too old" check from a warning
+                        to an ERROR when a pack is older than DAYS. Used by the
+                        scheduled freshness workflow so citation rot fails CI
+                        (and opens an issue) instead of sitting as a warning.
 """
+import argparse
 import datetime
 import pathlib
 import re
@@ -18,6 +24,10 @@ SKILL = ROOT / "skills" / "web-compliance"
 TEMPLATES = SKILL / "templates"
 JURISDICTIONS = SKILL / "jurisdictions"
 STALE_AFTER_DAYS = 365
+
+# Set from --strict-stale; when not None, a pack older than this many days is an
+# ERROR rather than a warning.
+STRICT_STALE_DAYS: int | None = None
 
 errors: list[str] = []
 warnings: list[str] = []
@@ -100,7 +110,12 @@ def check_jurisdictions() -> None:
             try:
                 reviewed = datetime.date.fromisoformat(raw)
                 age = (today - reviewed).days
-                if age > STALE_AFTER_DAYS:
+                if STRICT_STALE_DAYS is not None and age > STRICT_STALE_DAYS:
+                    err(
+                        f"{rel}: last_reviewed is {age} days old (over the "
+                        f"{STRICT_STALE_DAYS}-day freshness limit) — re-check the citations"
+                    )
+                elif age > STALE_AFTER_DAYS:
                     warn(f"{rel}: last_reviewed is {age} days old — re-check the citations")
             except ValueError:
                 err(f"{rel}: last_reviewed {raw!r} is not an ISO date (YYYY-MM-DD)")
@@ -144,6 +159,18 @@ def check_disclaimer() -> None:
 
 
 def main() -> int:
+    global STRICT_STALE_DAYS
+    parser = argparse.ArgumentParser(description="Validate the web-compliance skill.")
+    parser.add_argument(
+        "--strict-stale",
+        type=int,
+        metavar="DAYS",
+        default=None,
+        help="Treat a pack whose last_reviewed is older than DAYS as an ERROR, not a warning.",
+    )
+    args = parser.parse_args()
+    STRICT_STALE_DAYS = args.strict_stale
+
     check_templates()
     check_jurisdictions()
     check_disclaimer()
