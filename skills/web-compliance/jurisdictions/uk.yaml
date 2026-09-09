@@ -1,6 +1,6 @@
 jurisdiction: uk
 name: United Kingdom
-last_reviewed: 2026-09-03
+last_reviewed: 2026-09-09
 reviewed_by: unverified
 needs_legal_review: true
 
@@ -71,15 +71,28 @@ frameworks:
 
   - id: data_use_access_act
     name: Data (Use and Access) Act 2025
-    governs: [privacy_policy, data_subject_rights, cookie_consent]
+    effective: 2026-02-05          # PECR cookie provisions commenced; further obligations from 19 Jun 2026
+    governs: [privacy_policy, data_subject_rights, cookie_consent, email_marketing]
     citation: https://www.legislation.gov.uk/ukpga/2025/18/contents
     verified: false
-    needs_verification: >
-      This Act reforms parts of the UK data protection and PECR regime,
-      including some low-risk cookie exemptions and changes to how certain
-      requests are handled. Provisions commence on staggered dates. Confirm
-      which provisions are actually in force, and their effect on cookie
-      consent, with a UK practitioner before relying on any relaxation.
+    notes: >
+      Royal Assent 19 Jun 2025; the PECR cookie changes came into force
+      5 Feb 2026, with further provisions from 19 Jun 2026. TWO practical
+      effects on the build:
+        1. Consent EXEMPTIONS for low-risk cookies. From 5 Feb 2026 certain
+           low-risk storage no longer needs prior consent under PECR — notably
+           FIRST-PARTY analytics and cookies that remember display/appearance
+           preferences. This DIVERGES from the EU, where ePrivacy Art. 5(3)
+           still requires consent for analytics — so a UK visitor may be shown
+           a lighter banner than an EU visitor. IMPORTANT: the exemption does
+           NOT cover advertising-related analytics — if analytics feeds ad
+           targeting, remarketing, or conversion modelling, consent is still
+           required. When in doubt, keep consent.
+        2. Higher fines. PECR penalties are now aligned with UK GDPR — up to
+           £17.5m or 4% of global annual turnover — and a mandatory pre-ICO
+           complaints procedure applies from Jun 2026.
+      Confirm the exact exemption boundaries against current ICO guidance
+      before relaxing any consent gate.
 
   - id: equality_act
     name: Equality Act 2010
