@@ -85,6 +85,9 @@ skills/web-compliance/
     uk.yaml             # United Kingdom
     us.yaml             # US federal layer
     us-ca.yaml          # California (extends: us)
+    ca.yaml             # Canada
+widgets/                # drop-in runnable code (not prompts)
+  cookie-consent/       # vanilla JS/CSS consent banner — no build step
 scripts/validate.py     # structural checks, run in CI
 docs/screenshots/
 ```
@@ -92,6 +95,21 @@ docs/screenshots/
 Templates and jurisdictions are deliberately separate. One `cookie-banner`
 template serves Israel, the EU and California without being forked — the pack
 supplies the rules, the template supplies the build.
+
+## Drop-in widgets
+
+Most of the repo generates *prompts*. `widgets/` is the exception: **runnable
+code you paste in**, no AI assistant required.
+
+- **[`widgets/cookie-consent/`](widgets/cookie-consent/)** — a framework-agnostic
+  cookie-consent banner (vanilla JS + CSS, no build step, no dependencies). It
+  implements the same logic as the `cookie-banner` template: GTM Consent Mode
+  v2, Global Privacy Control honoured automatically, geo-aware opt-in/opt-out,
+  the UK first-party-analytics exemption, granular toggles, 4 languages + RTL,
+  and WCAG 2.2 accessibility. Open its `demo.html` to try it.
+
+Same "not legal advice" caveat applies — it's a template implementation to
+review, not a compliance guarantee.
 
 ## The 13 artifacts
 
@@ -247,3 +265,7 @@ python3 scripts/validate.py --strict-stale 180
 ## License
 
 [MIT](LICENSE).
+
+---
+
+<p align="right"><a href="#web-compliance-prompts">⬆ Back to top</a></p>
