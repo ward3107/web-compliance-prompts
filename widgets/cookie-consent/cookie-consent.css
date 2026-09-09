@@ -1,0 +1,196 @@
+/*!
+ * Cookie Consent widget styles. Framework-agnostic, no build step.
+ * Progressive enhancement: widely supported declarations first; no feature is
+ * the ONLY declaration for anything load-bearing. Targets Blink, WebKit, Gecko.
+ */
+
+.cc-root {
+  --cc-brand: #2563eb;
+  --cc-bg: #ffffff;
+  --cc-fg: #1f2937;
+  --cc-muted: #6b7280;
+  --cc-border: #e5e7eb;
+  --cc-radius: 12px;
+
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2147483000; /* above almost everything */
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--cc-fg);
+}
+
+.cc-root *,
+.cc-root *::before,
+.cc-root *::after { box-sizing: border-box; }
+
+@media (prefers-color-scheme: dark) {
+  .cc-root {
+    --cc-bg: #111827;
+    --cc-fg: #f3f4f6;
+    --cc-muted: #9ca3af;
+    --cc-border: #374151;
+  }
+}
+
+.cc-banner {
+  max-width: 760px;
+  margin: 0 auto;
+  /* Fallback solid first, then the enhanced radius/shadow. */
+  background: #ffffff;
+  background: var(--cc-bg);
+  border: 1px solid var(--cc-border);
+  border-bottom: 0;
+  border-radius: var(--cc-radius) var(--cc-radius) 0 0;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.18);
+  padding: 20px;
+}
+
+.cc-title {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.cc-body {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--cc-fg);
+}
+
+.cc-notice {
+  margin: 0 0 10px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--cc-muted);
+  border-inline-start: 3px solid var(--cc-brand);
+  padding-inline-start: 10px;
+}
+
+.cc-link {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+  color: var(--cc-brand);
+  text-decoration: underline;
+}
+
+.cc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cc-btn {
+  /* WCAG 2.2 SC 2.5.8: minimum 24x24; we go larger for comfort. */
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--cc-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cc-fg);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.cc-btn:hover { border-color: var(--cc-brand); }
+
+.cc-btn:focus-visible {
+  outline: 3px solid var(--cc-brand);
+  outline-offset: 2px;
+}
+
+.cc-btn-primary {
+  background: #2563eb;               /* fallback if the var is unsupported */
+  background: var(--cc-brand);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.cc-btn-ghost {
+  margin-inline-start: auto;         /* push Customize to the far side */
+}
+
+.cc-panel {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--cc-border);
+}
+
+.cc-cat { padding: 10px 0; border-bottom: 1px solid var(--cc-border); }
+.cc-cat:last-of-type { border-bottom: 0; }
+
+.cc-cat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cc-cat-label { font-weight: 600; font-size: 0.92rem; }
+.cc-cat-desc { margin: 6px 0 0; font-size: 0.82rem; line-height: 1.5; color: var(--cc-muted); }
+.cc-locked { font-size: 0.8rem; color: var(--cc-muted); }
+
+/* Accessible toggle switch built on a real checkbox. */
+.cc-switch {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 48px;
+  height: 28px;
+}
+.cc-switch input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;            /* keep it in the a11y tree, hide visually */
+  cursor: pointer;
+}
+.cc-slider {
+  position: absolute;
+  inset: 0;
+  background: #9ca3af;
+  border-radius: 999px;
+  transition: background-color 0.15s ease;
+  pointer-events: none;
+}
+.cc-slider::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  inset-inline-start: 3px;
+  width: 22px;
+  height: 22px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+}
+.cc-switch input:checked + .cc-slider { background: var(--cc-brand); }
+.cc-switch input:checked + .cc-slider::before { transform: translateX(20px); }
+[dir="rtl"] .cc-switch input:checked + .cc-slider::before { transform: translateX(-20px); }
+.cc-switch input:disabled + .cc-slider { opacity: 0.5; }
+/* Visible focus for keyboard users on the (visually hidden) checkbox. */
+.cc-switch input:focus-visible + .cc-slider {
+  outline: 3px solid var(--cc-brand);
+  outline-offset: 2px;
+}
+
+.cc-save { margin-top: 14px; width: 100%; }
+
+/* Stack actions on small screens; keep targets full-width and tappable. */
+@media (max-width: 560px) {
+  .cc-actions { flex-direction: column; }
+  .cc-btn, .cc-btn-ghost { width: 100%; margin-inline-start: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-slider, .cc-slider::before { transition: none; }
+}

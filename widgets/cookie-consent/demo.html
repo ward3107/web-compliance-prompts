@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cookie Consent widget — demo</title>
+  <link rel="stylesheet" href="cookie-consent.css">
+  <style>
+    body { font: 16px/1.6 system-ui, sans-serif; margin: 0; color: #1f2937; background: #f9fafb; }
+    main { max-width: 720px; margin: 0 auto; padding: 40px 20px 200px; }
+    h1 { font-size: 1.5rem; }
+    code { background: #eef2ff; padding: 1px 5px; border-radius: 4px; }
+    fieldset { border: 1px solid #e5e7eb; border-radius: 8px; margin: 16px 0; }
+    label { display: inline-block; margin: 4px 10px 4px 0; }
+    button.demo { padding: 8px 14px; border: 1px solid #2563eb; background: #2563eb; color: #fff; border-radius: 6px; cursor: pointer; }
+    #log { background: #111827; color: #d1fae5; padding: 12px; border-radius: 8px; font: 13px/1.5 ui-monospace, monospace; white-space: pre-wrap; min-height: 60px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Cookie Consent widget — demo</h1>
+    <p>Pick a scenario and click <strong>Load banner</strong>. The banner reads
+    the options below, applies Consent Mode v2 to a fake <code>dataLayer</code>,
+    and logs the resulting consent state.</p>
+
+    <fieldset>
+      <legend>Region</legend>
+      <label><input type="radio" name="region" value="eu" checked> EU (opt-in)</label>
+      <label><input type="radio" name="region" value="uk"> UK (opt-in + first-party analytics exemption)</label>
+      <label><input type="radio" name="region" value="il"> Israel (opt-in)</label>
+      <label><input type="radio" name="region" value="us"> US federal (opt-out)</label>
+      <label><input type="radio" name="region" value="us-ca"> California (opt-out + GPC)</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Language</legend>
+      <label><input type="radio" name="lang" value="en" checked> English</label>
+      <label><input type="radio" name="lang" value="he"> עברית</label>
+      <label><input type="radio" name="lang" value="ar"> العربية</label>
+      <label><input type="radio" name="lang" value="ru"> Русский</label>
+    </fieldset>
+
+    <p>
+      <button class="demo" id="load">Load banner</button>
+      <button class="demo" id="reset" style="background:#6b7280;border-color:#6b7280">Clear saved choice</button>
+    </p>
+
+    <h2>dataLayer log</h2>
+    <div id="log" aria-live="polite">— nothing yet —</div>
+  </main>
+
+  <script src="cookie-consent.js"></script>
+  <script>
+    // Fake GTM dataLayer so we can watch what the widget pushes.
+    window.dataLayer = window.dataLayer || [];
+    var logEl = document.getElementById('log');
+    function render() {
+      logEl.textContent = window.dataLayer.map(function (x) {
+        return JSON.stringify(x);
+      }).join('\n') || '— nothing yet —';
+    }
+    var origPush = window.dataLayer.push.bind(window.dataLayer);
+    window.dataLayer.push = function () { var r = origPush.apply(null, arguments); render(); return r; };
+
+    function selected(name) {
+      var el = document.querySelector('input[name="' + name + '"]:checked');
+      return el ? el.value : null;
+    }
+
+    document.getElementById('load').addEventListener('click', function () {
+      try { localStorage.removeItem('cc_consent_v1'); } catch (e) {}
+      window.dataLayer.length = 0; render();
+      // Re-init fresh each time for the demo.
+      CookieConsent._root && CookieConsent._destroy();
+      CookieConsent.init({
+        region: selected('region'),
+        language: selected('lang'),
+        privacyPolicyUrl: '/privacy',
+        brandColor: '#2563eb',
+        onChange: function (c) {
+          origPush({ event: 'onChange_callback', analytics: c.analytics, marketing: c.marketing });
+          render();
+        }
+      });
+    });
+
+    document.getElementById('reset').addEventListener('click', function () {
+      try { localStorage.removeItem('cc_consent_v1'); } catch (e) {}
+      window.dataLayer.length = 0; render();
+      CookieConsent._root && CookieConsent._destroy();
+    });
+  </script>
+</body>
+</html>
