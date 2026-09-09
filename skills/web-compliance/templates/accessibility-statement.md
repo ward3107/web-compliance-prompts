@@ -84,10 +84,19 @@ Build to the HIGHER of the standards that apply to [JURISDICTIONS]:
 - EU (EAA / EN 301 549)         -> WCAG 2.1 Level AA
 - UK, US Section 508, Canada    -> WCAG 2.1 Level AA (verify per contract)
 
-WCAG 2.1 AA is a strict superset of 2.0 AA, so building to 2.1 satisfies
-IS 5568 as well. Default to 2.1 AA unless the client serves Israel only.
+WCAG 2.1 AA is a strict superset of 2.0 AA, and WCAG 2.2 AA is in turn a
+superset of 2.1 — so building to WCAG 2.2 AA satisfies every regime here,
+IS 5568 included. WCAG 2.2 (W3C Recommendation, Oct 2023) is the current
+version. DEFAULT TO WCAG 2.2 AA. The statutory minimum per market is mapped
+above (Israel 2.0 AA, EU/UK 2.1 AA); 2.2 AA meets or exceeds all of them, so
+only drop to a lower level if the client serves Israel only and explicitly
+wants the minimum.
 
-The 2.1 additions that matter most beyond 2.0 AA:
+IMPORTANT for the statement text: the conformance level you DECLARE must match
+what was actually built and tested. If you built to WCAG 2.2 AA, state 2.2 AA;
+do not claim a level the site does not meet.
+
+The 2.1 additions beyond 2.0 AA (all still required):
 - 1.3.4 Orientation — do not lock to portrait or landscape
 - 1.3.5 Identify Input Purpose — autocomplete attributes on personal-data fields
 - 1.4.10 Reflow — usable at 320px wide with no horizontal scrolling
@@ -97,6 +106,15 @@ The 2.1 additions that matter most beyond 2.0 AA:
 - 2.5.1 Pointer Gestures / 2.5.2 Pointer Cancellation
 - 2.5.3 Label in Name — visible label text must be in the accessible name
 - 2.5.4 Motion Actuation
+
+The 2.2 additions beyond 2.1 AA (declare 2.2 AA only if these were built too):
+- 2.4.11 Focus Not Obscured (Minimum)
+- 2.5.7 Dragging Movements — single-pointer alternative to any drag
+- 2.5.8 Target Size (Minimum) — pointer targets at least 24×24 CSS px
+- 3.2.6 Consistent Help
+- 3.3.7 Redundant Entry
+- 3.3.8 Accessible Authentication (Minimum)
+Note: WCAG 2.2 also RETIRED 2.0's 4.1.1 Parsing (obsolete).
 
 ---
 ## ✅ Verification Checklist

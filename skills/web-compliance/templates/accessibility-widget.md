@@ -15,10 +15,15 @@ Build to the HIGHER of the standards that apply to [JURISDICTIONS]:
 - EU (EAA / EN 301 549)         -> WCAG 2.1 Level AA
 - UK, US Section 508, Canada    -> WCAG 2.1 Level AA (verify per contract)
 
-WCAG 2.1 AA is a strict superset of 2.0 AA, so building to 2.1 satisfies
-IS 5568 as well. Default to 2.1 AA unless the client serves Israel only.
+WCAG 2.1 AA is a strict superset of 2.0 AA, and WCAG 2.2 AA is in turn a
+superset of 2.1 — so building to WCAG 2.2 AA satisfies every regime here,
+IS 5568 included. WCAG 2.2 (W3C Recommendation, Oct 2023) is the current
+version. DEFAULT TO WCAG 2.2 AA. The statutory minimum per market is mapped
+above (Israel 2.0 AA, EU/UK 2.1 AA); 2.2 AA meets or exceeds all of them, so
+only drop to a lower level if the client serves Israel only and explicitly
+wants the minimum.
 
-The 2.1 additions that matter most beyond 2.0 AA:
+The 2.1 additions beyond 2.0 AA (all still required):
 - 1.3.4 Orientation — do not lock to portrait or landscape
 - 1.3.5 Identify Input Purpose — autocomplete attributes on personal-data fields
 - 1.4.10 Reflow — usable at 320px wide with no horizontal scrolling
@@ -28,6 +33,22 @@ The 2.1 additions that matter most beyond 2.0 AA:
 - 2.5.1 Pointer Gestures / 2.5.2 Pointer Cancellation
 - 2.5.3 Label in Name — visible label text must be in the accessible name
 - 2.5.4 Motion Actuation
+
+The 2.2 additions beyond 2.1 AA (build these too under the 2.2 default):
+- 2.4.11 Focus Not Obscured (Minimum) — the focused element is not fully hidden
+  by sticky headers/footers or other overlays
+- 2.5.7 Dragging Movements — any drag action has a single-pointer alternative
+  (tap/click), unless dragging is essential
+- 2.5.8 Target Size (Minimum) — pointer targets are at least 24×24 CSS px, or
+  have equivalent spacing
+- 3.2.6 Consistent Help — help mechanisms (contact link, chat, help page) appear
+  in the same relative order across pages
+- 3.3.7 Redundant Entry — do not force re-entering information already provided
+  earlier in the same process (auto-populate or offer a choice)
+- 3.3.8 Accessible Authentication (Minimum) — no cognitive-function test (solving
+  a puzzle, transcribing characters) without an accessible alternative
+Note: WCAG 2.2 also RETIRED 2.0's 4.1.1 Parsing — it is obsolete, so do not
+spend effort on it.
 
 == BROWSER SUPPORT ==
 Target the current versions of Chrome, Edge, Safari, Firefox, Samsung Internet
