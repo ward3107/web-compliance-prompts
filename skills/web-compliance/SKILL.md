@@ -115,6 +115,12 @@ Things to get right when several apply:
   (consent before storage). US states are opt-out (a "Do Not Sell or Share"
   control). Geo-detect and serve each visitor their own model. Never apply the
   US opt-out model globally — that breaches ePrivacy and PECR.
+- **UK diverges from the EU on cookies since the DUAA 2025.** From 5 Feb 2026,
+  PECR exempts low-risk storage — first-party analytics and appearance/display
+  preferences — from prior consent for UK visitors, so a UK-only site can run a
+  lighter banner than an EU one. The exemption does NOT cover advertising or any
+  analytics that feeds ad targeting; that still needs opt-in. Apply it per
+  region, never to EU visitors, and keep consent when analytics might feed ads.
 - **Honour Global Privacy Control wherever US state law applies.** It is a code
   requirement (`navigator.globalPrivacyControl`), not policy text, and it
   applies even on a site that otherwise runs an opt-in banner.

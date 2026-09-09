@@ -18,11 +18,23 @@ Read the requirements from the matching jurisdictions/*.yaml pack. In short:
   Personal Information" control rather than a prior-consent gate.
 
 - UK: the banner is required by PECR Regulation 6 (not the UK GDPR).
-  Opt-in, same shape as the EU.
+  Opt-in, same shape as the EU — WITH ONE DIVERGENCE. Since the Data (Use and
+  Access) Act 2025 (PECR changes in force 5 Feb 2026), certain LOW-RISK storage
+  is exempt from prior consent for UK visitors: FIRST-PARTY analytics and
+  cookies that only remember display/appearance preferences. So for a UK-only
+  visitor you MAY default first-party analytics_storage to 'granted' and drop it
+  from the consent gate. Critical caveats: (1) the exemption does NOT cover
+  advertising cookies or any analytics that feeds ad targeting, remarketing or
+  conversion modelling — those still require opt-in consent; (2) it is UK-only —
+  the EU (ePrivacy Art. 5(3)) still requires consent for analytics. If you are
+  unsure whether the site's analytics feeds advertising, KEEP CONSENT — treat it
+  like the EU. Implement this as a per-region flag, not a global relaxation.
 
 If the site serves several of these, detect the visitor's region and apply the
-STRICTER model to them: opt-in for EU/UK/Israel visitors, opt-out control for
-California. Never apply opt-out globally — that breaches ePrivacy.
+model for THAT visitor: opt-in for EU/Israel visitors; opt-in for the UK too but
+with the first-party-analytics exemption above; an opt-out control for
+California. Never apply opt-out globally — that breaches ePrivacy — and never
+apply the UK analytics exemption to EU visitors.
 
 == GLOBAL PRIVACY CONTROL (required wherever US state law applies) ==
 California — and a growing number of other US states — require you to honour a
