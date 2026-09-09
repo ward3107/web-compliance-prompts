@@ -1,6 +1,6 @@
 jurisdiction: us
 name: United States (federal layer)
-last_reviewed: 2026-09-03
+last_reviewed: 2026-09-09
 reviewed_by: unverified
 needs_legal_review: true
 
@@ -37,21 +37,40 @@ frameworks:
       - honour_optout_within_10_business_days
 
   - id: coppa
-    name: Children's Online Privacy Protection Act (15 U.S.C. §§ 6501-6506)
+    name: Children's Online Privacy Protection Act (15 U.S.C. §§ 6501-6506) and the amended COPPA Rule (16 CFR Part 312)
     short: COPPA
+    amended_by: 2025 COPPA Rule amendments
+    effective: 2025-06-23          # amended Rule effective; full compliance required by 22 Apr 2026
     governs: [children, consent]
-    citation: https://www.ftc.gov/legal-library/browse/rules/childrens-online-privacy-protection-rule-coppa
+    citation: https://www.federalregister.gov/documents/2025/04/22/2025-05904/childrens-online-privacy-protection-rule
     verified: true
     notes: >
       Applies to sites/services directed to children under 13, or with actual
       knowledge of collecting from under-13s. Requires verifiable parental
       consent before collection, a separate children's privacy notice, and
-      limits on retention. If the site could attract under-13s, escalate to a
-      lawyer — the analytics and advertising tags in the cookie banner are
-      exactly what triggers liability here.
+      limits on retention.
+
+      The FTC's amended COPPA Rule (published 22 Apr 2025, effective 23 Jun
+      2025, full compliance by 22 Apr 2026 — the first major overhaul since
+      2013) tightens this materially:
+        - "Personal information" now expressly includes BIOMETRIC identifiers
+          (fingerprints, facial/voice/gait patterns, DNA) and government-issued
+          identifiers.
+        - SEPARATE opt-in parental consent is required for third-party
+          disclosures (e.g. sharing with advertisers) — bundling it with
+          collection consent is not enough.
+        - A written data-retention policy and stronger data-security program
+          are mandated; indefinite retention of children's data is barred.
+
+      If the site could attract under-13s, escalate to a lawyer — the analytics
+      and advertising tags in the cookie banner are exactly what triggers
+      liability here, and the third-party-disclosure consent rule now hits them
+      directly.
     requires:
       - verifiable_parental_consent
+      - separate_consent_for_third_party_disclosure
       - childrens_privacy_notice
+      - data_retention_policy
       - no_behavioural_ads_to_children
 
   - id: ada_title_iii
@@ -95,15 +114,17 @@ frameworks:
       language may specify a higher level.
 
 other_state_laws: >
-  Roughly twenty states have enacted comprehensive consumer privacy laws
-  (California, Virginia, Colorado, Connecticut, Utah, Texas, Oregon, Montana,
-  Delaware, Iowa, Nebraska, New Hampshire, New Jersey, Tennessee, Minnesota,
-  Maryland and others), with more taking effect each year. Most follow an
-  opt-out model with rights of access, correction, deletion and portability,
-  and several require honouring a universal opt-out signal such as Global
-  Privacy Control. Only California ships as a pack here so far. Do NOT tell a
-  user they are covered for a state that has no pack — say the pack does not
-  exist and that local counsel is needed.
+  As of early 2026, about twenty state comprehensive consumer privacy laws are
+  IN EFFECT (California, Virginia, Colorado, Connecticut, Utah, Texas, Oregon,
+  Montana, Delaware, Iowa, Nebraska, New Hampshire, New Jersey, Tennessee,
+  Minnesota, Maryland, and — newly effective 1 Jan 2026 — Indiana, Kentucky and
+  Rhode Island), with several more enacted but not yet in force (~24 enacted
+  total) and more each year. Most follow an opt-out model with rights of access,
+  correction, deletion and portability, and several require honouring a
+  universal opt-out signal such as Global Privacy Control. Only California ships
+  as a pack here so far. Do NOT tell a user they are covered for a state that has
+  no pack — say the pack does not exist and that local counsel is needed, and
+  verify current effective dates (the list moves every year).
 
 consent_model: opt_out           # federal layer; individual states may differ
 rtl: false
