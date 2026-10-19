@@ -1,0 +1,13 @@
+# Studio presentation assets
+
+The homepage uses two original AI-generated illustrations. They are decorative visual metaphors, not product screenshots or physical goods. Generated with the built-in Imagegen tool, then encoded as WebP without cropping or visual edits. The self-contained SVG wrappers embed those raster assets so the existing UTF-8 public-file builder and offline ZIP keep working without third-party requests.
+
+Files: `docs/site/evidence-glass.svg`, `docs/site/digital-review-kit.svg`.
+
+## Hero prompt
+
+Use case: stylized-concept. Asset type: premium website hero illustration for an AI developer skill named Website Compliance Launch Review. Create a refined photorealistic 3D product visualization, landscape 3:2 composition. Three large frameless translucent glass browser panes floating above a smooth warm white desk, seen in elegant three-quarter perspective. A slim emerald inspection plane passes through the panes, revealing neatly structured ivory paper report sheets and a few small deep blue and emerald markers. Subtle frosted glass, brushed aluminum edges, realistic refraction, tactile paper, soft daylight shadows, pearl-white background, cool mint highlights and one quiet lilac reflection. Editorial art direction, architectural clarity, restrained beautiful premium software product campaign. Keep objects large and the composition airy, focused in center and right, with enough room around edges for responsive cropping. NO text, no letters, no numbers, no logos, no shields, no locks, no robots, no people, no neon, no dark background, no infographic. This is an artistic illustration, not a screenshot.
+
+## Digital kit prompt
+
+Use case: product-mockup. Asset type: secondary image for a downloadable AI agent skill and developer templates landing page. Create a high-end editorial 3D still life in landscape 3:2. A carefully arranged digital workflow kit represented by a thick ivory report folder standing half-open, a small midnight-blue square folio, and three crisp cream report pages gently fanned out on a pale mineral plinth. The pages contain very fine abstract blue and grey short rules, tiny emerald square marks, and restrained tab dividers, no readable text or letters. Pale mint translucent glass bookmark across the pages, subtle soft lilac accent in background, realistic matte paper texture and soft daylight with elegant long shadows. A premium architectural product photograph aesthetic, warm off-white seamless background, spacious refined composition. No packaging claims, no human, no logos, no shields, no padlocks, no dark background, no generic gradients, no typography. This is a conceptual illustration of digital resources, not a physical item for sale.
