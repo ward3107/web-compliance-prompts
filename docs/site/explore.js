@@ -1,48 +1,33 @@
 (function () {
   'use strict';
-  var $ = function (id) { return document.getElementById(id); }, theme = 'ocean';
-  var languageNames = {he:'עברית',ar:'ערבית',en:'אנגלית',ru:'רוסית'};
-  var names = {'cookie-banner':'באנר עוגיות','privacy-policy':'מדיניות פרטיות','terms-of-use':'תנאי שימוש','refund-policy':'ביטולים והחזרים','accessibility-baseline':'בסיס נגישות לאתר','accessibility-widget':'הגדרות נגישות','accessibility-statement':'הצהרת נגישות','client-onboarding':'שאלון קליטת לקוח','data-subject-rights':'זכויות בנושא מידע אישי','disclaimer':'הבהרות ואחריות','ecommerce-checkout':'תהליך רכישה','email-marketing':'דיוור שיווקי','freelancer-contract':'חוזה פרילנס'};
-  function preview() {
-    var preset = ToolkitThemes.presets[theme], language = $('preview-language').value;
-    // All interpolated CSS comes from the shipped, fixed preset catalog.
-    var colors = preset.colors, light = ['night','midnight'].includes(theme);
-    var css = '.cc-root{--cc-brand:'+colors[0]+';--cc-bg:'+colors[1]+';--cc-fg:'+colors[2]+';--cc-muted:'+colors[2]+';--cc-border:'+colors[2]+';--cc-radius:'+preset.radius+'px;font-family:'+ToolkitThemes.fonts[preset.font]+'}.cc-root .cc-btn-primary{color:'+(light?'#000':'#fff')+'}.cc-root a{color:'+colors[2]+'}';
-    $('explore-preview').contentWindow.postMessage({type:'compliance-preview',config:{region:'auto',language:language,brandColor:colors[0]},css:css,name:'העסק לדוגמה'},location.protocol==='file:'?'*':location.origin);
-    var params = new URLSearchParams({theme:theme,language:language});
-    $('start-link').href = 'start.html?'+params;
-    document.querySelectorAll('[data-start-link]').forEach(function(link){link.href='start.html?'+params;});
-    params.set('platform','wordpress');$('wordpress-link').href = 'start.html?'+params;
-    params.set('platform','other');$('other-link').href = 'start.html?'+params;
+  var $=function(id){return document.getElementById(id);},ui=ToolkitUI,pick=ui.pick;
+  var params=new URLSearchParams(location.search),theme=Object.hasOwn(ToolkitThemes.presets,params.get('theme'))?params.get('theme'):'cobalt';
+  if(['he','ar','en','ru'].includes(params.get('language')))$('preview-language').value=params.get('language');
+  else $('preview-language').value=ui.language==='he'?'he':'en';
+  var names={ 'cookie-banner':['Cookie banner','באנר עוגיות'],'privacy-policy':['Privacy policy','מדיניות פרטיות'],'terms-of-use':['Terms of use','תנאי שימוש'],'refund-policy':['Refunds policy','ביטולים והחזרים'],'accessibility-baseline':['Accessibility baseline','בסיס נגישות לאתר'],'accessibility-widget':['Accessibility settings','הגדרות נגישות'],'accessibility-statement':['Accessibility statement','הצהרת נגישות'],'client-onboarding':['Client onboarding','שאלון קליטת לקוח'],'data-subject-rights':['Data subject rights','זכויות בנושא מידע אישי'],'disclaimer':['Disclaimer','הבהרות ואחריות'],'ecommerce-checkout':['Ecommerce checkout','תהליך רכישה'],'email-marketing':['Email marketing','דיוור שיווקי'],'freelancer-contract':['Freelancer contract','חוזה פרילנס']};
+  var languages={en:['English','אנגלית'],he:['Hebrew','עברית'],ar:['Arabic','ערבית'],ru:['Russian','רוסית']},catalog;
+  function preview(){
+    var preset=ToolkitThemes.presets[theme],language=$('preview-language').value,colors=preset.colors,light=['night','midnight'].includes(theme);
+    var css='.cc-root{--cc-brand:'+colors[0]+';--cc-bg:'+colors[1]+';--cc-fg:'+colors[2]+';--cc-muted:'+colors[2]+';--cc-border:'+colors[2]+';--cc-radius:'+preset.radius+'px;font-family:'+ToolkitThemes.fonts[preset.font]+'}.cc-root .cc-btn-primary{color:'+(light?'#000':'#fff')+'}.cc-root a{color:'+colors[2]+'}';
+    $('explore-preview').contentWindow.postMessage({type:'compliance-preview',config:{region:'auto',language:language,brandColor:colors[0]},css:css,name:language==='he'?'העסק לדוגמה':language==='ar'?'موقعك الخاص':language==='ru'?'Ваш сайт':'Your website, your style.'},location.protocol==='file:'?'*':location.origin);
+    var query=new URLSearchParams({theme:theme,language:language,ui:ui.language});
+    $('start-link').href='start.html?'+query;document.querySelectorAll('[data-start-link]').forEach(function(link){link.href='start.html?'+query;});
+    query.set('platform','wordpress');$('wordpress-link').href='start.html?'+query;query.set('platform','other');$('other-link').href='start.html?'+query;
   }
-  Object.keys(ToolkitThemes.presets).forEach(function(key){var option=document.createElement('option');option.value=key;option.textContent=ToolkitThemes.presets[key].name;$('quick-theme').append(option);});
-  ToolkitThemes.gallery($('explore-themes'),'data-explore-theme',function(key){theme=key;$('quick-theme').value=key;preview();});
-  function describeChange(message) { $('change-description').textContent=message; }
-  $('explore-themes').addEventListener('click',function(event){var button=event.target.closest('[data-explore-theme]');if(button)describeChange('הבאנר עבר לעיצוב '+ToolkitThemes.presets[button.dataset.exploreTheme].name+'. הצבעים, הפינות והגופן עודכנו בתצוגה.');});
-  $('quick-theme').addEventListener('change',function(){theme=this.value;document.querySelectorAll('[data-explore-theme]').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.exploreTheme===theme));});describeChange('הבאנר עבר לעיצוב '+ToolkitThemes.presets[theme].name+'. הצבעים, הפינות והגופן עודכנו בתצוגה.');preview();});
-  $('preview-language').addEventListener('change',function(){describeChange('נוסח הבאנר בתצוגה השתנה ל'+languageNames[this.value]+'.');preview();});$('reopen').addEventListener('click',preview);
-  ['wide','narrow'].forEach(function(id){$(id).addEventListener('click',function(){
-    $('explore-preview').classList.toggle('mobile',id==='narrow');
-    ['wide','narrow'].forEach(function(key){$(key).setAttribute('aria-pressed',String(id===key));});
-  });});
-  window.addEventListener('message',function(event){
-    if(!(location.protocol==='file:'?event.origin==='null'||event.origin==='file://':event.origin===location.origin)||event.source!==$('explore-preview').contentWindow||!event.data)return;
-    if(event.data.type==='compliance-preview-ready')preview();
-    if(event.data.type==='compliance-preview-choice'&&typeof event.data.analytics==='boolean'&&typeof event.data.marketing==='boolean')$('try-status').textContent='כך הבחירה נשמרת: מדידה '+(event.data.analytics?'מותרת':'כבויה')+' · פרסום '+(event.data.marketing?'מותר':'כבוי')+'. כאן לא נטענים כלי מעקב.';
-  });
-  function detail(container,title,note,source,rtl){
-    var details=document.createElement('details'),summary=document.createElement('summary'),small=document.createElement('small'),pre=document.createElement('pre');
-    summary.append(document.createTextNode(title));small.textContent=note;summary.append(small);pre.textContent=source;pre.dir=rtl?'rtl':'ltr';pre.tabIndex=0;pre.setAttribute('role','region');pre.setAttribute('aria-label',title);details.append(summary,pre);container.append(details);
-  }
+  function themeName(key){return ui.t(ToolkitThemes.presets[key].name);}
+  function controls(){var selected=theme;$('quick-theme').replaceChildren();Object.keys(ToolkitThemes.presets).forEach(function(key){var option=document.createElement('option');option.value=key;option.textContent=themeName(key);$('quick-theme').append(option);});$('quick-theme').value=selected;}
+  function describeTheme(){ $('change-description').textContent=pick('Now showing '+themeName(theme)+'. Colors, corners and font updated.','הבאנר עבר לעיצוב '+themeName(theme)+'. הצבעים, הפינות והגופן עודכנו.');}
+  controls();ToolkitThemes.gallery($('explore-themes'),'data-explore-theme',function(key){theme=key;$('quick-theme').value=key;describeTheme();preview();});
+  document.querySelectorAll('[data-explore-theme]').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.exploreTheme===theme));});
+  $('quick-theme').addEventListener('change',function(){theme=this.value;document.querySelectorAll('[data-explore-theme]').forEach(function(el){el.setAttribute('aria-pressed',String(el.dataset.exploreTheme===theme));});describeTheme();preview();});
+  $('preview-language').addEventListener('change',function(){$('change-description').textContent=pick('The banner is now in '+pick.apply(null,languages[this.value])+'.','נוסח הבאנר השתנה ל'+pick.apply(null,languages[this.value])+'.');preview();});$('reopen').addEventListener('click',preview);
+  ['wide','narrow'].forEach(function(id){$(id).addEventListener('click',function(){$('explore-preview').classList.toggle('mobile',id==='narrow');['wide','narrow'].forEach(function(key){$(key).setAttribute('aria-pressed',String(id===key));});});});
+  window.addEventListener('message',function(event){if(!(location.protocol==='file:'?event.origin==='null'||event.origin==='file://':event.origin===location.origin)||event.source!==$('explore-preview').contentWindow||!event.data)return;if(event.data.type==='compliance-preview-ready')preview();if(event.data.type==='compliance-preview-choice'&&typeof event.data.analytics==='boolean'&&typeof event.data.marketing==='boolean')$('try-status').textContent=pick('Saved choice: analytics '+(event.data.analytics?'on':'off')+' · marketing '+(event.data.marketing?'on':'off')+'. No trackers load here.','הבחירה נשמרה: מדידה '+(event.data.analytics?'פעילה':'כבויה')+' · פרסום '+(event.data.marketing?'פעיל':'כבוי')+'. כאן לא נטענים כלי מעקב.');});
+  function detail(container,title,note,source,rtl,key){var details=document.createElement('details'),summary=document.createElement('summary'),small=document.createElement('small'),pre=document.createElement('pre');if(key)details.dataset.documentKey=key;summary.append(document.createTextNode(title));small.textContent=note;summary.append(small);pre.textContent=source;pre.dir=rtl?'rtl':'ltr';pre.lang=rtl?'he':'en';pre.tabIndex=0;pre.setAttribute('role','region');pre.setAttribute('aria-label',title);pre.dataset.noTranslate='';details.append(summary,pre);container.append(details);}
   var sample=ToolkitDocuments.build({values:{market:'il','business-name':'עסק לדוגמה — נתונים בדיוניים','site-url':'https://example.com','contact-email':'example@example.com','privacy-url':'/privacy'},answers:{sales:'unknown',accounts:'unknown',forms:'unknown',tracking:'unknown',sensitive:'unknown'}},{});
-  Object.keys(sample.documents).forEach(function(key){detail($('document-examples'),ToolkitDocuments.titles[key],'טיוטה בעברית · ישראל בלבד · נדרשת השלמה וביקורת',sample.documents[key],true);});
-  ToolkitSource.load().then(function(data){
-    data.catalog.forEach(function(item){
-      var kind=item.id==='cookie-banner'?'רכיב מוכן + פרומפט':(['privacy-policy','terms-of-use','refund-policy'].includes(item.id)?'מחולל טיוטה + פרומפט':'פרומפט ליישום');
-      var scope=item.scope==='il'?'ישראל בלבד':item.scope==='il+eu'?'שילוב ישראל והאיחוד האירופי':'הקשר מכל חבילות המדינה';
-      detail($('catalog-items'),names[item.id]||item.id,kind+' · '+scope,data.files['skills/web-compliance/templates/'+item.id+'.md'],false);
-    });$('catalog-status').textContent='';
-  }).catch(function(){$('catalog-status').textContent='התבניות לא נטענו. רעננו את העמוד או פתחו את המאגר ב־GitHub.';});
-  if(location.protocol==='file:'){$('offline-download').hidden=true;$('offline-status').textContent='אתם בסטודיו המקומי. אפשר להכין חבילות בלי אינטרנט; קישורי מקורות חיצוניים דורשים חיבור.';}
-  preview();
+  function documents(){var opened=Array.from($('document-examples').querySelectorAll('details[open]')).map(function(el){return el.dataset.documentKey;});$('document-examples').replaceChildren();Object.keys(sample.documents).forEach(function(key){detail($('document-examples'),ui.t(ToolkitDocuments.titles[key]),pick('Hebrew draft · Israel only · Complete and review with a lawyer','טיוטה בעברית · ישראל בלבד · נדרשת השלמה וביקורת'),sample.documents[key],true,key);});opened.forEach(function(key){$('document-examples').querySelector('[data-document-key="'+key+'"]').open=true;});}
+  function renderCatalog(){if(!catalog)return;var opened=Array.from($('catalog-items').querySelectorAll('details')).map(function(el){return el.open;});$('catalog-items').replaceChildren();catalog.catalog.forEach(function(item,index){var kind=item.id==='cookie-banner'?pick('Working component + prompt','רכיב מוכן + פרומפט'):(['privacy-policy','terms-of-use','refund-policy'].includes(item.id)?pick('Draft generator + prompt','מחולל טיוטה + פרומפט'):pick('Implementation prompt','פרומפט ליישום'));var scope=item.scope==='il'?pick('Israel only','ישראל בלבד'):item.scope==='il+eu'?pick('Israel + EU overlay','שילוב ישראל והאיחוד האירופי'):pick('Context from all jurisdiction packs','הקשר מכל חבילות המדינה');detail($('catalog-items'),pick.apply(null,names[item.id]||[item.id,item.id]),kind+' · '+scope,catalog.files['skills/web-compliance/templates/'+item.id+'.md'],false);$('catalog-items').lastElementChild.open=!!opened[index];});$('catalog-status').textContent='';}
+  documents();ToolkitSource.load().then(function(data){catalog=data;renderCatalog();}).catch(function(){$('catalog-status').textContent=pick('Templates could not load. Refresh or open the repository on GitHub.','התבניות לא נטענו. רעננו או פתחו את המאגר ב־GitHub.');});
+  function offline(){if(location.protocol==='file:'){$('offline-download').hidden=true;$('offline-status').textContent=pick('You’re using the local studio. Build packages offline. External source links need internet.','אתם בסטודיו המקומי. הכינו חבילות בלי אינטרנט; קישורי מקורות חיצוניים דורשים חיבור.');}}
+  window.addEventListener('toolkit:language',function(){controls();describeTheme();documents();renderCatalog();offline();preview();});offline();preview();
 })();

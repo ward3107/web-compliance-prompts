@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+  var t=typeof window==='object'&&window.ToolkitUI?window.ToolkitUI.t:function(s){return s;};
   var presets = {
     ocean:{name:'כחול ים',colors:['#145f78','#ffffff','#183348'],radius:12,font:'inherit'},
     forest:{name:'ירוק יער',colors:['#216348','#f5fff8','#183d2e'],radius:16,font:'inherit'},
@@ -24,9 +25,9 @@
       sample.innerHTML='<span class="sample-banner"><span class="sample-heading">הפרטיות שלכם.</span><span class="sample-line"></span><span class="sample-line short"></span><span class="sample-actions"><i></i><i></i></span></span>';
       swatches.className='theme-swatches';swatches.setAttribute('aria-hidden','true');
       preset.colors.forEach(function(color){var dot=document.createElement('i');dot.style.backgroundColor=color;swatches.append(dot);});
-      var caption=document.createElement('span');caption.className='theme-caption';caption.append(document.createTextNode(preset.name),swatches);button.append(sample,caption);
+      var caption=document.createElement('span');caption.className='theme-caption';caption.append(document.createTextNode(t(preset.name)),swatches);button.append(sample,caption);
       button.addEventListener('click',function(){container.querySelectorAll('button').forEach(function(el){el.setAttribute('aria-pressed',String(el===button));});onSelect(key,preset);});
-      container.append(button);
+      sample.querySelector('.sample-heading').textContent=t('הפרטיות שלכם.');container.append(button);
     });
   }
   var api={presets:presets,gallery:gallery,fonts:{inherit:'inherit',system:'system-ui, Tahoma, Arial, sans-serif',serif:'Georgia, serif'}};

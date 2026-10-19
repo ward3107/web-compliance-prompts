@@ -1,3 +1,19 @@
+# International studio photography
+
+The current website uses original editorial images generated with the built-in Imagegen tool. These are contextual, AI-generated photographs, not product screenshots or customer photographs. The animated consent card and live studio are HTML/CSS/JavaScript; product text and controls are not baked into an image. Images are encoded as WebP without visual edits, inside self-contained SVG wrappers for the UTF-8 public-file builder and offline archive.
+
+Current assets:
+- `docs/site/studio-workspace.svg` — hero and fictional website preview, 170,396 WebP bytes.
+- `docs/site/studio-palette.svg` — theme customization section, 145,774 WebP bytes.
+
+## Workspace prompt
+
+Use case: photorealistic-natural. Asset type: premium international website hero photograph for a cookie consent and website developer toolkit. Primary request: A striking editorial still life of a contemporary creative web designer's desk, no people. Warm off-white limewash wall, softly lit pale oak desk, open brushed silver laptop seen three quarter front, laptop screen is clean warm-white with a restrained abstract terracotta horizontal band and pale neutral blocks, no writing. A large sculptural cobalt blue ceramic vase with two airy green branches on the right, a burnt-orange desk object, linen sample and sketch pad beside laptop. Color palette cream, warm terracotta, electric cobalt, charcoal. Directional late morning sunlight from upper left, real long shadows, tactile surface details, refined independent design studio mood. Compose landscape 3:2, laptop toward lower center, upper background calm negative space, full desk scene, high end art-directed product lifestyle photography, realistic materials and lens. No text, no lettering, no logos, no watermarks, no charts, no padlocks or shields. This is contextual editorial imagery; actual interactive product UI will be overlaid separately in HTML.
+
+## Palette prompt
+
+Use case: photorealistic-natural. Asset type: wide editorial website image for the customization section of a website cookie-consent toolkit. Primary request: Art-directed overhead photograph of a web designer's tactile color exploration arranged across a warm ivory desk. Several matte rectangular color swatches in cobalt blue, terracotta, sage green, soft lavender and charcoal with generous ivory negative space, a slim silver laptop keyboard partly visible along the left edge, an unbranded white smartphone lying on two lavender color sheets toward the right, the smartphone screen plain warm white without content, a pencil and one small sculptural orange ceramic form. Crisp strong natural light, beautiful soft shadows, extremely clean contemporary editorial design studio photography. Landscape 3:2. The scene communicates selecting a visual style, no humans, no writing, no text, no logos, no watermarks, no shields. Use natural tactile paper grain, excellent color fidelity and subtle photographic imperfection, not a 3D render.
+
 # Archived studio illustration assets
 
 These two original AI-generated illustrations are archived in the repository. The current homepage uses the actual banner, document content and installation-file previews; these illustrations are excluded from the public distribution. They are decorative visual metaphors, not product screenshots or physical goods. Generated with the built-in Imagegen tool, then encoded as WebP without cropping or visual edits. The self-contained SVG wrappers embed those raster assets so the existing UTF-8 public-file builder and offline ZIP keep working without third-party requests.

@@ -167,3 +167,7 @@ To update Python build dependencies, edit `requirements.in`, then run `python -m
 [MIT](LICENSE). No warranty; legal review remains pending.
 
 Dependency maintenance uses one weekly grouped version-update PR per ecosystem (Python, npm and GitHub Actions), with one open version PR per ecosystem. Security fixes are grouped separately and are not delayed by that version-update limit. All updates require passing checks and review; there is no automatic merge. Enable automatic deletion of merged branches in repository settings.
+
+### International studio interface
+
+The public studio opens in English and offers a Hebrew interface with right-to-left layout. The setup and MCP connection guide use the same language selection. The banner supports English, Hebrew, Arabic and Russian independently of the interface language. Generated privacy, terms and refunds drafts remain Hebrew and Israel-only. The decorative hero animation has a pause control, follows reduced-motion preferences and never changes live studio selections. All images, copy and scripts ship locally in the offline studio.
