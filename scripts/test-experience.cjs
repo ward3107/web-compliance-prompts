@@ -167,7 +167,8 @@ async function main(){
       await page.locator('#vivid-remix').click();
       assert.equal(await page.locator('[data-kit-theme=espresso]').getAttribute('aria-pressed'),'true');
       assert.equal(await page.locator('body').getAttribute('data-vivid-skin'),'warm');
-      await kit.locator('#custom-style').filter({hasText:'#784827'}).waitFor({state:'attached'});
+      const kitFrame=await (await page.locator('#kit-banner-preview').elementHandle()).contentFrame();
+      await kitFrame.waitForFunction(()=>{const el=document.querySelector('.cc-root');return el&&getComputedStyle(el).getPropertyValue('--cc-brand').trim()==='#784827';});
       assert.equal(await kit.locator('.cc-root').evaluate(el=>getComputedStyle(el).getPropertyValue('--cc-brand').trim()),'#784827');
       assert.match(await page.locator('#kit-customize-link').getAttribute('href'),/theme=espresso/);
       await page.locator('#kit-tab-prompt').click();
