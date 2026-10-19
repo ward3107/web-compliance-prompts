@@ -1,6 +1,6 @@
-# Studio presentation assets
+# Archived studio illustration assets
 
-The homepage uses two original AI-generated illustrations. They are decorative visual metaphors, not product screenshots or physical goods. Generated with the built-in Imagegen tool, then encoded as WebP without cropping or visual edits. The self-contained SVG wrappers embed those raster assets so the existing UTF-8 public-file builder and offline ZIP keep working without third-party requests.
+These two original AI-generated illustrations are archived in the repository. The current homepage uses the actual banner, document content and installation-file previews; these illustrations are excluded from the public distribution. They are decorative visual metaphors, not product screenshots or physical goods. Generated with the built-in Imagegen tool, then encoded as WebP without cropping or visual edits. The self-contained SVG wrappers embed those raster assets so the existing UTF-8 public-file builder and offline ZIP keep working without third-party requests.
 
 Files: `docs/site/evidence-glass.svg`, `docs/site/digital-review-kit.svg`.
 
