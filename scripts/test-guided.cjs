@@ -20,7 +20,7 @@ async function main(){
   const browser=await engine.launch();try{
    const page=await browser.newPage({viewport:{width:1320,height:900}}),errors=[],unexpected=[];
    page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(!r.url().startsWith(base)&&!r.url().startsWith('blob:'))unexpected.push(r.url());});
-   await page.goto(base+'/start.html');await page.waitForFunction(()=>!document.getElementById('next').disabled);
+   await page.goto(base+'/start.html?ui=he');await page.waitForFunction(()=>!document.getElementById('next').disabled);
    assert.equal(await page.locator('#back').isVisible(),false);assert.equal(await page.locator('#platform').inputValue(),'unknown');
    await page.locator('#next').click();assert.equal(await page.locator('[data-step="0"]').isVisible(),true);
    await page.locator('#platform').selectOption('wordpress');await page.locator('#site-url').fill('https://example.com');await page.locator('#business-name').fill('Example <script>alert(1)</script>');await page.locator('#contact-email').fill('private-contact@example.com');
