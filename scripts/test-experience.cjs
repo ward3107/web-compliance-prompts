@@ -39,8 +39,9 @@ async function main(){
       assert.match(await page.locator('#intro-title').textContent(),/Cookie consent/);
       const frame=page.frameLocator('#explore-preview');await frame.locator('.cc-banner').waitFor();
       assert.ok((await page.locator('#motion-consent').boundingBox()).y<650,'The opening view should show what a cookie banner looks like');
-      const motionTitle=await page.locator('#motion-title').textContent();
+      const motionTitle=await page.locator('#motion-title').textContent(),motionLeft=(await page.locator('#motion-consent').boundingBox()).x;
       await page.waitForFunction(previous=>document.getElementById('motion-title').textContent!==previous,motionTitle,{timeout:10000});
+      assert.ok(Math.abs((await page.locator('#motion-consent').boundingBox()).x-motionLeft)<15,'RTL banner copy must not move the card anchor');
       await page.locator('#motion-toggle').click();
       assert.equal(await page.locator('#motion-toggle').getAttribute('aria-pressed'),'true');
       const still=await page.locator('#motion-title').textContent();
