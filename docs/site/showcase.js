@@ -1,32 +1,67 @@
 (function () {
   'use strict';
-  // Shortcuts operate the same shipped studio controls; no separate demo data.
-  var themeSelect=document.getElementById('quick-theme');
-  var shortcuts=Array.from(document.querySelectorAll('[data-show-theme]'));
-  function syncTheme(){shortcuts.forEach(function(button){button.setAttribute('aria-pressed',String(button.dataset.showTheme===themeSelect.value));});}
-  function revealStudio(){
-    var heading=document.getElementById('banner-title');
-    if(!heading)return;
-    heading.tabIndex=-1;heading.focus({preventScroll:true});
-    heading.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  var $=function(id){return document.getElementById(id);};
+  var productTabs=Array.from(document.querySelectorAll('[data-product-tab]'));
+  var activeDocument='privacy',platform='wordpress';
+  function reduced(){return window.matchMedia('(prefers-reduced-motion: reduce)').matches;}
+  function showProduct(key,focus,scroll){
+    if(!['banner','documents','package'].includes(key))return;
+    productTabs.forEach(function(tab){var active=tab.dataset.productTab===key;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;$('product-panel-'+tab.dataset.productTab).hidden=!active;if(active&&focus)tab.focus({preventScroll:true});});
+    if(scroll)$('product-preview').scrollIntoView({behavior:reduced()?'auto':'smooth',block:'start'});
   }
-  shortcuts.forEach(function(button){button.addEventListener('click',function(){
-    if(!themeSelect||!window.ToolkitThemes||!ToolkitThemes.presets[button.dataset.showTheme])return;
-    themeSelect.value=button.dataset.showTheme;
-    themeSelect.dispatchEvent(new Event('change',{bubbles:true}));
-    syncTheme();revealStudio();
+  productTabs.forEach(function(tab){tab.addEventListener('click',function(){showProduct(tab.dataset.productTab,false,false);});tab.addEventListener('keydown',function(event){
+    var index=productTabs.indexOf(tab),next;
+    if(event.key==='Home')next=0;else if(event.key==='End')next=productTabs.length-1;
+    else if(event.key==='ArrowLeft')next=(index+1)%productTabs.length;
+    else if(event.key==='ArrowRight')next=(index+productTabs.length-1)%productTabs.length;else return;
+    event.preventDefault();showProduct(productTabs[next].dataset.productTab,true,false);
   });});
-  if(themeSelect){themeSelect.addEventListener('change',syncTheme);syncTheme();}
-  var gallery=document.getElementById('explore-themes');
-  if(gallery)gallery.addEventListener('click',syncTheme);
+  document.querySelectorAll('[data-open-product]').forEach(function(button){button.addEventListener('click',function(){showProduct(button.dataset.openProduct,true,true);});});
+  function sampleDetails(key){
+    if(!['privacy','terms','refunds'].includes(key)||!window.ToolkitDocuments)return null;
+    return Array.from($('document-examples').querySelectorAll('details')).find(function(item){return item.querySelector('summary').textContent.startsWith(ToolkitDocuments.titles[key]);});
+  }
+  function documentText(key){var details=sampleDetails(key);return details?details.querySelector('pre').textContent:'';}
+  function renderDocument(key){
+    var text=documentText(key);if(!text)return;activeDocument=key;
+    $('hero-document-title').textContent=ToolkitDocuments.titles[key];
+    document.querySelectorAll('[data-sample-document]').forEach(function(button){button.setAttribute('aria-pressed',String(button.dataset.sampleDocument===key));});
+    var fragment=document.createDocumentFragment();
+    text.split(/\n\n+/).slice(2,5).forEach(function(section,index){
+      var lines=section.split('\n');if(index>0){var heading=document.createElement('h4');heading.textContent=lines.shift();fragment.append(heading);}
+      var p=document.createElement('p');p.textContent=lines.join('\n');fragment.append(p);
+    });
+    $('hero-document-excerpt').replaceChildren(fragment);
+  }
+  document.querySelectorAll('[data-sample-document]').forEach(function(button){button.addEventListener('click',function(){renderDocument(button.dataset.sampleDocument);});});
+  $('read-sample-document').addEventListener('click',function(){
+    $('document-modal-title').textContent=ToolkitDocuments.titles[activeDocument];$('document-modal-content').textContent=documentText(activeDocument);
+    $('document-modal').showModal();
+  });
+  $('close-document-modal').addEventListener('click',function(){$('document-modal').close();});
+  $('document-modal').addEventListener('click',function(event){if(event.target!==this)return;var box=this.getBoundingClientRect();if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)this.close();});
   document.addEventListener('click',function(event){
     var link=event.target.closest('[data-open-document]');if(!link)return;
-    var key=link.dataset.openDocument,container=document.getElementById('document-examples');
-    if(!container||!window.ToolkitDocuments)return;
-    var title=ToolkitDocuments.titles[key];
-    var target=Array.from(container.querySelectorAll('details')).find(function(item){return item.querySelector('summary').textContent.startsWith(title);});
-    if(!target)return;event.preventDefault();target.open=true;
-    target.querySelector('summary').focus({preventScroll:true});
-    target.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    var target=sampleDetails(link.dataset.openDocument);if(!target)return;
+    event.preventDefault();target.open=true;target.querySelector('summary').focus({preventScroll:true});target.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'start'});
   });
+  function packageLink(){
+    var params=new URL($('start-link').href,location.href).searchParams;params.set('platform',platform);$('package-start-link').href='start.html?'+params;
+  }
+  function renderPackage(value){
+    if(!['wordpress','other'].includes(value))return;platform=value;
+    var wp=value==='wordpress',files=['cookie-consent.js','cookie-consent.css','theme.css','install.js','START-HERE.html','preview.html','LICENSE'];
+    if(wp)files.unshift('web-compliance.php');else files.push('embed.html.txt');
+    $('package-filename').textContent=wp?'web-compliance-wordpress.zip':'web-compliance-install.zip';
+    $('package-description').textContent=wp?'תוסף להעלאה דרך לוח הבקרה של WordPress.':'קובצי באנר וקטע הטמעה למי שמטפל באתר.';
+    $('package-next-step').textContent=wp?'תוספים ← תוסף חדש ← העלאת תוסף':'מעלים את ארבעת קובצי הבאנר ומוסיפים את קטע ההטמעה.';
+    document.querySelectorAll('[data-package-platform]').forEach(function(button){button.setAttribute('aria-pressed',String(button.dataset.packagePlatform===value));});
+    var fragment=document.createDocumentFragment();files.forEach(function(name){var li=document.createElement('li'),code=document.createElement('code'),type=document.createElement('span');code.textContent=(wp?'web-compliance/':'')+name;type.className='file-type';type.textContent=name.includes('.')?name.split('.').pop().toUpperCase():'FILE';li.append(code,type);fragment.append(li);});$('package-files').replaceChildren(fragment);packageLink();
+  }
+  document.querySelectorAll('[data-package-platform]').forEach(function(button){button.addEventListener('click',function(){renderPackage(button.dataset.packagePlatform);});});
+  ['quick-theme','preview-language'].forEach(function(id){$(id).addEventListener('change',packageLink);});
+  $('explore-themes').addEventListener('click',function(event){if(event.target.closest('[data-explore-theme]')){showProduct('banner',true,true);packageLink();}});
+  var primary=$('hero-start-link'),bar=$('next-bar');
+  if('IntersectionObserver' in window){new IntersectionObserver(function(entries){bar.hidden=entries[0].isIntersecting;},{threshold:0}).observe(primary);}else bar.hidden=false;
+  renderDocument('privacy');renderPackage('wordpress');
 })();

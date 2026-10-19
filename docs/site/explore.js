@@ -11,6 +11,7 @@
     $('explore-preview').contentWindow.postMessage({type:'compliance-preview',config:{region:'auto',language:language,brandColor:colors[0]},css:css,name:'העסק לדוגמה'},location.protocol==='file:'?'*':location.origin);
     var params = new URLSearchParams({theme:theme,language:language});
     $('start-link').href = 'start.html?'+params;
+    document.querySelectorAll('[data-start-link]').forEach(function(link){link.href='start.html?'+params;});
     params.set('platform','wordpress');$('wordpress-link').href = 'start.html?'+params;
     params.set('platform','other');$('other-link').href = 'start.html?'+params;
   }
