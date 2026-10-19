@@ -1,3 +1,17 @@
+# Immersive live product scenes
+
+The opening now runs the actual shipped cookie-consent component in a fictional example website. Its images are original editorial assets generated with the built-in Imagegen tool; they are not customer websites, real customer photography or product screenshots. The browser, consent controls, paper and package scenes are native HTML/CSS/JavaScript. Both new images were encoded as WebP without visual edits and embedded in self-contained SVG wrappers for the offline studio.
+
+Files: `docs/site/world-fragrance.svg` (162,506 WebP bytes), `docs/site/world-architecture.svg` (222,676 WebP bytes).
+
+## Fragrance scene prompt
+
+Use case: product-mockup. Asset type: editorial photograph inside an explicitly fictional luxury ecommerce website used to demonstrate a cookie consent banner. Primary request: A supremely refined, photorealistic luxury fragrance still life, cinematic landscape 3:2 composition. One large unbranded sculptural transparent amber perfume bottle with a smooth matte dark-brown spherical cap on a pale warm travertine plinth, a second lower transparent glass object and a loose beige silk fabric. Directional late-afternoon light passes through the amber liquid and glass, luminous caustics and warm realistic shadows, rich amber against a warm bone-white backdrop, tactile stone. Camera close, elevated three quarter front, bottle arranged on right half with calm off-white negative space on the left half for actual HTML copy. Premium contemporary art direction, visually striking editorial product photography, accurate high quality glass and material detail, sophisticated and real. Absolutely no writing, no labels, no logos, no watermark, no shield or lock icons, no people, no UI or text in the image.
+
+## Architecture scene prompt
+
+Use case: photorealistic-natural. Asset type: editorial photograph inside an explicitly fictional architecture studio website used to demonstrate a cookie consent banner. Primary request: A breathtaking serene contemporary Mediterranean architectural interior, landscape 3:2. Low sculptural ivory boucle sofa to the right, a chunky pale travertine coffee table, large rounded doorway, a single mature olive tree visible through glazing, warm limestone floors and limewash walls. Extremely beautiful sunlight and sculptural architectural shadows, restrained olive and sand tones with one cobalt ceramic vase. Spacious left side, interior framed as an editorial architecture photograph, real refined material grain and true perspective, human scale, aspirational international design magazine quality. No people, no lettering, no logos, no text, no watermark, no screens, no UI, no shields or locks.
+
 # International studio photography
 
 The current website uses original editorial images generated with the built-in Imagegen tool. These are contextual, AI-generated photographs, not product screenshots or customer photographs. The animated consent card and live studio are HTML/CSS/JavaScript; product text and controls are not baked into an image. Images are encoded as WebP without visual edits, inside self-contained SVG wrappers for the UTF-8 public-file builder and offline archive.

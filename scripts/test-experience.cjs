@@ -32,22 +32,30 @@ async function main(){
       assert.equal(await page.locator('html').getAttribute('lang'),'en');
       assert.equal(await page.locator('html').getAttribute('dir'),'ltr');
       assert.equal(await page.locator('#preview-language').inputValue(),'en');
-      await page.waitForFunction(()=>document.querySelector('.hero-photograph').complete&&document.querySelector('.hero-photograph').naturalWidth>0);
-      assert.equal(await page.locator('img.hero-photograph').count(),1);
       assert.equal(await page.locator('#document-examples details').count(),3);
       assert.equal(await page.locator('input').count(),0,'Discovery must not require business details');
       assert.match(await page.locator('#intro-title').textContent(),/Cookie consent/);
-      const frame=page.frameLocator('#explore-preview');await frame.locator('.cc-banner').waitFor();
-      assert.ok((await page.locator('#motion-consent').boundingBox()).y<650,'The opening view should show what a cookie banner looks like');
-      const motionTitle=await page.locator('#motion-title').textContent(),motionLeft=(await page.locator('#motion-consent').boundingBox()).x;
-      await page.waitForFunction(previous=>document.getElementById('motion-title').textContent!==previous,motionTitle,{timeout:10000});
-      assert.ok(Math.abs((await page.locator('#motion-consent').boundingBox()).x-motionLeft)<15,'RTL banner copy must not move the card anchor');
-      await page.locator('#motion-toggle').click();
-      assert.equal(await page.locator('#motion-toggle').getAttribute('aria-pressed'),'true');
-      const still=await page.locator('#motion-title').textContent();
-      await page.waitForTimeout(4800);assert.equal(await page.locator('#motion-title').textContent(),still,'Pause must stop the rotating copy');
-      await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await page.locator('#motion-toggle').getAttribute('aria-pressed'),'true');
+      const frame=page.frameLocator('#explore-preview'),hero=page.frameLocator('#hero-preview');
+      await frame.locator('.cc-banner').waitFor();await hero.locator('.cc-banner').waitFor();
+      await hero.locator('#sample-surface').evaluate(img=>{if(!img.complete||!img.naturalWidth)return new Promise(resolve=>img.addEventListener('load',resolve,{once:true}));});
+      assert.ok((await page.locator('#hero-preview').boundingBox()).y<300,'The real product must be visible in the opening view');
+      const firstTheme=await page.locator('#hero-machine').getAttribute('data-theme');
+      await page.waitForFunction(previous=>document.getElementById('hero-machine').dataset.theme!==previous,firstTheme,{timeout:11000});
+      await page.locator('[data-hero-language=en]').click();
+      await hero.getByRole('button',{name:'Reject all',exact:true}).waitFor();
+      await page.locator('#hero-tour-toggle').click();
+      assert.equal(await page.locator('#hero-tour-toggle').getAttribute('aria-pressed'),'false');
+      await hero.getByRole('button',{name:'Reject all',exact:true}).click();
+      await page.waitForFunction(()=>document.getElementById('hero-tour-toggle').getAttribute('aria-pressed')==='true');
+      const still=await page.locator('#hero-machine').getAttribute('data-theme');
+      await page.waitForTimeout(6100);assert.equal(await page.locator('#hero-machine').getAttribute('data-theme'),still,'A visitor choice must stop the tour from overwriting it');
+      assert.match(await page.locator('#hero-choice-status').textContent(),/analytics off/);
+      await page.locator('#hero-reopen').click();await hero.getByRole('button',{name:'Customize',exact:true}).waitFor();
+      await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await page.locator('#hero-tour-toggle').getAttribute('aria-pressed'),'true');
       await page.emulateMedia({reducedMotion:'no-preference'});
+      await page.locator('[data-hero-world=commerce]').click();
+      assert.equal(await page.locator('#quick-theme').inputValue(),'espresso');
+      assert.match(await page.locator('#package-start-link').getAttribute('href'),/theme=espresso/);
       await page.locator('[data-ui-language=he]').click();
       assert.equal(await page.locator('html').getAttribute('dir'),'rtl');
       assert.match(await page.locator('#intro-title').textContent(),/באנר עוגיות/);
@@ -56,11 +64,23 @@ async function main(){
       await page.locator('[data-ui-language=en]').click();
       assert.match(await page.locator('#hero-start-link').getAttribute('href'),/ui=en/);
       await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-desktop.png`),fullPage:false});
-      for(const width of [320,390,768]){await page.setViewportSize({width,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
+      for(const width of [320,390,768]){
+        await page.setViewportSize({width,height:844});
+        const reflow=await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,overflowing:Array.from(document.querySelectorAll('body *')).filter(el=>{const r=el.getBoundingClientRect();return r.width>0&&r.height>0&&(r.right>innerWidth+1||r.left< -1);}).slice(0,12).map(el=>({tag:el.tagName,id:el.id,class:el.className,rect:{left:Math.round(el.getBoundingClientRect().left),right:Math.round(el.getBoundingClientRect().right)}}))}));
+        if(reflow.scrollWidth>reflow.width)await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-reflow-${width}.png`),fullPage:false});
+        assert.ok(reflow.scrollWidth<=reflow.width,JSON.stringify(reflow));
+      }
       await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-phone.png`),fullPage:false});
+      await page.locator('[data-story-chapter="1"]').click();assert.equal(await page.locator('#story-visual').getAttribute('data-chapter'),'1');
+      assert.equal(await page.locator('[data-story-step="1"]').isVisible(),true);
+      assert.match(await page.locator('[data-story-step="1"]').textContent(),/Hebrew.*Israel/);
+      await page.locator('[data-story-chapter="2"]').click();assert.equal(await page.locator('[data-story-step="2"]').isVisible(),true);
+      await page.locator('#product-story').screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-story-phone.png`)});
+      await page.locator('[data-story-chapter="0"]').click();
       await page.setViewportSize({width:1280,height:900});
       await page.evaluate(axe);
       async function auditProduct(){const result=await page.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}}));assert.deepEqual(result.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),[]);}
+      if(name==='chromium'&&!offline){await page.locator('[data-story-step="1"]').scrollIntoViewIfNeeded();await page.waitForTimeout(800);await page.screenshot({path:path.join(out,'chromium-online-scroll-story.png'),fullPage:false});}
       await page.locator('[data-product-tab=documents]').click();
       await auditProduct();
       await page.locator('[data-sample-document=terms]').click();
@@ -121,6 +141,58 @@ async function main(){
       await page.goto(pathToFileURL(path.join(extracted,'preview.html')).href);
       await page.getByRole('button',{name:'Reject all',exact:true}).click();await page.locator('#wct-preferences').click();
       await page.getByRole('button',{name:'Reject all',exact:true}).waitFor();
+      // The standalone skill is a real complete download, online and offline.
+      await page.goto(offline?pathToFileURL(path.join(out,'studio/developer.html')).href:base+'/developer.html');
+      assert.equal(await page.locator('html').getAttribute('lang'),'en');
+      assert.equal(await page.locator('.skill-download').count(),3);
+      const kit=page.frameLocator('#kit-banner-preview');
+      await kit.getByRole('button',{name:'Reject all',exact:true}).waitFor();
+      await page.locator('#kit-panel-banner').evaluate(el=>Promise.all(el.getAnimations().map(a=>a.finished.catch(()=>{}))));
+      await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-kit-desktop.png`),fullPage:false});
+      await page.evaluate(axe);await auditProduct();
+      await page.locator('#kit-tab-prompt').click();
+      await page.waitForFunction(()=>document.getElementById('kit-example-excerpt').textContent.includes('Build a PRODUCTION-READY COOKIE'));
+      await page.locator('[data-kit-example=california-en]').click();
+      assert.equal(await page.locator('#kit-example-market').textContent(),'California');
+      await page.locator('.sample-full summary').click();
+      assert.match(await page.locator('#kit-example-full').textContent(),/California/);
+      await auditProduct();
+      await page.locator('.sample-full summary').click();
+      await page.locator('#kit-tab-prompt').focus();await page.keyboard.press('ArrowRight');
+      assert.equal(await page.locator('#kit-tab-banner').getAttribute('aria-selected'),'true');
+      await page.locator('[data-ui-language=he]').click();assert.equal(await page.locator('html').getAttribute('dir'),'rtl');
+      assert.equal(await page.locator('#kit-banner-language').inputValue(),'en');
+      await page.locator('[data-ui-language=en]').click();
+      await page.locator('[data-kit-theme=forest]').click();
+      await page.locator('#kit-banner-language').selectOption('he');
+      await kit.getByRole('button',{name:'דחיית הכול',exact:true}).waitFor();
+      assert.equal(await kit.locator('.cc-root').getAttribute('dir'),'rtl');
+      await page.locator('#kit-banner-language').selectOption('en');
+      await kit.getByRole('button',{name:'Reject all',exact:true}).click();
+      await page.waitForFunction(()=>document.getElementById('kit-choice-status').textContent==='Analytics: off · Ads: off');
+      await page.waitForFunction(()=>document.getElementById('kit-motion-toggle').getAttribute('aria-pressed')==='true');
+      await page.locator('#kit-banner-reopen').click();
+      await kit.getByRole('button',{name:'Customize',exact:true}).waitFor();
+      await page.locator('#kit-tab-export').click();await page.locator('[data-kit-platform=other]').click();
+      assert.equal(await page.locator('#kit-platform-file').textContent(),'embed.html.txt');
+      const kitRoute=new URL(await page.locator('#kit-build-link').getAttribute('href'),base);
+      assert.equal(kitRoute.searchParams.get('platform'),'other');assert.equal(kitRoute.searchParams.get('theme'),'forest');
+      await page.emulateMedia({reducedMotion:'reduce'});
+      assert.equal(await page.locator('.kit-zip-object').evaluate(el=>getComputedStyle(el).animationName),'none');
+      await auditProduct();
+      await page.emulateMedia({reducedMotion:'no-preference'});
+      await page.locator('#kit-tab-banner').click();
+      for(const width of [320,390,768]){
+        await page.setViewportSize({width,height:844});
+        assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`Developer kit must reflow at ${width}px`);
+      }
+      await page.setViewportSize({width:390,height:844});await page.locator('#kit-flow').screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-kit-phone.png`)});
+      await page.setViewportSize({width:1280,height:900});
+      const skillWaiting=page.waitForEvent('download');await page.locator('[href="web-compliance-skill-claude.zip"]').click();
+      const skillDownload=await skillWaiting,skillPath=path.join(out,`${name}-${offline?'offline':'online'}-skill.zip`);await skillDownload.saveAs(skillPath);
+      execFileSync('python',['-c','import zipfile,sys;z=zipfile.ZipFile(sys.argv[1]);assert z.testzip() is None;p=".claude/skills/web-compliance/";assert p+"SKILL.md" in z.namelist();assert p+"references/intake.md" in z.namelist();assert len([n for n in z.namelist() if "/templates/" in n and n.endswith(".md")])==13',skillPath]);
+      await page.evaluate(axe);const skillAudit=await page.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}}));assert.deepEqual(skillAudit.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),[]);
+      await page.setViewportSize({width:320,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.setViewportSize({width:1280,height:900});
       // The optional editor connection is a complete no-shell configuration flow.
       await page.goto(offline?pathToFileURL(path.join(out,'studio/connect.html')).href:base+'/connect.html');
       await page.locator('#mcp-path').fill('C:\\Tools\\Project with spaces\\mcp\\server.mjs');

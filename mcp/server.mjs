@@ -77,7 +77,7 @@ function handle(message){
     if(initialized)return error(id,-32600,'Already initialized');
     if(typeof params.protocolVersion!=='string'||params.protocolVersion.length>40||!object(params.capabilities)||!object(params.clientInfo)||typeof params.clientInfo.name!=='string'||typeof params.clientInfo.version!=='string')return error(id,-32602,'Invalid initialize parameters');
     initialized=true;
-    return {jsonrpc:'2.0',id,result:{protocolVersion:versions.includes(params.protocolVersion)?params.protocolVersion:versions[0],capabilities:{tools:{listChanged:false}},serverInfo:{name:'web-compliance',version:'2.7.0'},instructions:'Local, read-only toolkit. Start with list_templates. Legal material is draft and unreviewed. Never claim to have scanned, installed or approved a site. prepare_banner returns files as text; the coding client must review changes with the user before applying them.'}};
+    return {jsonrpc:'2.0',id,result:{protocolVersion:versions.includes(params.protocolVersion)?params.protocolVersion:versions[0],capabilities:{tools:{listChanged:false}},serverInfo:{name:'web-compliance',version:'2.8.0'},instructions:'Local, read-only toolkit. Start with list_templates. Legal material is draft and unreviewed. Never claim to have scanned, installed or approved a site. prepare_banner returns files as text; the coding client must review changes with the user before applying them.'}};
   }
   if(!ready)return error(id,-32000,'Initialize and send notifications/initialized first');
   if(method==='tools/list'){

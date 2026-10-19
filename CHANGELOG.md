@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.8.0 — release candidate
+
+- Package the existing prompt skill as complete generic/Claude Code/Cursor/Copilot ZIPs.
+- Add a self-contained developer kit, bilingual installation page, examples and client acceptance worksheet.
+- Validate portable skill metadata/resources and deterministic package hashes; add real download browser coverage.
+- Make source verification, missing facts, legal scope and installation boundaries explicit in the skill.
+- Replace the decorative opening card with a live, dimensional product stage and native-scroll output story.
+- Keep the current MIT downloads free; separate the commercial offer draft from active checkout and support promises.
+
+
 ## 2.7.0 — Guided experience and local MCP
 
 - The homepage now opens the working preview. Added a shared responsive design, compact theme/language controls, a persistent next step and progressive detail sections. Kept the regional developer demo at `demo.html`.

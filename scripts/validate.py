@@ -18,6 +18,7 @@ import datetime
 import pathlib
 import re
 import sys
+import yaml
 
 from packs import load_packs
 
@@ -94,6 +95,43 @@ def check_disclaimer() -> None:
             err(f"{rel}: missing the 'Not legal advice' disclaimer")
 
 
+def skill_metadata_errors(content: str, folder_name: str) -> list[str]:
+    """Validate the portable Agent Skills boundary before packaging it."""
+    found = re.match(r'^---\n(.*?)\n---(?:\n|$)', content, re.DOTALL)
+    if not found:
+        return ['missing or malformed frontmatter']
+    try:
+        meta = yaml.safe_load(found[1])
+    except yaml.YAMLError:
+        return ['invalid frontmatter YAML']
+    if not isinstance(meta, dict):
+        return ['frontmatter must be a mapping']
+    problems = []
+    name = meta.get('name')
+    if not isinstance(name, str) or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', name) or len(name) > 64 or name != folder_name:
+        problems.append('name must match the folder and use 1-64 lowercase hyphenated characters')
+    description = meta.get('description')
+    if not isinstance(description, str) or not 1 <= len(description.strip()) <= 1024:
+        problems.append('description must contain 1-1024 characters')
+    return problems
+
+
+def check_skill() -> None:
+    source = SKILL / 'SKILL.md'
+    if not source.exists():
+        err('skills/web-compliance/SKILL.md: missing')
+        return
+    text = source.read_text(encoding='utf-8')
+    for problem in skill_metadata_errors(text, SKILL.name):
+        err('skills/web-compliance/SKILL.md: ' + problem)
+    for link in re.findall(r'\]\(([^)]+)\)', text):
+        if link.startswith(('https://', 'http://', '#')):
+            continue
+        target = (SKILL / link.split('#', 1)[0]).resolve()
+        if not target.is_relative_to(SKILL) or not target.is_file():
+            err('skills/web-compliance/SKILL.md: missing or nonportable resource ' + link)
+
+
 def main() -> int:
     global STRICT_STALE_DAYS
     parser = argparse.ArgumentParser(description="Validate the web-compliance skill.")
@@ -112,6 +150,7 @@ def main() -> int:
     check_templates()
     check_jurisdictions()
     check_disclaimer()
+    check_skill()
 
     for w in warnings:
         print(f"WARN  {w}")
