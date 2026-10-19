@@ -40,7 +40,10 @@ async function main(){
       for(const width of [320,390,768]){await page.setViewportSize({width,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
       await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-phone.png`),fullPage:false});
       await page.setViewportSize({width:1280,height:900});
+      await page.evaluate(axe);
+      async function auditProduct(){const result=await page.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}}));assert.deepEqual(result.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),[]);}
       await page.locator('[data-product-tab=documents]').click();
+      await auditProduct();
       await page.locator('[data-sample-document=terms]').click();
       assert.equal(await page.locator('#hero-document-title').textContent(),'תנאי שימוש');
       await page.locator('#read-sample-document').click();
@@ -53,6 +56,7 @@ async function main(){
       assert.match(await page.locator('#package-filename').textContent(),/web-compliance-install/);
       assert.match(await page.locator('#package-files').textContent(),/embed\.html\.txt/);
       assert.match(await page.locator('#package-start-link').getAttribute('href'),/platform=other/);
+      await auditProduct();
       await page.locator('[data-product-tab=banner]').click();
       await page.locator('#quick-theme').selectOption('lavender');
       assert.match(await page.locator('#change-description').textContent(),/לבנדר/);
