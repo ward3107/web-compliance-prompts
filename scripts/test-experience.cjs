@@ -79,6 +79,8 @@ async function main(){
       await page.locator('#quick-theme').selectOption('lavender');
       assert.match(await page.locator('#change-description').textContent(),/Lavender/);
       assert.match(await page.locator('#hero-start-link').getAttribute('href'),/theme=lavender/);
+      await page.locator('#product-preview').screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-studio.png`)});
+      if(name==='chromium'&&!offline)await page.locator('#designs').screenshot({path:path.join(out,'chromium-online-designs.png')});
       await page.locator('[data-open-document=privacy]').click();
       assert.equal(await page.locator('#document-examples details').first().evaluate(el=>el.open),true,'Document shortcut must open the actual sample');
       await page.locator('#document-examples details').first().locator('summary').click();
@@ -97,7 +99,7 @@ async function main(){
       await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}.png`),fullPage:true});
       // DOM-injected inline code must actually be blocked, not just documented.
       const blocked=await page.evaluate(()=>{const s=document.createElement('script');s.textContent='window.__unexpectedScriptRan=true';document.body.append(s);return window.__unexpectedScriptRan!==true;});assert.equal(blocked,true);
-      await page.locator('#other-link').click();await page.waitForFunction(()=>!document.getElementById('next').disabled);
+      await page.locator('#other-link').click();await page.waitForURL(url=>url.pathname.endsWith('/start.html'));await page.waitForFunction(()=>document.getElementById('next')&&!document.getElementById('next').disabled);
       assert.equal(await page.locator('#platform').inputValue(),'other');assert.equal(await page.locator('#accent').inputValue(),'#216348');assert.equal(await page.locator('#output-language').inputValue(),'en');
       assert.equal(await page.locator('html').getAttribute('lang'),'en');
       assert.equal(await page.locator('#market').inputValue(),'unknown','International setup must ask for a market');
@@ -110,6 +112,7 @@ async function main(){
       await page.locator('[data-theme=night]').click();assert.match(await page.locator('#guided-change').textContent(),/Banner switched to/);
       await page.setViewportSize({width:390,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.setViewportSize({width:1280,height:900});
       await page.locator('#next').click();
+      await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-export.png`),fullPage:false});
       const waiting=page.waitForEvent('download');await page.locator('#download-install').click();const download=await waiting;
       const dest=path.join(out,`${name}-${offline?'offline':'online'}.zip`);await download.saveAs(dest);
       const extracted=dest+'.files';
