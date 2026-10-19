@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   var $=function(id){return document.getElementById(id);},ui=ToolkitUI,pick=ui.pick;
-  var params=new URLSearchParams(location.search),theme=Object.hasOwn(ToolkitThemes.presets,params.get('theme'))?params.get('theme'):'espresso';
+  var params=new URLSearchParams(location.search),theme=Object.hasOwn(ToolkitThemes.presets,params.get('theme'))?params.get('theme'):'cobalt';
   if(['he','ar','en','ru'].includes(params.get('language')))$('preview-language').value=params.get('language');
   else $('preview-language').value=ui.language==='he'?'he':'en';
   var scene='commerce',lastChoice=null;
