@@ -147,6 +147,7 @@ async function main(){
       assert.equal(await page.locator('.skill-download').count(),3);
       const kit=page.frameLocator('#kit-banner-preview');
       await kit.getByRole('button',{name:'Reject all',exact:true}).waitFor();
+      await page.locator('#kit-panel-banner').evaluate(el=>Promise.all(el.getAnimations().map(a=>a.finished.catch(()=>{}))));
       await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-kit-desktop.png`),fullPage:false});
       await page.evaluate(axe);await auditProduct();
       await page.locator('#kit-tab-prompt').click();
@@ -169,7 +170,7 @@ async function main(){
       await page.locator('#kit-banner-language').selectOption('en');
       await kit.getByRole('button',{name:'Reject all',exact:true}).click();
       await page.waitForFunction(()=>document.getElementById('kit-choice-status').textContent==='Analytics: off · Ads: off');
-      assert.equal(await page.locator('#kit-motion-toggle').getAttribute('aria-pressed'),'true');
+      await page.waitForFunction(()=>document.getElementById('kit-motion-toggle').getAttribute('aria-pressed')==='true');
       await page.locator('#kit-banner-reopen').click();
       await kit.getByRole('button',{name:'Customize',exact:true}).waitFor();
       await page.locator('#kit-tab-export').click();await page.locator('[data-kit-platform=other]').click();
