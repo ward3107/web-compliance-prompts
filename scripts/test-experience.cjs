@@ -106,7 +106,7 @@ async function main(){
       assert.equal(await page.locator('#market').inputValue(),'unknown','International setup must ask for a market');
       await page.locator('#site-url').fill('https://example.com');await page.locator('#business-name').fill('Portable example');await page.locator('#contact-email').fill('private@example.com');
       await page.locator('[data-ui-language=he]').click();assert.equal(await page.locator('#business-name').inputValue(),'Portable example','Switching UI must preserve entered details');
-      await page.locator('[data-ui-language=en]').click();await page.locator('#next').click();
+      await page.locator('[data-ui-language=en]').click();assert.match(await page.locator('#load-status').textContent(),/Ready to start/,'Changing language must preserve the actual loaded state');await page.locator('#next').click();
       assert.match(await page.locator('#step-counter').textContent(),/Business needs/);
       await page.locator('#market').selectOption('us-ca');await page.locator('#privacy-url').fill('/privacy');await page.locator('#next').click();
       await page.locator('#guided-narrow').click();assert.equal(await page.locator('#guided-preview').getAttribute('class'),'mobile');
