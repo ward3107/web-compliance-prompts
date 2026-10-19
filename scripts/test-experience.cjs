@@ -11,7 +11,7 @@ const server=http.createServer((req,res)=>{
   try {
     fd=fs.openSync(file,fs.constants.O_RDONLY|fs.constants.O_NOFOLLOW);
     if(!fs.fstatSync(fd).isFile()){res.writeHead(404);res.end();return;}
-    res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.zip':'application/zip'})[path.extname(file)]||'text/plain');res.end(fs.readFileSync(fd));
+    res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.zip':'application/zip','.svg':'image/svg+xml'})[path.extname(file)]||'text/plain');res.end(fs.readFileSync(fd));
   } catch {res.writeHead(404);res.end();} finally {if(fd!==undefined)fs.closeSync(fd);}
 });
 async function main(){
@@ -32,10 +32,17 @@ async function main(){
       assert.equal(await page.locator('body').evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(244, 248, 246)');
       assert.equal(await page.locator('#document-examples details').count(),3);
       assert.equal(await page.locator('input').count(),0,'Discovery must not require business details');
+      await page.waitForFunction(()=>{const image=document.querySelector('.hero-image-frame img');return image&&image.complete&&image.naturalWidth>0;});
       await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-desktop.png`),fullPage:false});
       for(const width of [320,390,768]){await page.setViewportSize({width,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
       await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-phone.png`),fullPage:false});
       await page.setViewportSize({width:1280,height:900});
+      await page.locator('[data-show-theme=lavender]').click();
+      assert.equal(await page.locator('#quick-theme').inputValue(),'lavender','Hero shortcuts must operate the real studio');
+      assert.match(await page.locator('#change-description').textContent(),/לבנדר/);
+      await page.locator('[data-open-document=privacy]').click();
+      assert.equal(await page.locator('#document-examples details').first().evaluate(el=>el.open),true,'Document shortcut must open the actual sample');
+      await page.locator('#document-examples details').first().locator('summary').click();
       await page.locator('#all-designs summary').click();await page.locator('[data-explore-theme=forest]').click();await page.locator('#preview-language').selectOption('en');
       assert.match(await page.locator('#change-description').textContent(),/אנגלית/);
       const frame=page.frameLocator('#explore-preview');await frame.getByRole('button',{name:'Reject all',exact:true}).waitFor();
