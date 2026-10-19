@@ -171,3 +171,5 @@ Dependency maintenance uses one weekly grouped version-update PR per ecosystem (
 ### International studio interface
 
 The public studio opens in English and offers a Hebrew interface with right-to-left layout. The setup and MCP connection guide use the same language selection. The banner supports English, Hebrew, Arabic and Russian independently of the interface language. Generated privacy, terms and refunds drafts remain Hebrew and Israel-only. The decorative hero animation has a pause control, follows reduced-motion preferences and never changes live studio selections. All images, copy and scripts ship locally in the offline studio.
+
+The opening scene now runs the actual cookie-consent widget inside an interactive website example. Visitors can switch website scenes, themes and banner languages without leaving the hero. The optional tour pauses on interaction, follows reduced-motion preferences and stops when offscreen. A three-chapter scroll story connects the banner, real Hebrew document samples and install files; mobile uses direct chapter controls. No scrolling is intercepted and no external runtime libraries are loaded.
