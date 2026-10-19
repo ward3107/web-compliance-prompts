@@ -35,6 +35,11 @@ async function main(){
       assert.equal(await page.locator('#document-examples details').count(),3);
       assert.equal(await page.locator('input').count(),0,'Discovery must not require business details');
       assert.match(await page.locator('#intro-title').textContent(),/Cookie consent/);
+      assert.equal(await page.locator('body').getAttribute('data-vivid-theme'),'cobalt');
+      const movingShape=page.locator('#motion-scene .vivid-blob-one');
+      const beforeMotion=await movingShape.evaluate(el=>getComputedStyle(el).transform);
+      await page.waitForTimeout(250);
+      assert.notEqual(await movingShape.evaluate(el=>getComputedStyle(el).transform),beforeMotion,'Visible product-stage art must actually animate');
       const frame=page.frameLocator('#explore-preview'),hero=page.frameLocator('#hero-preview');
       await frame.locator('.cc-banner').waitFor();await hero.locator('.cc-banner').waitFor();
       await hero.locator('#sample-surface').evaluate(img=>{if(!img.complete||!img.naturalWidth)return new Promise(resolve=>img.addEventListener('load',resolve,{once:true}));});
@@ -47,6 +52,8 @@ async function main(){
       assert.equal(await page.locator('#hero-tour-toggle').getAttribute('aria-pressed'),'false');
       await hero.getByRole('button',{name:'Reject all',exact:true}).click();
       await page.waitForFunction(()=>document.getElementById('hero-tour-toggle').getAttribute('aria-pressed')==='true');
+      await page.waitForFunction(()=>document.body.classList.contains('vivid-motion-paused'));
+      assert.equal(await movingShape.evaluate(el=>getComputedStyle(el).animationPlayState),'paused');
       const still=await page.locator('#hero-machine').getAttribute('data-theme');
       await page.waitForTimeout(6100);assert.equal(await page.locator('#hero-machine').getAttribute('data-theme'),still,'A visitor choice must stop the tour from overwriting it');
       assert.match(await page.locator('#hero-choice-status').textContent(),/analytics off/);
@@ -56,6 +63,11 @@ async function main(){
       await page.locator('[data-hero-world=commerce]').click();
       assert.equal(await page.locator('#quick-theme').inputValue(),'espresso');
       assert.match(await page.locator('#package-start-link').getAttribute('href'),/theme=espresso/);
+      await page.locator('#vivid-remix').click();
+      assert.equal(await page.locator('#quick-theme').inputValue(),'cobalt','Remix must select an actual bundled theme');
+      assert.equal(await page.locator('body').getAttribute('data-vivid-theme'),'cobalt');
+      assert.match(await page.locator('#hero-start-link').getAttribute('href'),/theme=cobalt/);
+      await page.locator('[data-hero-world=commerce]').click();
       await page.locator('[data-ui-language=he]').click();
       assert.equal(await page.locator('html').getAttribute('dir'),'rtl');
       assert.match(await page.locator('#intro-title').textContent(),/באנר עוגיות/);
@@ -150,6 +162,13 @@ async function main(){
       await page.locator('#kit-panel-banner').evaluate(el=>Promise.all(el.getAnimations().map(a=>a.finished.catch(()=>{}))));
       await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-kit-desktop.png`),fullPage:false});
       await page.evaluate(axe);await auditProduct();
+      assert.equal(await page.locator('body').getAttribute('data-vivid-theme'),'cobalt');
+      await page.locator('#vivid-remix').click();
+      assert.equal(await page.locator('[data-kit-theme=espresso]').getAttribute('aria-pressed'),'true');
+      assert.equal(await page.locator('body').getAttribute('data-vivid-skin'),'warm');
+      await kit.locator('#custom-style').filter({hasText:'#784827'}).waitFor({state:'attached'});
+      assert.equal(await kit.locator('.cc-root').evaluate(el=>getComputedStyle(el).getPropertyValue('--cc-brand').trim()),'#784827');
+      assert.match(await page.locator('#kit-customize-link').getAttribute('href'),/theme=espresso/);
       await page.locator('#kit-tab-prompt').click();
       await page.waitForFunction(()=>document.getElementById('kit-example-excerpt').textContent.includes('Build a PRODUCTION-READY COOKIE'));
       await page.locator('[data-kit-example=california-en]').click();
@@ -171,6 +190,8 @@ async function main(){
       await kit.getByRole('button',{name:'Reject all',exact:true}).click();
       await page.waitForFunction(()=>document.getElementById('kit-choice-status').textContent==='Analytics: off · Ads: off');
       await page.waitForFunction(()=>document.getElementById('kit-motion-toggle').getAttribute('aria-pressed')==='true');
+      await page.waitForFunction(()=>document.body.classList.contains('vivid-motion-paused'));
+      assert.equal(await page.locator('.vivid-ribbon-track').evaluate(el=>getComputedStyle(el).animationPlayState),'paused');
       await page.locator('#kit-banner-reopen').click();
       await kit.getByRole('button',{name:'Customize',exact:true}).waitFor();
       await page.locator('#kit-tab-export').click();await page.locator('[data-kit-platform=other]').click();
@@ -179,6 +200,7 @@ async function main(){
       assert.equal(kitRoute.searchParams.get('platform'),'other');assert.equal(kitRoute.searchParams.get('theme'),'forest');
       await page.emulateMedia({reducedMotion:'reduce'});
       assert.equal(await page.locator('.kit-zip-object').evaluate(el=>getComputedStyle(el).animationName),'none');
+      assert.equal(await page.locator('.vivid-blob-one').evaluate(el=>getComputedStyle(el).animationName),'none');
       await auditProduct();
       await page.emulateMedia({reducedMotion:'no-preference'});
       await page.locator('#kit-tab-banner').click();

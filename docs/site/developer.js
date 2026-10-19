@@ -3,7 +3,7 @@
   'use strict';
   var $=function(id){return document.getElementById(id);},ui=ToolkitUI,pick=ui.pick;
   var tabs=Array.from(document.querySelectorAll('[data-kit-step]')),root=$('kit-flow'),frame=$('kit-banner-preview');
-  var active='banner',theme='espresso',language='en',platform='wordpress',lastChoice=null,interacted=false,source=null,example='eu-shop-en';
+  var active='banner',theme='cobalt',language='en',platform='wordpress',lastChoice=null,interacted=false,source=null,example='eu-shop-en';
   var examples={'eu-shop-en':{market:'EU',language:'English'},'israel-he':{market:'IL',language:'עברית'},'california-en':{market:'California',language:'English'}};
   var themes=['espresso','forest','cobalt'],reduced=matchMedia('(prefers-reduced-motion: reduce)'),paused=reduced.matches;
   function motion(){var stopped=paused||reduced.matches;$('kit-motion-toggle').setAttribute('aria-pressed',String(stopped));$('kit-motion-label').textContent=pick(stopped?'Play motion':'Pause motion',stopped?'הפעלת תנועה':'עצירת תנועה');root.classList.toggle('motion-paused',stopped);}
