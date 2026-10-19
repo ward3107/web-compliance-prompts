@@ -43,6 +43,7 @@ async function main(){
       const frame=page.frameLocator('#explore-preview'),hero=page.frameLocator('#hero-preview');
       await frame.locator('.cc-banner').waitFor();await hero.locator('.cc-banner').waitFor();
       await hero.locator('#sample-surface').evaluate(img=>{if(!img.complete||!img.naturalWidth)return new Promise(resolve=>img.addEventListener('load',resolve,{once:true}));});
+      if(name==='chromium'&&!offline)await page.screenshot({path:path.join(out,'chromium-online-vivid-opening.png'),fullPage:false});
       assert.ok((await page.locator('#hero-preview').boundingBox()).y<300,'The real product must be visible in the opening view');
       const firstTheme=await page.locator('#hero-machine').getAttribute('data-theme');
       await page.waitForFunction(previous=>document.getElementById('hero-machine').dataset.theme!==previous,firstTheme,{timeout:11000});

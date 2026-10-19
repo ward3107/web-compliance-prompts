@@ -123,12 +123,13 @@ body.vivid-page{
 .vivid-page .hero-languages button{color:#52436f}
 .vivid-page .hero-languages [aria-pressed=true]{background:#4934d9;border-color:#4934d9;color:white}
 .vivid-page .stage-orbit{display:none}
-.vivid-page .stage-controls{bottom:35px;gap:8px}
+.vivid-page .stage-controls{bottom:35px;gap:8px;pointer-events:none}
+.vivid-page .stage-controls>*{pointer-events:auto}
 .vivid-page .hero-worlds{border-color:#b6a2de;background:#fffaf4;border-radius:10px}
 .vivid-page .hero-worlds button{color:#53436e}
 .vivid-page .hero-worlds button[aria-pressed=true]{color:#32245d;border-color:#baaddd;background:#e9dfff}
 .vivid-page #hero-tour-toggle{color:#4934d9;background:#fffaf4;border:1px solid #b6a2de;border-radius:8px;padding:5px 9px}
-.vivid-page .stage-feedback{color:#473e62}
+.vivid-page .stage-feedback{color:#24233f}
 .vivid-page .hero-remix{position:absolute;right:11px;top:72px;z-index:6;rotate:7deg}
 .vivid-page.immersive-page .capability-strip{border-color:#d1c7e5}
 .vivid-page.immersive-page .capability-strip b{color:#4934d9;font-weight:600}
