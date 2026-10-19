@@ -1,10 +1,10 @@
 # Jurisdiction packs
 
-To inspect all source templates before installation, use the [browser catalog](https://ward3107.github.io/web-compliance-prompts/explore.html#catalog). End users do not need Python or a CLI; pack contribution/validation is a developer workflow described in the [main README](../../../README.md#development-and-verification). All packs remain pending legal review.
+To inspect all source templates before installation, use the [browser catalog](https://ward3107.github.io/web-compliance-prompts/explore.html#catalog). End users do not need Python or a CLI; pack contribution/validation is a developer workflow described in the [main README](https://github.com/ward3107/web-compliance-prompts#development-and-verification). All packs remain pending legal review.
 
-Coding assistants can read a bundled pack using the optional [MCP server](../../../mcp/README.md) and its `get_jurisdiction` tool. That returns the source YAML and review status; it does not refresh sources, certify legal accuracy or broaden template scope. The browser flow and MCP retain the same unreviewed legal boundaries.
+Coding assistants can read a bundled pack using the optional [MCP server](https://github.com/ward3107/web-compliance-prompts/tree/main/mcp) and its `get_jurisdiction` tool. That returns the source YAML and review status; it does not refresh sources, certify legal accuracy or broaden template scope. The browser flow and MCP retain the same unreviewed legal boundaries.
 
-Each `<code>.yaml` file describes **which laws apply in one jurisdiction** —
+Each `<code>.yaml` file contains **source inputs to review for one jurisdiction** —
 separately from the `templates/`, which describe **what to build**. The skill
 composes them: `template × jurisdiction(s) → filled prompt`.
 

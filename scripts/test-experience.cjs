@@ -64,7 +64,12 @@ async function main(){
       await page.locator('[data-ui-language=en]').click();
       assert.match(await page.locator('#hero-start-link').getAttribute('href'),/ui=en/);
       await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-desktop.png`),fullPage:false});
-      for(const width of [320,390,768]){await page.setViewportSize({width,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
+      for(const width of [320,390,768]){
+        await page.setViewportSize({width,height:844});
+        const reflow=await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,overflowing:Array.from(document.querySelectorAll('body *')).filter(el=>{const r=el.getBoundingClientRect();return r.width>0&&r.height>0&&(r.right>innerWidth+1||r.left< -1);}).slice(0,12).map(el=>({tag:el.tagName,id:el.id,class:el.className,rect:{left:Math.round(el.getBoundingClientRect().left),right:Math.round(el.getBoundingClientRect().right)}}))}));
+        if(reflow.scrollWidth>reflow.width)await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-reflow-${width}.png`),fullPage:false});
+        assert.ok(reflow.scrollWidth<=reflow.width,JSON.stringify(reflow));
+      }
       await page.setViewportSize({width:390,height:844});await page.screenshot({path:path.join(out,`${name}-${offline?'offline':'online'}-phone.png`),fullPage:false});
       await page.locator('[data-story-chapter="1"]').click();assert.equal(await page.locator('#story-visual').getAttribute('data-chapter'),'1');
       assert.equal(await page.locator('[data-story-step="1"]').isVisible(),true);
@@ -136,6 +141,17 @@ async function main(){
       await page.goto(pathToFileURL(path.join(extracted,'preview.html')).href);
       await page.getByRole('button',{name:'Reject all',exact:true}).click();await page.locator('#wct-preferences').click();
       await page.getByRole('button',{name:'Reject all',exact:true}).waitFor();
+      // The standalone skill is a real complete download, online and offline.
+      await page.goto(offline?pathToFileURL(path.join(out,'studio/developer.html')).href:base+'/developer.html');
+      assert.equal(await page.locator('html').getAttribute('lang'),'en');
+      assert.equal(await page.locator('.skill-download').count(),3);
+      await page.locator('[data-ui-language=he]').click();assert.equal(await page.locator('html').getAttribute('dir'),'rtl');
+      await page.locator('[data-ui-language=en]').click();
+      const skillWaiting=page.waitForEvent('download');await page.locator('[href="web-compliance-skill-claude.zip"]').click();
+      const skillDownload=await skillWaiting,skillPath=path.join(out,`${name}-${offline?'offline':'online'}-skill.zip`);await skillDownload.saveAs(skillPath);
+      execFileSync('python',['-c','import zipfile,sys;z=zipfile.ZipFile(sys.argv[1]);assert z.testzip() is None;p=".claude/skills/web-compliance/";assert p+"SKILL.md" in z.namelist();assert p+"references/intake.md" in z.namelist();assert len([n for n in z.namelist() if "/templates/" in n and n.endswith(".md")])==13',skillPath]);
+      await page.evaluate(axe);const skillAudit=await page.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}}));assert.deepEqual(skillAudit.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),[]);
+      await page.setViewportSize({width:320,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.setViewportSize({width:1280,height:900});
       // The optional editor connection is a complete no-shell configuration flow.
       await page.goto(offline?pathToFileURL(path.join(out,'studio/connect.html')).href:base+'/connect.html');
       await page.locator('#mcp-path').fill('C:\\Tools\\Project with spaces\\mcp\\server.mjs');

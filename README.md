@@ -19,7 +19,21 @@ The **banner, browser studio and ZIP exporter have zero third-party runtime depe
 
 The preview is also the homepage: one link opens a working banner. It has a compact design/language selector, a visible next step, optional detail sections and a mobile layout. The four-step wizard explains the current task, names the next action and provides a direct route back to missing details. “I do not know” is the default platform choice; WordPress is never silently assumed.
 
-The guided interface is currently Hebrew. Banner text supports **Hebrew, Arabic, English and Russian**, including RTL. Changing language does not expand legal coverage.
+The guided interface opens in English and offers Hebrew with RTL. Banner text supports **Hebrew, Arabic, English and Russian**, including RTL. Changing language does not expand legal coverage.
+
+## Developer kit and standalone AI skill
+
+[Install the skill or download the complete kit](https://ward3107.github.io/web-compliance-prompts/developer.html).
+The current downloads are free under MIT. The kit contains the standalone prompt
+skill, offline studio, examples, blank client-acceptance worksheet and optional
+MCP archive. The separate Website Compliance Launch Review reporting skill is
+not included. No paid checkout or support entitlement is active.
+
+Choose the Claude Code, Cursor or Copilot ZIP and extract it into a project root.
+Each archive places `web-compliance/SKILL.md` directly in the host's project skill
+directory and includes all supporting files. Generic host installation is also
+available. Vendor documentation was checked; authenticated host sessions still
+need verification. See [delivery, host evidence, commercial scope and updates](docs/DEVELOPER-KIT.md).
 
 ## Choose an installation route
 
@@ -95,7 +109,7 @@ The six packs cover Israel (`il`), EU/EEA (`eu`), UK (`uk`), US federal (`us`), 
 
 ## Security and maintenance
 
-Read [SECURITY.md](SECURITY.md) for threat boundaries, reporting and deployment controls, and the [2.7.0 verification notes](docs/verification/2.7.0.md) for test evidence and remaining limits.
+Read [SECURITY.md](SECURITY.md) for threat boundaries, reporting and deployment controls, and the [2.8.0 verification record](docs/verification/2.8.0.md) for test evidence and remaining limits.
 
 Controls include URL-scheme validation at the widget boundary, escaped customer text, bounded project import, cross-platform ZIP path validation, an explicit public-file allowlist, a static Content Security Policy, read-only workflow defaults and commit-pinned GitHub Actions. The repository includes regression tests, dependency audits, CodeQL and Dependabot configuration. These measures do not constitute an independent penetration test or guarantee that vulnerabilities cannot exist.
 
@@ -170,6 +184,6 @@ Dependency maintenance uses one weekly grouped version-update PR per ecosystem (
 
 ### International studio interface
 
-The public studio opens in English and offers a Hebrew interface with right-to-left layout. The setup and MCP connection guide use the same language selection. The banner supports English, Hebrew, Arabic and Russian independently of the interface language. Generated privacy, terms and refunds drafts remain Hebrew and Israel-only. The decorative hero animation has a pause control, follows reduced-motion preferences and never changes live studio selections. All images, copy and scripts ship locally in the offline studio.
+The public studio opens in English and offers a Hebrew interface with right-to-left layout. The setup and MCP connection guide use the same language selection. The banner supports English, Hebrew, Arabic and Russian independently of the interface language. Generated privacy, terms and refunds drafts remain Hebrew and Israel-only. The live hero tour has a pause control, follows reduced-motion preferences and stops changing selections after interaction. All images, copy and scripts ship locally in the offline studio.
 
 The opening scene now runs the actual cookie-consent widget inside an interactive website example. Visitors can switch website scenes, themes and banner languages without leaving the hero. The optional tour pauses on interaction, follows reduced-motion preferences and stops when offscreen. A three-chapter scroll story connects the banner, real Hebrew document samples and install files; mobile uses direct chapter controls. No scrolling is intercepted and no external runtime libraries are loaded.

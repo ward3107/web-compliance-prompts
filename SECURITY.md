@@ -2,7 +2,7 @@
 
 ## Scope and supported version
 
-Security fixes target the latest `main` revision and current 2.7.x distributions. Update existing self-hosted assets after reviewing fixes; an offline copy does not update itself. Zero runtime dependencies reduces supply-chain exposure, but does not make custom code invulnerable.
+Security fixes target the latest `main` revision and current 2.8.x distributions. Update existing self-hosted assets after reviewing fixes; an offline copy does not update itself. Zero runtime dependencies reduces supply-chain exposure, but does not make custom code invulnerable.
 
 The trust boundaries are the public browser studio, user-supplied project files, exported ZIP/HTML/JavaScript, the standalone consent widget, the optional local MCP server and WordPress adapter, and the build/publication pipeline. No credential store, payment processing, user accounts or server-side business-data collection is implemented.
 
