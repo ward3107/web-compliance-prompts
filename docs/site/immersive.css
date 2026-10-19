@@ -19,3 +19,9 @@ html[dir=rtl] .immersive-page .cinematic-hero h1{font:400 clamp(3.2rem,5.1vw,5.2
 .product-stage[data-world=commerce] .stage-backplate{background:#574433}.product-stage[data-world=architecture] .stage-backplate{background:#344b36}.product-stage[data-world=studio] .stage-backplate{background:#263d56}.stage-backplate{transition:background .8s}
 
 .developer-kit-callout{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:24px;background:#273e2b;border:1px solid #688159;border-radius:9px;margin:25px 0;color:#edf5df}.developer-kit-callout b{font-size:18px;font-weight:500}.developer-kit-callout p{font-size:13px;line-height:1.8;color:#c3d2b5;max-width:64ch;margin:9px 0 0}.immersive-page .developer-kit-callout .button{background:#d7eea8;color:#20351e;border-color:#d7eea8;flex-shrink:0;font-size:12px}.immersive-page .developer-kit-callout .button:hover{background:#eff8d9}@media(max-width:820px){.developer-kit-callout{flex-direction:column;align-items:start;padding:22px}.developer-kit-callout .button{max-width:100%;white-space:normal}.developer-kit-callout b{font-size:17px}}
+
+.immersive-page .closing-cta .section-kicker{color:#233e28;position:relative;z-index:1}
+
+/* Product routes stay visible at the first glance. */
+.hero-toolkit{display:flex;gap:9px;flex-wrap:wrap;margin-top:33px}.hero-toolkit a{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1px solid #b9c6ab;border-radius:6px;color:#334c2c;text-decoration:none;background:#f5f7eb;min-height:46px}.hero-toolkit a:hover{background:#dfebcf}.hero-toolkit span{font-size:21px}.hero-toolkit b{font-size:11px;font-weight:500}.hero-toolkit a:focus-visible{outline:3px solid #216348;outline-offset:4px}
+@media(max-width:600px){.hero-toolkit{margin-top:22px;gap:7px}.hero-toolkit a{gap:6px;padding:9px;font-size:10px}.hero-toolkit span{font-size:18px}.hero-toolkit b{font-size:10px}}
