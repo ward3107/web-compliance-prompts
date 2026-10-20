@@ -12,7 +12,7 @@
     var safe={region:'auto',language:config.language,privacyPolicyUrl:config.privacyPolicyUrl,brandColor:config.brandColor,ukFirstPartyAnalyticsExempt:false};
     if(config.textOverrides)safe.textOverrides=config.textOverrides;
     var serialized=JSON.stringify(safe,null,2).replace(/</g,'\\u003c').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
-    return '(function(){"use strict";if(window.__wctInstalled)return;window.__wctInstalled=true;CookieConsent.init(Object.assign('+serialized+', {onChange:function(consent){window.dispatchEvent(new CustomEvent("compliance:consent",{detail:consent}));}}));var button=document.getElementById("wct-preferences");if(!button){button=document.createElement("button");button.id="wct-preferences";button.type="button";button.className="wct-preferences";document.body.appendChild(button);}button.textContent='+JSON.stringify(labels[config.language])+';button.setAttribute("aria-label",button.textContent);button.addEventListener("click",function(){CookieConsent.show();});})();\n';
+    return '(function(){"use strict";if(window.__wctInstalled)return;CookieConsent.init(Object.assign('+serialized+', {onChange:function(consent){window.dispatchEvent(new CustomEvent("compliance:consent",{detail:consent}));}}));var button=document.getElementById("wct-preferences");if(!button){button=document.createElement("button");button.id="wct-preferences";button.type="button";button.className="wct-preferences";document.body.appendChild(button);}button.textContent='+JSON.stringify(labels[config.language])+';button.setAttribute("aria-label",button.textContent);button.addEventListener("click",function(){CookieConsent.show();});window.__wctInstalled=true;})();\n';
   }
   function snippet(){return '<link rel="stylesheet" href="/web-compliance/cookie-consent.css">\n<link rel="stylesheet" href="/web-compliance/theme.css">\n<script defer src="/web-compliance/cookie-consent.js"></script>\n<script defer src="/web-compliance/install.js"></script>';}
   function preview(language){
@@ -63,6 +63,19 @@
           return true;
         });
     }).catch(function (error) {
+      // A successful HTTP response can still throw while evaluating. Reload
+      // both scripts on the next explicit attempt, including partial init.
+      if (window.CookieConsent && typeof window.CookieConsent._destroy === 'function') {
+        try { window.CookieConsent._destroy(); } catch (ignore) {}
+      }
+      var preferences = document.getElementById('wct-preferences');
+      if (preferences) preferences.remove();
+      ['cookie-consent.js', 'install.js'].forEach(function (name) {
+        var element = document.getElementById('wct-asset-' + name.replace(/\./g, '-'));
+        if (element && element.src === new URL(name, base).href) element.remove();
+      });
+      delete window.CookieConsent;
+      delete window.__wctInstalled;
       delete window.__wctMountPromise;
       window.dispatchEvent(new CustomEvent('compliance:installation-error', {detail:{message:error.message}}));
       return false;

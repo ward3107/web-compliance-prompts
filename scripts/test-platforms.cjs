@@ -122,6 +122,20 @@ async function main(){
    await failure.evaluate(()=>{const s=document.createElement('script');s.src='/runtime/mount-banner.js';document.head.append(s);});
    await failure.waitForFunction(()=>window.runtimeReady===1);assert.equal(await failure.locator('#wct-preferences').count(),1);
    await failureContext.close();
+   for(const broken of ['cookie-consent.js','install.js']){
+    const brokenContext=await browser.newContext(),brokenPage=await brokenContext.newPage();
+    await brokenPage.route('**/runtime/'+broken,r=>r.fulfill({status:200,contentType:'text/javascript',body:(broken==='install.js'?'window.__wctInstalled=true;':'')+'throw new Error("Expected evaluation failure fixture");'}));
+    await brokenPage.goto(base+'/host.html');await brokenPage.waitForFunction(()=>window.runtimeErrors.length===1);
+    assert.equal(await brokenPage.evaluate(()=>window.__wctInstalled),undefined);
+    assert.equal(await brokenPage.evaluate(()=>window.runtimeReady),0);
+    assert.equal(await brokenPage.locator('#wct-asset-cookie-consent-js,#wct-asset-install-js,#wct-preferences').count(),0);
+    await brokenPage.unroute('**/runtime/'+broken);
+    await brokenPage.evaluate(()=>{const s=document.createElement('script');s.src='/runtime/mount-banner.js';document.head.append(s);});
+    await brokenPage.waitForFunction(()=>window.runtimeReady===1);
+    assert.equal(await brokenPage.locator('#wct-preferences').count(),1);
+    assert.deepEqual(await brokenPage.evaluate(()=>window.choices.at(-1)),{analytics:false,marketing:false});
+    await brokenContext.close();
+   }
    console.log(name+': all platform routes, downloaded packages, bilingual offline setup, responsive accessibility, ordered framework runtime, remounts, consent, load failure and retry passed');
   }finally{await browser.close();}
  }}finally{await new Promise(resolve=>server.close(resolve));}
