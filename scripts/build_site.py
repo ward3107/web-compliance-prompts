@@ -81,7 +81,7 @@ def build(output):
         raise ValueError('Symlink in site output')
     files = public_files()
     offer = json.loads(files['products/developer-kit/offer.json'])
-    checkout = {key: offer.get(key) for key in ('status', 'billing', 'currency', 'price_usd', 'checkout_url', 'support_email', 'readiness')}
+    checkout = {key: offer.get(key) for key in ('status', 'billing', 'currency', 'price_usd', 'checkout_url', 'support_email', 'seller_name', 'refund_terms', 'readiness')}
     # The pack/template loaders also read source directories. Fail before
     # rendering if those directories contain an unreviewed build input.
     for directory, pattern in [('jurisdictions', '*.yaml'), ('templates', '*.md'), ('references', '*.md')]:

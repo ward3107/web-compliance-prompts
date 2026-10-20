@@ -39,8 +39,12 @@ Website Compliance Launch Review reporting skill is not in this product.
 
 ## Owner decisions before enabling payment
 
-1. Confirm $19 and the proposed 14-day refund policy in `offer.json`; provide
-   the real seller identity and private order-support email in the store.
+1. Confirm $19 and the final refund policy; the proposed 14-day period is not
+   automatically approved. Set `seller_name` to the actual seller identity,
+   `support_email` to the confirmed private purchase contact and `refund_terms`
+   to an object with approved English (`en`) and Hebrew (`he`) text in `offer.json`.
+   Use the same identity, contact and policy in the store, checkout and receipt.
+   Missing/blank text in either language keeps checkout disabled.
 2. Complete store activation, identity and payout setup in Lemon Squeezy.
    Do not send identity documents, credentials or banking details to this repo.
 3. Upload the prepared ZIP and a truthful screenshot of the current product.
@@ -49,8 +53,11 @@ Website Compliance Launch Review reporting skill is not in this product.
    test mode. Test mode does not prove file delivery: downloads are disabled.
 5. Verify the real product price, confirmation, receipt and live file delivery
    with an owner-authorized transaction. Never use real customer card details.
-6. Copy the actual hosted checkout URL, set the four evidence-backed readiness
-   flags and `status: live`, add the support email, then rebuild and publish.
+6. Copy the actual hosted checkout URL into `checkout_url`, set the four
+   evidence-backed readiness flags and `status: live`, then rebuild, run the
+   required checks and publish. The tests support either configured lifecycle
+   state; do not remove prelaunch fixture coverage to activate sales. Pricing
+   and purchase terms switch together and render the approved refund policy.
    The website intentionally keeps payment disabled until those facts exist.
 
 ## Store questionnaire — accurate product description

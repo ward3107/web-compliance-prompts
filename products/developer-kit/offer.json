@@ -14,6 +14,7 @@
   "includes": ["Standalone web-compliance prompt skill", "13 templates and 6 source packs", "Offline banner studio with WordPress and universal export", "Fictional project profiles and composed prompt examples", "Installation guide and blank acceptance worksheet", "Optional local MCP archive"],
   "excludes": ["Separate Website Compliance Launch Review reporting skill", "AI subscription or hosted AI service", "Personal installation or audit service", "Lawyer review or certification", "Automatic tracker discovery and blocking", "Paid support entitlement or response-time guarantee"],
   "support_email": null,
+  "seller_name": null,
   "paid_support_period": null,
   "paid_update_period": null,
   "refund_terms": null,

@@ -2,15 +2,17 @@
 (function(root){
   'use strict';
   var gates=['store_approved','seller_terms_confirmed','checkout_tested','live_delivery_verified'];
+  function hasText(value){return typeof value==='string'&&value.trim().length>0;}
   function checkoutState(offer){
     if(!offer||offer.status!=='live'||offer.billing!=='one_time_download'||offer.currency!=='USD'||offer.price_usd!==19)return {ready:false};
     if(!gates.every(function(key){return offer.readiness&&offer.readiness[key]===true;}))return {ready:false};
     if(typeof offer.support_email!=='string'||!/^\S+@\S+\.\S+$/.test(offer.support_email))return {ready:false};
+    if(!hasText(offer.seller_name)||!offer.refund_terms||!['en','he'].every(function(language){return hasText(offer.refund_terms[language]);}))return {ready:false};
     try{
       var url=new URL(offer.checkout_url);
       if(url.protocol!=='https:'||url.username||url.password||url.port||url.search||url.hash)return {ready:false};
       if(!/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.lemonsqueezy\.com$/.test(url.hostname)||!/^\/buy\/[a-zA-Z0-9-]+\/?$/.test(url.pathname))return {ready:false};
-      return {ready:true,url:url.href,support_email:offer.support_email};
+      return {ready:true,url:url.href,support_email:offer.support_email,seller_name:offer.seller_name,refund_terms:offer.refund_terms};
     }catch(ignore){return {ready:false};}
   }
   if(typeof module==='object'&&module.exports)module.exports={checkoutState:checkoutState};
@@ -18,10 +20,14 @@
   var doc=root.document;
   function mount(){
     var state=checkoutState(root.WebComplianceCheckout);
+    doc.querySelectorAll('[data-purchase-pending]').forEach(function(el){el.hidden=state.ready;});
+    doc.querySelectorAll('[data-purchase-live]').forEach(function(el){el.hidden=!state.ready;});
     if(state.ready){
       doc.querySelectorAll('[data-purchase-link]').forEach(function(link){link.href=state.url;link.hidden=false;});
-      doc.querySelectorAll('[data-purchase-pending]').forEach(function(el){el.hidden=true;});
       doc.querySelectorAll('[data-order-support]').forEach(function(link){link.href='mailto:'+state.support_email;link.hidden=false;});
+      doc.querySelectorAll('[data-seller-name]').forEach(function(el){el.textContent=state.seller_name;});
+      doc.querySelectorAll('[data-refund-terms]').forEach(function(el){el.dataset.en=state.refund_terms.en;el.dataset.he=state.refund_terms.he;el.textContent=state.refund_terms.en;});
+      if(root.ToolkitUI)root.ToolkitUI.apply();
     }
     var toggle=doc.getElementById('pricing-motion-toggle');
     if(toggle){

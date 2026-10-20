@@ -23,9 +23,24 @@ Complete the owner steps in
 [`products/developer-kit/lemon-squeezy-listing.md`](../products/developer-kit/lemon-squeezy-listing.md).
 The canonical offer is `products/developer-kit/offer.json`. Only selected public
 fields are emitted as `checkout-config.js`. The purchase script requires a live
-status, $19 USD one-time billing, private order-support email, an HTTPS Lemon
-Squeezy hosted buy URL and four readiness flags. A null URL, a test status or an
-incomplete gate leaves the button disabled. No query parameter enables checkout.
+status, $19 USD one-time billing, a confirmed `seller_name`, private
+`support_email`, approved `refund_terms` text in both `en` and `he`, an HTTPS
+Lemon Squeezy hosted buy URL and four readiness flags. A null URL, a test status,
+missing seller/terms text or an incomplete gate leaves the button disabled.
+No query parameter enables checkout. Readiness flags record verified facts;
+setting them does not itself verify a store, transaction or delivered file.
+
+Both pricing and purchase terms use the same checkout state. Before launch they
+show the proposed offer. When fully ready, they show the current purchase price,
+delivery information, seller, private purchase contact and the exact approved
+bilingual refund terms from the offer. Neither page invents a live refund period
+from the proposed policy. Language changes and portable copies use the same data.
+
+Required Node/Python checks validate the configured state, so an approved live
+offer passes without editing tests. Explicit prelaunch, synthetic live and
+incomplete-live fixtures remain covered independently. The browser matrix checks
+both pages in EN/HE at 320/390/768/1280px, online and offline, in all three engines.
+Fixture checkout links are never visited and are not payment/delivery evidence.
 
 This is a hosted-link integration. The website never needs the store's API key,
 card details or an embedded third-party script. Lemon Squeezy, when configured,
