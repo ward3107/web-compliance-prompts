@@ -1,0 +1,37 @@
+{
+  "prelaunch": {
+    "status": "release_candidate_not_on_sale",
+    "billing": "one_time_download",
+    "currency": "USD",
+    "price_usd": 19,
+    "checkout_url": null,
+    "support_email": null,
+    "seller_name": null,
+    "refund_terms": null,
+    "readiness": {
+      "store_approved": false,
+      "seller_terms_confirmed": false,
+      "checkout_tested": false,
+      "live_delivery_verified": false
+    }
+  },
+  "live": {
+    "status": "live",
+    "billing": "one_time_download",
+    "currency": "USD",
+    "price_usd": 19,
+    "checkout_url": "https://example.lemonsqueezy.com/buy/550e8400-e29b-41d4-a716-446655440000",
+    "support_email": "support@example.com",
+    "seller_name": "Fixture seller (not a real store)",
+    "refund_terms": {
+      "en": "Fixture policy: request a refund within 7 days of purchase through private order support.",
+      "he": "מדיניות בדיקה: אפשר לבקש החזר תוך 7 ימים ממועד הרכישה באמצעות ערוץ הפנייה הפרטי."
+    },
+    "readiness": {
+      "store_approved": true,
+      "seller_terms_confirmed": true,
+      "checkout_tested": true,
+      "live_delivery_verified": true
+    }
+  }
+}

@@ -6,15 +6,25 @@
   "status": "release_candidate_not_on_sale",
   "checkout_url": null,
   "proposed_price_usd": 19,
-  "price_status": "draft_not_published",
+  "price_usd": 19,
+  "currency": "USD",
+  "price_status": "planned_launch_price_not_on_sale",
   "billing": "one_time_download",
   "license": "MIT; retain notices; the original source and public toolkit are also available free",
   "includes": ["Standalone web-compliance prompt skill", "13 templates and 6 source packs", "Offline banner studio with WordPress and universal export", "Fictional project profiles and composed prompt examples", "Installation guide and blank acceptance worksheet", "Optional local MCP archive"],
   "excludes": ["Separate Website Compliance Launch Review reporting skill", "AI subscription or hosted AI service", "Personal installation or audit service", "Lawyer review or certification", "Automatic tracker discovery and blocking", "Paid support entitlement or response-time guarantee"],
   "support_email": null,
+  "seller_name": null,
   "paid_support_period": null,
   "paid_update_period": null,
   "refund_terms": null,
+  "proposed_refund_policy": "Refund requests accepted within 14 days of purchase through the private order-support contact; applicable statutory rights and Lemon Squeezy terms are unaffected. Seller approval pending.",
+  "readiness": {
+    "store_approved": false,
+    "seller_terms_confirmed": false,
+    "checkout_tested": false,
+    "live_delivery_verified": false
+  },
   "launch_gates": ["Required CI and browser checks pass on the release commit", "Live skill discovery verified for every advertised host", "Seller confirms price, support channel, support/update period and refund terms", "Store identity and payout setup completed by owner; store approved", "Checkout tested and live delivery verified after activation", "Paid listing clearly discloses free MIT source and the actual packaged value"],
   "activation_business_description": "VASIA sells downloadable AI-agent instruction workflows and developer template/toolkit packages. This product is a self-serve software and instruction download, with source files, fictional examples and installation documentation. It is not a personalized legal, consulting or installation service."
 }

@@ -80,6 +80,8 @@ def build(output):
     if any(p.is_symlink() for p in output.rglob('*')):
         raise ValueError('Symlink in site output')
     files = public_files()
+    offer = json.loads(files['products/developer-kit/offer.json'])
+    checkout = {key: offer.get(key) for key in ('status', 'billing', 'currency', 'price_usd', 'checkout_url', 'support_email', 'seller_name', 'refund_terms', 'readiness')}
     # The pack/template loaders also read source directories. Fail before
     # rendering if those directories contain an unreviewed build input.
     for directory, pattern in [('jurisdictions', '*.yaml'), ('templates', '*.md'), ('references', '*.md')]:
@@ -90,6 +92,7 @@ def build(output):
     for name, text in files.items():
         if name.startswith('docs/site/'):
             site_files[Path(name).name] = secure_html(text) if name.endswith('.html') else text
+    site_files['checkout-config.js'] = 'window.WebComplianceCheckout=' + json.dumps(checkout, ensure_ascii=True).replace('<', '\\u003c') + ';\n'
     for name in ("cookie-consent.js", "cookie-consent.css"):
         site_files[name] = files['widgets/cookie-consent/' + name]
     for name, text in files.items():
@@ -140,6 +143,11 @@ def build(output):
         'data-he="הורדת הערכה המלאה (דורשת אינטרנט)">Download full kit (internet required)').replace(
         'href="SHA256SUMS.txt" data-he="בדיקת תקינות ההורדות">Download checksums',
         'href="https://ward3107.github.io/web-compliance-prompts/SHA256SUMS.txt" data-he="בדיקת תקינות ההורדות (דורשת אינטרנט)">Download checksums (internet required)')
+    offline['pricing.html'] = offline['pricing.html'].replace(
+        'href="web-compliance-developer-kit.zip" download',
+        'href="https://ward3107.github.io/web-compliance-prompts/web-compliance-developer-kit.zip" rel="noreferrer"').replace(
+        'data-he="או הורידו את החבילה הציבורית ↓">Or download the public package ↓',
+        'data-he="הורדת החבילה הציבורית (דורשת אינטרנט) ↓">Download public package (internet required) ↓')
     skill_files = standalone_skill(files)
     archives = []
     for archive_name, prefix in SKILL_ARCHIVES.items():
