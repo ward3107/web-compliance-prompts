@@ -41,6 +41,8 @@ jobs:
         run: npm run test:experience
       - name: Test customizer and downloaded packages
         run: node scripts/test-builder.cjs
+      - name: Test purchase offer, checkout gating and customer download
+        run: node scripts/test-purchase.cjs
       - name: Test guided setup and private review packages
         run: node scripts/test-guided.cjs
       - name: Test generated legal drafts and handoff packages
