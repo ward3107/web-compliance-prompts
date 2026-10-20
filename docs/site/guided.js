@@ -15,9 +15,13 @@
     $('platform').value = platforms.get(selected) ? selected : 'unknown'; platformHint();
   }
   function platformHint() {
-    var id = $('platform').value, copy = platforms.text(id, ToolkitUI.language);
+    var route = platforms.get($('platform').value) || platforms.get('unknown');
+    var copy = platforms.text(route.id, ToolkitUI.language);
     $('platform-hint').textContent = copy.availability + ' · ' + copy.note;
-    $('platform-route-link').href = 'platforms.html?ui='+ToolkitUI.language+'&platform='+id;
+    var url = new URL('platforms.html', location.href);
+    url.searchParams.set('ui', ToolkitUI.language === 'he' ? 'he' : 'en');
+    url.searchParams.set('platform', route.id);
+    $('platform-route-link').href = url.href;
   }
   var questions = {sales:t('אפשר לקנות מוצרים או שירותים באתר?'),accounts:t('לקוחות יכולים לפתוח חשבון?'),forms:t('יש טפסים לאיסוף פרטים?'),tracking:t('משתמשים בכלי מדידה או פרסום?'),sensitive:t('נאסף מידע רפואי, מידע על ילדים או מידע רגיש אחר?')};
   var answers = {yes:t('כן'),no:t('לא'),unknown:t('לא יודע/ת')};
