@@ -122,6 +122,18 @@ async function main(){
    await failure.evaluate(()=>{const s=document.createElement('script');s.src='/runtime/mount-banner.js';document.head.append(s);});
    await failure.waitForFunction(()=>window.runtimeReady===1);assert.equal(await failure.locator('#wct-preferences').count(),1);
    await failureContext.close();
+   const existingContext=await browser.newContext(),existing=await existingContext.newPage();
+   await existing.addInitScript(()=>{
+    window.hostDestroyCalls=0;window.hostConsent={_destroy(){window.hostDestroyCalls++;}};window.CookieConsent=window.hostConsent;
+    document.addEventListener('DOMContentLoaded',()=>{const b=document.createElement('button');b.id='wct-preferences';b.textContent='Existing host preferences';document.body.append(b);},{once:true});
+   });
+   await existing.route('**/runtime/*.css',r=>r.abort());await existing.goto(base+'/host.html');
+   await existing.waitForFunction(()=>window.runtimeErrors.length===1);
+   assert.equal(await existing.evaluate(()=>window.CookieConsent===window.hostConsent),true);
+   assert.equal(await existing.evaluate(()=>window.hostDestroyCalls),0);
+   assert.equal(await existing.locator('#wct-preferences').textContent(),'Existing host preferences');
+   assert.equal(await existing.evaluate(()=>window.runtimeReady),0);
+   await existingContext.close();
    for(const broken of ['cookie-consent.js','install.js']){
     const brokenContext=await browser.newContext(),brokenPage=await brokenContext.newPage();
     await brokenPage.route('**/runtime/'+broken,r=>r.fulfill({status:200,contentType:'text/javascript',body:(broken==='install.js'?'window.__wctInstalled=true;':'')+'throw new Error("Expected evaluation failure fixture");'}));

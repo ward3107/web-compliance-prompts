@@ -36,6 +36,9 @@ The bootstrap emits `compliance:installation-ready` only after its scripts and
 preferences button initialize. Failure emits `compliance:installation-error` and
 allows a later explicit retry. These events describe local component loading,
 not consent enforcement, a completed site scan or customer acceptance.
+An existing `CookieConsent` implementation requires an explicit integration
+review. The loader stops before replacing it, and failure cleanup touches only
+script/widget state owned by that attempt.
 
 HTML snippets, `next/script`, `useHead` and the other examples are integration
 references. Browser runtime tests do not establish that a real framework project

@@ -28,6 +28,11 @@
     var current = document.currentScript;
     if (!current || !current.src) return;
     var base = new URL('.', current.src);
+    var previousConsent = window.CookieConsent, ownedConsent;
+    var previousPreferences = document.getElementById('wct-preferences');
+    var hadInstalled = Object.prototype.hasOwnProperty.call(window, '__wctInstalled');
+    var previousInstalled = window.__wctInstalled, installAttempted = false;
+    var ownedScripts = [];
     function asset(name, style) {
       return new Promise(function (resolve, reject) {
         var id = 'wct-asset-' + name.replace(/\./g, '-'), url = new URL(name, base).href;
@@ -39,7 +44,7 @@
         if (fresh) {
           element = document.createElement(style ? 'link' : 'script'); element.id = id;
           if (style) { element.rel = 'stylesheet'; element.href = url; }
-          else { element.src = url; element.async = false; }
+          else { element.src = url; element.async = false; ownedScripts.push(element); }
         }
         function cleanup() { clearTimeout(timer); element.removeEventListener('load', loaded); element.removeEventListener('error', failed); }
         function loaded() { element.dataset.wctLoaded = 'true'; cleanup(); resolve(); }
@@ -54,9 +59,13 @@
     }) : Promise.resolve();
     window.__wctMountPromise = ready.then(function () {
       if (window.__wctInstalled && document.getElementById('wct-preferences')) return true;
+      if (typeof window.CookieConsent !== 'undefined' || window.__wctInstalled) throw new Error('An existing consent implementation needs an integration review');
       return asset('cookie-consent.css', true).then(function () { return asset('theme.css', true); })
-        .then(function () { return asset('cookie-consent.js', false); })
-        .then(function () { return asset('install.js', false); })
+        .then(function () {
+          if (typeof window.CookieConsent !== 'undefined') throw new Error('Another consent implementation loaded during setup');
+          return asset('cookie-consent.js', false);
+        })
+        .then(function () { ownedConsent = window.CookieConsent; installAttempted = true; return asset('install.js', false); })
         .then(function () {
           if (!window.__wctInstalled || !document.getElementById('wct-preferences')) throw new Error('Banner initialization was not verified');
           window.dispatchEvent(new CustomEvent('compliance:installation-ready'));
@@ -65,17 +74,20 @@
     }).catch(function (error) {
       // A successful HTTP response can still throw while evaluating. Reload
       // both scripts on the next explicit attempt, including partial init.
-      if (window.CookieConsent && typeof window.CookieConsent._destroy === 'function') {
-        try { window.CookieConsent._destroy(); } catch (ignore) {}
+      if (ownedConsent && window.CookieConsent === ownedConsent && typeof ownedConsent._destroy === 'function') {
+        try { ownedConsent._destroy(); } catch (ignore) {}
       }
       var preferences = document.getElementById('wct-preferences');
-      if (preferences) preferences.remove();
-      ['cookie-consent.js', 'install.js'].forEach(function (name) {
-        var element = document.getElementById('wct-asset-' + name.replace(/\./g, '-'));
-        if (element && element.src === new URL(name, base).href) element.remove();
-      });
-      delete window.CookieConsent;
-      delete window.__wctInstalled;
+      if (installAttempted && preferences && preferences !== previousPreferences) preferences.remove();
+      ownedScripts.forEach(function (element) { element.remove(); });
+      if (ownedConsent && window.CookieConsent === ownedConsent) {
+        if (typeof previousConsent === 'undefined') delete window.CookieConsent;
+        else window.CookieConsent = previousConsent;
+      }
+      if (installAttempted) {
+        if (hadInstalled) window.__wctInstalled = previousInstalled;
+        else delete window.__wctInstalled;
+      }
       delete window.__wctMountPromise;
       window.dispatchEvent(new CustomEvent('compliance:installation-error', {detail:{message:error.message}}));
       return false;

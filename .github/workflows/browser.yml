@@ -37,6 +37,8 @@ jobs:
         with:
           name: pages-build-smoke
           path: generated/site
+      - name: Test multi-platform routes and framework runtime
+        run: node scripts/test-platforms.cjs
       - name: Test preview-first and offline experience
         run: npm run test:experience
       - name: Test customizer and downloaded packages
@@ -45,8 +47,6 @@ jobs:
         run: node scripts/test-purchase.cjs
       - name: Test guided setup and private review packages
         run: node scripts/test-guided.cjs
-      - name: Test multi-platform routes and framework runtime
-        run: node scripts/test-platforms.cjs
       - name: Test generated legal drafts and handoff packages
         run: node scripts/test-documents.cjs
       - name: Start disposable WordPress QA
