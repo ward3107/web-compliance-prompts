@@ -35,6 +35,10 @@ directory and includes all supporting files. Generic host installation is also
 available. Vendor documentation was checked; authenticated host sessions still
 need verification. See [delivery, host evidence, commercial scope and updates](docs/DEVELOPER-KIT.md).
 
+## Website platforms
+
+[Choose your platform](https://ward3107.github.io/web-compliance-prompts/platforms.html) before entering business details. WordPress, custom HTML/PHP and seven framework routes share the local runtime. Wix, Shopify, Webflow and Squarespace receive integration plans with explicit platform prerequisites; native connectors are not included. See [delivery routes and verification limits](docs/PLATFORMS.md).
+
 ## Choose an installation route
 
 | Your situation | What you do | What is required |

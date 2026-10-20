@@ -25,6 +25,11 @@ class DistributionTests(unittest.TestCase):
                 with zipfile.ZipFile(output / 'web-compliance-studio.zip') as archive:
                     self.assertNotIn(private.name, archive.namelist())
                     self.assertIn('START-HERE.html', archive.namelist())
+                    self.assertIn('platforms.html', archive.namelist())
+                    self.assertIn('platforms.js', archive.namelist())
+                    self.assertIn('platform-picker.js', archive.namelist())
+                    self.assertIn('platforms.css', archive.namelist())
+                    self.assertIn('platforms.js', archive.read('start.html').decode())
                     loader = archive.read('toolkit-loader.js').decode()
                     self.assertTrue(loader.startswith('window.ToolkitSource='))
                     self.assertNotIn('explore.js?v=', archive.read('START-HERE.html').decode())

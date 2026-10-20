@@ -19,5 +19,55 @@
     if(!Object.hasOwn(labels,language))throw new Error('Invalid language');
     return '<!doctype html><html lang="'+language+'" dir="'+(['he','ar'].includes(language)?'rtl':'ltr')+'"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>Cookie banner preview</title><link rel="stylesheet" href="cookie-consent.css"><link rel="stylesheet" href="theme.css"><body><h1>Cookie banner preview</h1><p>Local preview only. No trackers are loaded. The privacy link opens your configured policy.</p><script src="cookie-consent.js"></script><script src="install.js"></script></body></html>';
   }
-  return {script:script,snippet:snippet,preview:preview,validPolicy:policy};
+  // An external, framework-independent entry point. It can be loaded by a root
+  // layout after hydration without racing install.js against the widget script.
+  function bootstrapRuntime() {
+    'use strict';
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    if (window.__wctMountPromise) return;
+    var current = document.currentScript;
+    if (!current || !current.src) return;
+    var base = new URL('.', current.src);
+    function asset(name, style) {
+      return new Promise(function (resolve, reject) {
+        var id = 'wct-asset-' + name.replace(/\./g, '-'), url = new URL(name, base).href;
+        var element = document.getElementById(id), fresh = !element;
+        if (!fresh && (style ? element.href : element.src) !== url) {
+          reject(new Error('Conflicting banner asset: ' + name)); return;
+        }
+        if (element && element.dataset.wctLoaded === 'true') { resolve(); return; }
+        if (fresh) {
+          element = document.createElement(style ? 'link' : 'script'); element.id = id;
+          if (style) { element.rel = 'stylesheet'; element.href = url; }
+          else { element.src = url; element.async = false; }
+        }
+        function cleanup() { clearTimeout(timer); element.removeEventListener('load', loaded); element.removeEventListener('error', failed); }
+        function loaded() { element.dataset.wctLoaded = 'true'; cleanup(); resolve(); }
+        function failed() { cleanup(); element.remove(); reject(new Error('Could not load banner asset: ' + name)); }
+        var timer = setTimeout(failed, 15000);
+        element.addEventListener('load', loaded, {once:true}); element.addEventListener('error', failed, {once:true});
+        if (fresh) document.head.appendChild(element);
+      });
+    }
+    var ready = document.readyState === 'loading' ? new Promise(function (resolve) {
+      document.addEventListener('DOMContentLoaded', resolve, {once:true});
+    }) : Promise.resolve();
+    window.__wctMountPromise = ready.then(function () {
+      if (window.__wctInstalled && document.getElementById('wct-preferences')) return true;
+      return asset('cookie-consent.css', true).then(function () { return asset('theme.css', true); })
+        .then(function () { return asset('cookie-consent.js', false); })
+        .then(function () { return asset('install.js', false); })
+        .then(function () {
+          if (!window.__wctInstalled || !document.getElementById('wct-preferences')) throw new Error('Banner initialization was not verified');
+          window.dispatchEvent(new CustomEvent('compliance:installation-ready'));
+          return true;
+        });
+    }).catch(function (error) {
+      delete window.__wctMountPromise;
+      window.dispatchEvent(new CustomEvent('compliance:installation-error', {detail:{message:error.message}}));
+      return false;
+    });
+  }
+  function bootstrap() { return '(' + bootstrapRuntime.toString() + ')();\n'; }
+  return {script:script,snippet:snippet,preview:preview,validPolicy:policy,bootstrap:bootstrap};
 });

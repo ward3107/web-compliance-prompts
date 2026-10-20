@@ -4,6 +4,21 @@
   var $ = function (id) { return document.getElementById(id); };
   var step = 0, toolkit, studio, documentStudio, theme = 'ocean';
   var themes = ToolkitThemes.presets;
+  var platforms = ToolkitPlatforms;
+  function platformOptions() {
+    var selected = $('platform').value || 'unknown';
+    $('platform').replaceChildren();
+    platforms.list().forEach(function (route) {
+      var option = document.createElement('option'); option.value = route.id;
+      option.textContent = platforms.text(route.id, ToolkitUI.language).name; $('platform').append(option);
+    });
+    $('platform').value = platforms.get(selected) ? selected : 'unknown'; platformHint();
+  }
+  function platformHint() {
+    var id = $('platform').value, copy = platforms.text(id, ToolkitUI.language);
+    $('platform-hint').textContent = copy.availability + ' · ' + copy.note;
+    $('platform-route-link').href = 'platforms.html?ui='+ToolkitUI.language+'&platform='+id;
+  }
   var questions = {sales:t('אפשר לקנות מוצרים או שירותים באתר?'),accounts:t('לקוחות יכולים לפתוח חשבון?'),forms:t('יש טפסים לאיסוף פרטים?'),tracking:t('משתמשים בכלי מדידה או פרסום?'),sensitive:t('נאסף מידע רפואי, מידע על ילדים או מידע רגיש אחר?')};
   var answers = {yes:t('כן'),no:t('לא'),unknown:t('לא יודע/ת')};
   var marketNames = {il:t('ישראל'),eu:t('האיחוד האירופי'),'il+eu':t('ישראל והאיחוד האירופי'),uk:t('בריטניה'),'us-ca':t('קליפורניה'),us:t('ארה״ב — שכבה פדרלית בלבד'),ca:t('קנדה'),unknown:t('מדינות אחרות / לא ידוע')};
@@ -75,15 +90,17 @@
   function summary() {
     $('summary').replaceChildren();var name=document.createElement('p');name.textContent=$('business-name').value+' · '+t(marketNames[$('market').value]);$('summary').append(name);
     var open=openQuestions();var info=document.createElement('p');info.textContent=open.length?open.length+t(' שאלות פתוחות ייכללו בתיק לבדיקה.'):t('התשובות הוזנו. עדיין נדרשות בדיקות באתר ובדיקה משפטית.');$('summary').append(info);
-    var wp=$('platform').value==='wordpress';
-    $('installation-text').textContent=wp?t('הקובץ הוא תוסף WordPress שמציג את הבאנר בעיצוב שבחרתם.'):t('החבילה כוללת באנר מעוצב והוראות למי שמטפל באתר. עדיין אין התקנה אוטומטית למערכת שבחרתם.');
-    $('download-install').textContent=wp?t('הורדת תוסף WordPress'):t('הורדת חבילה למתקין');
-    var blocked=!$('privacy-url').value.trim() || $('market').value==='unknown';
+    var route=platforms.get($('platform').value),copy=platforms.text(route.id,ToolkitUI.language),wp=route.mode==='plugin',planning=route.mode==='conditional';
+    $('installation-text').textContent=copy.name+' · '+copy.availability;
+    $('installation-route-status').textContent=copy.note;
+    $('download-install').textContent=planning?ToolkitUI.pick('Download integration plan','הורדת תוכנית שילוב'):wp?t('הורדת תוסף WordPress'):t('הורדת חבילה למתקין');
+    var unidentified=route.mode==='identify';
+    var blocked=unidentified || (!planning && (!$('privacy-url').value.trim() || $('market').value==='unknown'));
     $('download-install').disabled=blocked || !toolkit;
-    $('installation-blocker').textContent=blocked?t('אפשר כבר להוריד תיק לעורך דין. להורדת ההתקנה, חזרו לשאלון והשלימו את מדינות היעד ואת הקישור למדיניות הפרטיות.'):'';
+    $('installation-blocker').textContent=unidentified?t('צריך לזהות את מערכת האתר כדי לבחור דרך התקנה.'):blocked?t('אפשר כבר להוריד תיק לעורך דין. להורדת ההתקנה, חזרו לשאלון והשלימו את מדינות היעד ואת הקישור למדיניות הפרטיות.'):'';
     $('fix-details').hidden=!blocked;
     $('install-steps').replaceChildren();
-    (wp?[t('ב־WordPress פתחו: תוספים ← תוסף חדש ← העלאת תוסף.'),t('בחרו את קובץ ה־ZIP שהורדתם, התקינו והפעילו.'),t('פתחו: הגדרות ← Web Compliance ופעלו לפי רשימת הבדיקות.')]:[t('הורידו את החבילה ושלחו למי שמטפל באתר.'),t('בקשו להתקין לפי START-HERE.html ולבדוק את כלי המעקב.')]).forEach(function(text){var li=document.createElement('li');li.textContent=text;$('install-steps').append(li);});
+    copy.steps.forEach(function(text){var li=document.createElement('li');li.textContent=text;$('install-steps').append(li);});
   }
   function save(blob,name) { var url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(function(){URL.revokeObjectURL(url);},30000); }
   function page(title,body) { return '<!doctype html><html lang="'+ToolkitUI.language+'" dir="'+(ToolkitUI.language==='he'?'rtl':'ltr')+'"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+escape(title)+'</title><style>body{font-family:Arial,sans-serif;max-width:850px;margin:40px auto;padding:20px;line-height:1.8;color:#183348}h1{line-height:1.3}li{margin:8px 0}table{border-collapse:collapse;width:100%}td,th{padding:12px;border:1px solid #9aaab5;text-align:start;overflow-wrap:anywhere}@media print{body{margin:0}}</style><body><h1>'+escape(title)+'</h1>'+body+'</body></html>'; }
@@ -92,18 +109,34 @@
       uiHtml('<h2>נוסח הבאנר שהלקוח ערך</h2><p>שדות שלא נערכו משתמשים בנוסח המקורי של הטולקיט. יש לבדוק התאמה לפעילות האתר ומשמעות הכפתורים.</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere">')+escape(json(studio.copy()))+uiHtml('</pre><p>הוכן בתאריך ')+new Date().toISOString().slice(0,10)+uiHtml('. זהו סיכום תשובות הלקוח, לא חוות דעת או אישור משפטי. ניתן להדפיס או לשמור כ־PDF מתפריט הדפדפן.</p><h2>העסק והאתר</h2><table><tr><th>עסק</th><td>')+escape(p.values['business-name'])+uiHtml('</td></tr><tr><th>אתר</th><td>')+escape(p.values['site-url'])+uiHtml('</td></tr><tr><th>אימייל לפניות</th><td>')+escape(p.values['contact-email'])+uiHtml('</td></tr><tr><th>קהלי יעד</th><td>')+escape(t(marketNames[p.values.market]))+uiHtml('</td></tr></table><h2>תשובות הלקוח</h2><table>')+Object.keys(questions).map(function(key){return '<tr><th>'+escape(t(questions[key]))+'</th><td>'+escape(t(answers[p.answers[key]]))+'</td></tr>';}).join('')+uiHtml('</table><h2>שאלות להשלמה</h2><ul>')+openQuestions().map(function(q){return '<li>'+escape(q)+'</li>';}).join('')+uiHtml('</ul><h2>נושאים מוצעים לבדיקה</h2><ul>')+topics().map(function(q){return '<li>'+escape(q)+'</li>';}).join('')+uiHtml('</ul><p>האתר לא נסרק ולא נבדק אוטומטית. התוסף אינו מנהל את כלי המעקב הקיימים. יש להשוות את התשובות להתנהגות האמיתית באתר.</p><h2>תיעוד הביקורת המקצועית</h2><p>למילוי על ידי עורך הדין: שם ומדינות רלוונטיות; תאריך; גרסאות שנבדקו; היקף, הנחות והחרגות; ליקויים ותיקונים; מסמכים או חוות דעת שנמסרו. כל חבילות המקורות בטולקיט ממתינות לביקורת משפטית ואין לראות בהן רשימה מלאה של הדין החל.</p><p>אין כיום עורך דין שותף או מחיר מוסכם. הלקוח בוחר למי להעביר את התיק. לא נשלח מידע על ידי הטולקיט.</p>'));
   }
   function instructions(wp) {
-    return page(t('התקנה ובדיקה באתר'), uiHtml('<p>עבור ')+escape($('business-name').value)+' — '+escape($('site-url').value)+'</p>'+ (wp?uiHtml('<ol><li>העלו את ZIP התוסף דרך תוספים ← תוסף חדש ← העלאת תוסף.</li><li>התקינו והפעילו. כנסו להגדרות ← Web Compliance.</li><li>להסרה, השביתו ומחקו את התוסף. הוא אינו יוצר דפי מדיניות.</li></ol>'):uiHtml('<ol><li>חלצו את החבילה. לפתיחת תצוגה מקומית, לחצו פעמיים על preview.html. העלו רק את cookie-consent.css, theme.css, cookie-consent.js ו-install.js לתיקיית /web-compliance/ באתר.</li><li>פתחו embed.html.txt והעתיקו את ארבע השורות להגדרות הקוד המותאם או למעטפת האתר. אין צורך בחבילות, CDN או פקודות CLI.</li><li>כפתור ההעדפות נוצר אוטומטית. אם שיניתם את מיקום הקבצים, עדכנו את הנתיבים בקטע ההטמעה. אין להעלות את קובצי הפרויקט או התיק המשפטי לתיקייה ציבורית.</li></ol>'))+uiHtml('<h2>רשימת בדיקות למתקין</h2><ul><li>בחלון פרטי, בדקו קבלה, דחייה, שינוי העדפות וטעינה חוזרת.</li><li>ודאו שקישור מדיניות הפרטיות קיים ומתאים לעסק.</li><li>בדקו מקלדת, נייד וכיוון הכתיבה.</li><li>חברו את כלי המעקב לאירוע compliance:consent ובדקו ברשת שהם חסומים לפני הסכמה ולאחר ביטולה. אין חסימה אוטומטית של קוד מתוספים אחרים.</li><li>הבאנר מתחיל ב־opt-in לכל המבקרים. בחירת מדינות בשאלון אינה זיהוי מיקום המבקר.</li></ul><h2>בדיקה משפטית</h2><p>פנו לעורך דין מתאים ובקשו בדיקת המסמכים וההתנהגות הרלוונטית באתר. אין כאן אישור משפטי.</p><a href="https://ward3107.github.io/web-compliance-prompts/legal-review.html">מידע על הכנת תיק לעורך דין</a>'));
+    var route=platforms.get($('platform').value),copy=platforms.text(route.id,ToolkitUI.language),code=platforms.snippet(route.id);
+    var details='<h2>'+escape(copy.name)+'</h2><p>'+escape(copy.availability)+'</p><p>'+escape(copy.note)+'</p><ol>'+copy.steps.map(function(text){return '<li>'+escape(text)+'</li>';}).join('')+'</ol>';
+    if(code)details+='<pre dir="ltr" style="white-space:pre-wrap;overflow-wrap:anywhere;text-align:left">'+escape(code)+'</pre>';
+    if(route.mode==='files')details+='<p>'+escape(ToolkitUI.pick('Open preview.html for a local preview, and use embed.html.txt for embedding. Upload only the four runtime files. Keep project files and review documents private.','פתחו preview.html לתצוגה מקומית, והשתמשו ב־embed.html.txt להטמעה. העלו רק את ארבעת קובצי הריצה. שמרו את קובצי הפרויקט והבדיקה באופן פרטי.'))+'</p>';
+    if(route.mode==='framework')details+='<p>'+escape(ToolkitUI.pick('Runtime files: cookie-consent.js, cookie-consent.css, theme.css, install.js and mount-banner.js. Load the single bootstrap once. Do not also add embed.html.txt and the two scripts separately.','קובצי הריצה: cookie-consent.js, cookie-consent.css, theme.css, install.js ו־mount-banner.js. טענו רק את הטוען פעם אחת. אל תוסיפו במקביל הטמעה נפרדת של שני הסקריפטים.'))+'</p>';
+    details+='<ul>'+route.docs.map(function(doc){return '<li><a rel="noreferrer" href="'+escape(doc[1])+'">'+escape(doc[0])+'</a></li>';}).join('')+'</ul>';
+    return page(t('התקנה ובדיקה באתר'),uiHtml('<p>עבור ')+escape($('business-name').value)+' — '+escape($('site-url').value)+'</p>'+details+uiHtml('<h2>רשימת בדיקות למתקין</h2><ul><li>בחלון פרטי, בדקו קבלה, דחייה, שינוי העדפות וטעינה חוזרת.</li><li>ודאו שקישור מדיניות הפרטיות קיים ומתאים לעסק.</li><li>בדקו מקלדת, נייד וכיוון הכתיבה.</li><li>חברו את כלי המעקב לאירוע compliance:consent ובדקו ברשת שהם חסומים לפני הסכמה ולאחר ביטולה. אין חסימה אוטומטית של קוד מתוספים אחרים.</li><li>הבאנר מתחיל ב־opt-in לכל המבקרים. בחירת מדינות בשאלון אינה זיהוי מיקום המבקר.</li></ul><h2>בדיקה משפטית</h2><p>פנו לעורך דין מתאים ובקשו בדיקת המסמכים וההתנהגות הרלוונטית באתר. אין כאן אישור משפטי.</p>'));
   }
   function installation() {
-    if(!toolkit || contrast()<4.5 || !$('privacy-url').value.trim() || $('market').value==='unknown')return;
-    var wp=$('platform').value==='wordpress',prefix=wp?'web-compliance/':'',files={};
+    var route=platforms.get($('platform').value);
+    if(!toolkit || !route || route.mode==='identify')return;
+    if(route.mode==='conditional'){
+      var plan={'START-HERE.html':instructions(false),'PLATFORM.json':json(platforms.manifest(route.id)),'STATUS.txt':'PLANNING ONLY. No native connector, consent API bridge or verified installation is included. Keep the existing consent solution until integration is implemented and tested.'};
+      save(ToolkitZip(plan),'web-compliance-'+route.id+'-plan.zip');$('download-status').textContent=ToolkitUI.pick('Integration plan prepared. No installation or consent synchronization has been performed.','תוכנית השילוב הוכנה. לא בוצעה התקנה או סנכרון הסכמה.');return;
+    }
+    if(contrast()<4.5 || !$('privacy-url').value.trim() || $('market').value==='unknown')return;
+    var wp=route.mode==='plugin',prefix=wp?'web-compliance/':'',files={};
     ['cookie-consent.js','cookie-consent.css'].forEach(function(name){files[prefix+name]=toolkit.files['widgets/cookie-consent/'+name];});
     files[prefix+'theme.css']=css();files[prefix+'install.js']=ToolkitInstall.script(config());files[prefix+'LICENSE']=toolkit.files.LICENSE;
     if(wp)files[prefix+'web-compliance.php']=toolkit.files['integrations/wordpress/web-compliance.php'];
     files[prefix+'START-HERE.html']=instructions(wp);
+    files[prefix+'PLATFORM.json']=json(platforms.manifest(route.id));
     files[prefix+'preview.html']=ToolkitInstall.preview($('output-language').value);
-    if(!wp)files['embed.html.txt']=ToolkitInstall.snippet();
-    save(ToolkitZip(files),wp?'web-compliance-wordpress.zip':'web-compliance-install.zip');$('download-status').textContent=t('הקובץ הוכן להורדה. התקנה ובדיקה באתר עדיין נדרשות.');
+    if(route.mode==='framework'){
+      files['mount-banner.js']=ToolkitInstall.bootstrap();files['integration-example.txt']=platforms.snippet(route.id);
+      files['embed.html.txt']='<script defer src="/web-compliance/mount-banner.js"></script>\n';
+    }else if(!wp)files['embed.html.txt']=ToolkitInstall.snippet();
+    save(ToolkitZip(files),wp?'web-compliance-wordpress.zip':route.mode==='framework'?'web-compliance-'+route.id+'.zip':'web-compliance-install.zip');$('download-status').textContent=t('הקובץ הוכן להורדה. התקנה ובדיקה באתר עדיין נדרשות.');
   }
   function reviewDownload() {
     var reviewProject=project();if($('market').value!=='il')delete reviewProject.documents;
@@ -128,7 +161,7 @@
       if(!/^#[0-9a-f]{6}$/i.test(value.values.accent)||!httpUrl(value.values['site-url'])||!privacyUrl(value.values['privacy-url']))throw new Error();
       if(!/^#[0-9a-f]{6}$/i.test(value.values.background)||!/^#[0-9a-f]{6}$/i.test(value.values.foreground)||!/^([0-9]|1[0-9]|2[0-8])$/.test(value.values.radius))throw new Error();
       Object.keys(questions).forEach(function(key){if(!Object.hasOwn(answers,value.answers[key]))throw new Error();});
-      fields.forEach(function(id){$(id).value=value.values[id];});Object.keys(questions).forEach(function(key){$('answer-'+key).value=value.answers[key];});theme=value.theme;studio.restore(value.studio);documentStudio.restore(value.documents);markTheme();show(0);$('load-status').textContent=t('הפרויקט נטען. אפשר לבדוק ולעדכן את הפרטים.');
+      fields.forEach(function(id){$(id).value=value.values[id];});Object.keys(questions).forEach(function(key){$('answer-'+key).value=value.answers[key];});theme=value.theme;studio.restore(value.studio);documentStudio.restore(value.documents);markTheme();platformHint();show(0);$('load-status').textContent=t('הפרויקט נטען. אפשר לבדוק ולעדכן את הפרטים.');
     } catch(error) {$('load-status').textContent=t('הקובץ אינו פרויקט תקין מהמערכת. בחרו קובץ JSON ששמרתם כאן (עד 600KB).');}
     event.target.value='';
   }
@@ -151,13 +184,15 @@
   if(['he','ar','en','ru'].includes(params.get('language')))$('output-language').value=params.get('language');
   if(ToolkitUI.language==='he'&&!params.has('language'))$('output-language').value='he';
   if(ToolkitUI.language==='he')$('market').value='il';
-  if(['other','wordpress'].includes(params.get('platform')))$('platform').value=params.get('platform');
+  platformOptions();
+  if(platforms.get(params.get('platform'))){$('platform').value=params.get('platform');platformHint();}
+  $('platform').addEventListener('change',platformHint);
   $('preview-again').addEventListener('click',preview);
   $('download-install').addEventListener('click',installation);$('download-review').addEventListener('click',reviewDownload);
-  $('fix-details').addEventListener('click',function(){show(1);if(!$('privacy-url').value.trim())$('privacy-url').focus();else $('market').focus();});
+  $('fix-details').addEventListener('click',function(){if($('platform').value==='unknown'){show(0);$('platform').focus();return;}show(1);if(!$('privacy-url').value.trim())$('privacy-url').focus();else $('market').focus();});
   $('download-handoff').addEventListener('click',function(){save(new Blob([instructions($('platform').value==='wordpress')],{type:'text/html;charset=utf-8'}),'installation-handoff.html');});
   $('save-project').addEventListener('click',function(){save(new Blob([json(project())],{type:'application/json'}),'web-compliance-project.json');});$('resume-project').addEventListener('change',resume);
   window.addEventListener('message',function(event){if((location.protocol==='file:'?event.origin==='null'||event.origin==='file://':event.origin===location.origin) && event.source===$('guided-preview').contentWindow && event.data && event.data.type==='compliance-preview-ready')preview();});
-  window.addEventListener('toolkit:language',function(){ToolkitUI.apply();show(step);if(step===2)preview();});
+  window.addEventListener('toolkit:language',function(){ToolkitUI.apply();platformOptions();show(step);if(step===2)preview();});
   ToolkitSource.load().then(function(data){if(!data.files['integrations/wordpress/web-compliance.php'])throw new Error();toolkit=data;$('next').disabled=false;$('load-status').textContent=t('מוכנים להתחיל. הפרטים אינם נשלחים לשרת.');}).catch(function(){$('load-status').textContent=t('קובצי ההתקנה לא נטענו. בדקו את החיבור ורעננו את העמוד.');});
 })();

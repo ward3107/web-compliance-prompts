@@ -83,3 +83,7 @@ review the changelog, back up settings/files and test replacement on staging.
 The package manifest hashes payload files; it does not independently sign the
 release or certify tests. Exact release evidence belongs to the source commit's
 Actions results and verification notes.
+
+## Website platform routes
+
+The online and offline studio include a [platform selector](PLATFORMS.md). Custom websites and framework projects receive their own installation instructions. A shared browser loader serializes framework asset loading. Hosted platforms receive planning-only downloads until native consent integrations are implemented and tested. Each installation download records its route and untested customer-site state in `PLATFORM.json`.

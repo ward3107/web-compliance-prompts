@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — website platform routes
+
+- Add a bilingual platform selector and explicit installation routes for WordPress, custom sites, seven frontend frameworks and four hosted builders.
+- Export platform-specific instructions and untested destination-site status alongside available runtime files.
+- Add an ordered, repeat-safe browser loader for framework root layouts, including load-error reporting and explicit retry.
+- Keep hosted-builder routes planning-only until native consent adapters are implemented and verified; require platform identification before an installation download.
+- Include the routes in the offline studio and developer kit, preserving existing saved projects and checkout readiness gates.
+
 ## 2.8.0 — release candidate
 
 - Package the existing prompt skill as complete generic/Claude Code/Cursor/Copilot ZIPs.
