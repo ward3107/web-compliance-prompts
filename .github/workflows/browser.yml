@@ -37,6 +37,8 @@ jobs:
         with:
           name: pages-build-smoke
           path: generated/site
+      - name: Test multi-platform routes and framework runtime
+        run: node scripts/test-platforms.cjs
       - name: Test preview-first and offline experience
         run: npm run test:experience
       - name: Test customizer and downloaded packages
