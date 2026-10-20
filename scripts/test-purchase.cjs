@@ -31,6 +31,7 @@ async function main(){
       assert.equal(await page.locator('a[data-purchase-link]').getAttribute('href'),null);
       assert.match(await page.locator('.disclosure').textContent(),/available free/);
       assert.match(await page.locator('.price-number').last().textContent(),/\$19/);
+      assert.ok(await page.locator('.price-number').last().evaluate(el=>parseFloat(getComputedStyle(el).fontSize)>=48),'The actual price must be visually prominent');
       const motion=page.locator('.price-object').first();
       await page.locator('#pricing-motion-toggle').click();
       assert.equal(await motion.evaluate(el=>getComputedStyle(el).animationPlayState),'paused');
